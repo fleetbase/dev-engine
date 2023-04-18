@@ -1,0 +1,51 @@
+<Modal::Default @modalIsOpened={{@modalIsOpened}} @options={{@options}} @confirm={{@onConfirm}} @decline={{@onDecline}} as |options|>
+    <div class="modal-body-container">
+        <div class="input-group">
+            <label>
+                Name
+            </label>
+            <Input @value={{options.apiKey.name}} type="text" class="w-full form-input" placeholder="Enter a nickname or environment name for API Key" />
+        </div>
+        <div class="input-group">
+            <InputLabel @labelText="Expiration" @helpText="Optionally set an expiry date for this api key." />
+
+            <select class="w-full mb-1 form-select" {{on "change" @options.setExpiration}}>
+                <option selected disabled>
+                    Select an expiration date...
+                </option>
+                {{#each @options.expirationOptions as |opt|}}
+                    <option value={{opt}}>
+                        {{opt}}
+                    </option>
+                {{/each}}
+            </select>
+            <p class="text-xs dark:text-gray-100">
+                Once this key expires, you can't perform any actions with it.
+            </p>
+        </div>
+
+        <div class="input-group">
+            <ArrayInput @data={{@options.apiKey.browser_origins}} @placeholder="Enter domain" @onDataChanged={{fn (mut @options.apiKey.browser_origins)}}>
+                <InputLabel @labelText="Allowed Browser Origins" @helpText="Input domains that will dictate the CORS policy for browser request from this api key." />
+            </ArrayInput>
+        </div>
+
+        <div class="flex flex-col input-group">
+            {{#if @options.testMode}}
+                <Badge @status="test">
+                    Test Key
+                </Badge>
+                <p class="block my-2 text-sm text-blue-500 dark:text-blue-300">
+                    You are creating a test environment key, use this for testing environments.
+                </p>
+            {{else}}
+                <Badge @status="live">
+                    Live Key
+                </Badge>
+                <p class="block my-2 text-sm text-blue-500 dark:text-blue-300">
+                    You are creating a live environment key, use this for production environments.
+                </p>
+            {{/if}}
+        </div>
+    </div>
+</Modal::Default>

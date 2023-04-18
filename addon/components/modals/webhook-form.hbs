@@ -1,0 +1,130 @@
+<Modal::Default @modalIsOpened={{@modalIsOpened}} @options={{@options}} @confirm={{@onConfirm}} @decline={{@onDecline}} as |options|>
+    <div class="p-5 border-b border-gray-200 dark:border-gray-800">
+        <div class="mb-5 input-group">
+            <InputLabel @labelText="Endpoint URL" @helpText="The URL Fleetbase should send event callbacks to." @required={{true}} />
+
+            <Input @value={{options.webhook.url}} type="url" class="w-full form-input" placeholder="https://" />
+        </div>
+
+        <div class="input-group">
+            <InputLabel @labelText="Description" @helpText="Optionally add a description for the webhook endpoint." />
+
+            <Textarea @value={{options.webhook.description}} class="w-full form-input" placeholder="An optional description of what this webhook endpoint is used for." />
+        </div>
+    </div>
+
+    <div class="p-5 border-b border-gray-200 dark:border-gray-800">
+        <div class="input-group">
+            <InputLabel @labelText="API Credential" @helpText="Restrict the webhook endpoint to receive callbacks from a specific API key." />
+
+            <select class="w-full form-select" {{on "change" @options.setApiCredential}}>
+                <option value={{null}} selected>
+                    Receive from all API Credentials...
+                </option>
+                {{#each @options.apiCredentialOptions as |opt|}}
+                    <option value={{opt.id}} selected={{eq @options.webhook.api_credential_uuid opt.id}}>
+                        {{or opt.name opt.key}}
+                    </option>
+                {{/each}}
+            </select>
+            <InfoBlock class="mt-3">
+                You can select a specific API credential that will be used to trigger callbacks to this webhook endpoint, or you can select "All API Credentials", and the webhook endpoint will receive callbacks regardless the API Credential being used.
+            </InfoBlock>
+        </div>
+    </div>
+
+    <div class="p-5 border-b border-gray-200 dark:border-gray-800">
+        <div class="input-group">
+            <InputLabel @labelText="Version" @helpText="Select a specific API version to receive callbacks for." />
+
+            <select class="w-full form-select" {{on "change" @options.setVersion}}>
+                <option selected disabled>
+                    Select an API version...
+                </option>
+                {{#each @options.versionOptions as |opt|}}
+                    <option value={{opt}} selected={{eq @options.webhook.version opt}}>
+                        {{opt}}
+                    </option>
+                {{/each}}
+            </select>
+        </div>
+    </div>
+
+    <div class="p-5">
+        <div class="input-group">
+            <div class="mb-4">
+                <InputLabel class="mb-2" @labelText="Events to send" @helpText="Explicilty set which events to receive callbacks for." />
+
+                <div class="flex items-start justify-between">
+                    <div class="w-1/2">
+                        <BasicDropdown @renderInPlace={{true}} as |dd|>
+                            <dd.Trigger>
+                                <div class="w-full px-3 py-2 text-sm leading-4 cursor-pointer form-select hover:shadow-sm">
+                                    Select events...
+                                </div>
+                            </dd.Trigger>
+                            <dd.Content class="w-full h-48 mt-1 overflow-y-hidden border bg-white border-gray-300 rounded shadow-md dark:border-gray-800 dark:bg-gray-700">
+                                <div class="w-full rounded shadow">
+                                    <Input placeholder="Search..." class="w-full px-3 py-2 text-sm leading-4 border-b border-gray-300 shadow-sm dark:border-gray-800 dark:bg-gray-700 dark:text-gray-100" {{on "keyup" @options.searchEvents}} />
+                                    <div class="w-full h-40 pb-2 overflow-y-scroll">
+                                        {{#each-in @options.eventOptions as |resourceName events|}}
+                                            <div class="">
+                                                <div class="flex items-center justify-between px-3 py-2 text-sm text-gray-700 bg-blue-50 dark:bg-gray-800 dark:text-gray-100">
+                                                    <span>
+                                                        {{humanize resourceName}}
+                                                    </span>
+                                                    <span>
+                                                        {{pluralize events.length "event"}}
+                                                    </span>
+                                                </div>
+                                                {{#each events as |event|}}
+                                                    <a href="javascript:;" class="block px-6 py-3 text-xs text-gray-700 no-underline cursor-pointer hover:opacity-75 dark:text-gray-100" disabled={{includes event @options.webhook.events}} {{on "click" (fn @options.addEvent event dd)}}>
+                                                        {{event}}
+                                                    </a>
+                                                {{/each}}
+                                            </div>
+                                        {{/each-in}}
+                                    </div>
+                                </div>
+                            </dd.Content>
+                        </BasicDropdown>
+                    </div>
+                    <a href="javascript:;" class="no-underline" {{on "click" @options.clearEvents}}>
+                        Clear
+                    </a>
+                </div>
+            </div>
+            <div class="h-48 overflow-y-scroll bg-white border border-gray-200 rounded shadow-sm dark:bg-gray-800 dark:border-gray-900">
+                {{#if @options.webhook.events}}
+                    {{#each @options.webhook.events as |event|}}
+                        <div class="flex items-center justify-between p-3 text-sm text-gray-800 border-b border-gray-200 dark:border-gray-900 dark:text-gray-100">
+                            <span>
+                                {{event}}
+                            </span>
+                            <span>
+                                <a href="javascript:;" class="text-blue-300 no-underline hover:text-blue-500" {{on "click" (fn @options.removeEvent event)}}>
+                                    <FaIcon @icon="times" @prefix="fas" />
+                                </a>
+                            </span>
+                        </div>
+                    {{/each}}
+                {{else}}
+                    <div class="flex items-center justify-center h-full dark:text-gray-100">
+                        <div class="flex flex-col items-center justify-center w-2/4 h-full my-8 text-center">
+                            <div class="font-semibold">
+                                No events selected
+                            </div>
+                            <p>
+                                Search for events with the dropdown above, or
+                                <a href="javascript:;" class="no-underline" {{on "click" @options.receiveAllEvents}}>
+                                    receive all events
+                                </a>
+                                .
+                            </p>
+                        </div>
+                    </div>
+                {{/if}}
+            </div>
+        </div>
+    </div>
+</Modal::Default>

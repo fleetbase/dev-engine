@@ -1,0 +1,5 @@
+<Modal::Default @modalIsOpened={{@modalIsOpened}} @options={{@options}} @confirm={{@onConfirm}} @decline={{@onDecline}} as |options|>
+    <div class="modal-body-container">
+        <InputGroup @name="Event channel ID" @value={{@options.channelId}} @helpText="Input the socket channel identifier you want to listen on" />
+    </div>
+</Modal::Default>

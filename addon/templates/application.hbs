@@ -1,0 +1,15 @@
+<EmberWormhole @to="sidebar-menu-items">
+    <Layout::Sidebar::Panel @open={{true}} @title="Developers Console">
+        <Layout::Sidebar::Item @route="console.developers.home" @icon="home">Dashboard</Layout::Sidebar::Item>
+        <Layout::Sidebar::Item @route="console.developers.api-keys" @icon="key">API Keys</Layout::Sidebar::Item>
+        <Layout::Sidebar::Item @route="console.developers.webhooks" @icon="globe-asia">Webhooks</Layout::Sidebar::Item>
+        <Layout::Sidebar::Item @route="console.developers.sockets" @icon="plug">WebSockets</Layout::Sidebar::Item>
+        <Layout::Sidebar::Item @route="console.developers.logs" @icon="file-lines">Logs</Layout::Sidebar::Item>
+        <Layout::Sidebar::Item @route="console.developers.events" @icon="calendar-day">Events</Layout::Sidebar::Item>
+    </Layout::Sidebar::Panel>
+    
+</EmberWormhole>
+
+<Layout::Section::Container>
+    {{outlet}}
+</Layout::Section::Container>
