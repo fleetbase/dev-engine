@@ -5,6 +5,7 @@ import { action } from '@ember/object';
 export default class ApiKeysIndexRoute extends Route {
     @service store;
     @service loader;
+    @service currentUser;
 
     queryParams = {
         page: {
@@ -27,5 +28,9 @@ export default class ApiKeysIndexRoute extends Route {
 
     model(params) {
         return this.store.query('api-credential', { ...params });
+    }
+
+    setupController(controller, model) {
+        controller.testMode = this.currentUser.getOption('sandbox', false);
     }
 }

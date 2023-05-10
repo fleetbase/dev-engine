@@ -1,0 +1,30 @@
+<ContentPanel @prefixTitle="Event" @title={{@apiEvent.event}} @prefixTitleRight={{@apiEvent.public_id}} @titleContainerClass="flex-col" @panelTitleClass="text-sm" @prefixTitleClass="ml-4 flex flex-row items-center text-sm" @prefixTitleRightClass="font-mono" @panelHeaderClass="items-stretch-i" @panelHeaderRightClass="items-start-i" @prefixTitleRightContainerClass="py-2" @open={{true}} @pad={{true}} @panelBodyClass="bg-white dark:bg-gray-800 text-sm">
+    <table class="border-none table-fixed dark:text-gray-100 table-spaced-y-2 table-cells-valign-top">
+        <tbody>
+            <tr>
+                <td class="w-40">
+                    Date
+                </td>
+                <td>
+                    {{@apiEvent.createdAt}}
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    Source
+                </td>
+                <td>
+                    {{@apiEvent.source}}
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    Description
+                </td>
+                <td>
+                    {{@apiEvent.description}}
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</ContentPanel>

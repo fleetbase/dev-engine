@@ -1,0 +1,11 @@
+<ContentPanel @title="Event data" @open={{true}} @pad={{true}} @panelTitleClass="text-sm" @panelBodyClass="bg-white dark:bg-gray-800">
+    {{#if @apiEvent.data}}
+        <CodeBlock @code={{or @apiEvent.dataJson ""}} @language="json" class="line-numbers" />
+    {{else}}
+        <div class="flex items-center justify-center h-24">
+            <span class="text-sm text-gray-600">
+                No event data
+            </span>
+        </div>
+    {{/if}}
+</ContentPanel>

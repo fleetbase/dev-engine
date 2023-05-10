@@ -3,27 +3,24 @@ import { setupRenderingTest } from 'dummy/tests/helpers';
 import { render } from '@ember/test-helpers';
 import { hbs } from 'ember-cli-htmlbars';
 
-module(
-  'Integration | Component | modals/listen-custom-channel',
-  function (hooks) {
+module('Integration | Component | modals/listen-custom-channel', function (hooks) {
     setupRenderingTest(hooks);
 
     test('it renders', async function (assert) {
-      // Set any properties with this.set('myProperty', 'value');
-      // Handle any actions with this.set('myAction', function(val) { ... });
+        // Set any properties with this.set('myProperty', 'value');
+        // Handle any actions with this.set('myAction', function(val) { ... });
 
-      await render(hbs`<Modals::ListenCustomChannel />`);
+        await render(hbs`<Modals::ListenCustomChannel />`);
 
-      assert.dom(this.element).hasText('');
+        assert.dom(this.element).hasText('');
 
-      // Template block usage:
-      await render(hbs`
+        // Template block usage:
+        await render(hbs`
       <Modals::ListenCustomChannel>
         template block text
       </Modals::ListenCustomChannel>
     `);
 
-      assert.dom(this.element).hasText('template block text');
+        assert.dom(this.element).hasText('template block text');
     });
-  }
-);
+});

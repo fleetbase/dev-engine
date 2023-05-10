@@ -1,1 +1,7 @@
-{{outlet}}
+<Layout::Section::Header @title="Webhooks" @searchQuery={{this.query}} @onSearch={{perform this.search}}>
+    <Button @type="primary" @icon="plus" @iconPrefix="fas" @text="Add new endpoint" class="mr-2" @onClick={{this.createWebhook}} />
+</Layout::Section::Header>
+
+<Layout::Section::Body>
+    <Table @rows={{@model}} @columns={{this.columns}} @onRowClick={{this.viewWebhook}} @onSetup={{fn (mut this.table)}} @pagination={{true}} @paginationMeta={{@model.meta}} @page={{this.page}} @onPageChange={{fn (mut this.page)}} @tfootVerticalOffset="53" @tfootVerticalOffsetElements=".next-view-section-subheader" />
+</Layout::Section::Body>

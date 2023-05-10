@@ -29,16 +29,17 @@
         "test:ember-compatibility": "ember try:each"
     },
     "dependencies": {
-        "@fleetbase/fleetops-data": "link:../fleetops-data",
         "@fleetbase/ember-core": "link:../ember-core",
         "@fleetbase/ember-ui": "link:../ember-ui",
+        "@fleetbase/fleetops-data": "link:../fleetops-data",
         "@fortawesome/ember-fontawesome": "^0.4.1",
         "@fortawesome/free-solid-svg-icons": "^6.2.0",
-        "ember-tag-input": "^3.1.0",
-        "ember-wormhole": "^0.6.0",
-        "socketcluster-client": "^17.1.1",
+        "date-fns": "^2.30.0",
         "ember-cli-babel": "^7.26.11",
-        "ember-cli-htmlbars": "^6.1.0"
+        "ember-cli-htmlbars": "^6.1.0",
+        "ember-prism": "^0.13.0",
+        "ember-tag-input": "^3.1.0",
+        "ember-wormhole": "^0.6.0"
     },
     "devDependencies": {
         "@ember/optional-features": "^2.0.0",
@@ -54,14 +55,14 @@
         "ember-cli-inject-live-reload": "^2.1.0",
         "ember-cli-sri": "^2.1.1",
         "ember-cli-terser": "^4.0.2",
+        "ember-data": "~4.6.0",
         "ember-disable-prototype-extensions": "^1.1.3",
+        "ember-engines": "^0.8.23",
         "ember-load-initializers": "^2.1.2",
         "ember-page-title": "^7.0.0",
         "ember-qunit": "^5.1.5",
         "ember-resolver": "^8.0.3",
         "ember-source": "~4.6.0",
-        "ember-engines": "^0.8.23",
-        "ember-data": "~4.6.0",
         "ember-source-channel-url": "^3.0.0",
         "ember-template-lint": "^4.10.1",
         "ember-try": "^2.0.0",
@@ -89,5 +90,20 @@
     },
     "ember-addon": {
         "configPath": "tests/dummy/config"
+    },
+    "prettier": {
+        "trailingComma": "es5",
+        "tabWidth": 4,
+        "semi": true,
+        "singleQuote": true,
+        "printWidth": 190,
+        "overrides": [
+            {
+                "files": "*.hbs",
+                "options": {
+                    "singleQuote": false
+                }
+            }
+        ]
     }
 }

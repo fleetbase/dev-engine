@@ -1,0 +1,11 @@
+<ContentPanel @title={{concat "Request " @apiRequest.method " body"}} @panelTitleClass="text-sm" @open={{true}} @pad={{true}} @panelBodyClass="bg-white dark:bg-gray-800">
+    {{#if @apiRequest.request_body}}
+        <CodeBlock @code={{or (json-stringify @apiRequest.request_body) ""}} @language="json" class="line-numbers" />
+    {{else}}
+        <div class="flex items-center justify-center h-24">
+            <span class="text-sm text-gray-400">
+                No request {{@apiRequest.method}} body
+            </span>
+        </div>
+    {{/if}}
+</ContentPanel>
