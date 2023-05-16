@@ -2,18 +2,24 @@
     "name": "@fleetbase/dev-engine",
     "extension": "Developers",
     "icon": "code",
-    "version": "0.0.0",
-    "description": "The developer console for managing API keys, sockets and webhooks.",
+    "version": "0.0.1",
+    "description": "Fleetbase Developers extension provides a module for managing developer resources such as API keys, webhooks, sockets, events and logs.",
     "keywords": [
-        "ember-engine",
-        "ember-addon"
+        "fleetbase-extension",
+        "fleetbase-development",
+        "logistice-development",
+        "fleetbase-dev",
+        "fleetbase",
+        "ember-addon",
+        "ember-engine"
     ],
-    "repository": "",
+    "repository": "https://github.com/fleetbase/dev-engine",
     "license": "MIT",
-    "author": "",
+    "author": "Fleetbase Pte Ltd <hello@fleetbase.io>",
     "directories": {
-        "doc": "doc",
-        "test": "tests"
+        "app": "app",
+        "addon": "addon",
+        "tests": "tests"
     },
     "scripts": {
         "build": "ember build --environment=production",
