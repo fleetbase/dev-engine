@@ -36,9 +36,9 @@
         "test:ember-compatibility": "ember try:each"
     },
     "dependencies": {
-        "@fleetbase/ember-core": "link:../ember-core",
-        "@fleetbase/ember-ui": "link:../ember-ui",
-        "@fleetbase/fleetops-data": "link:../fleetops-data",
+        "@fleetbase/ember-core": "^0.0.1",
+        "@fleetbase/ember-ui": "^0.0.1",
+        "@fleetbase/fleetops-data": "^0.0.1",
         "@fortawesome/ember-fontawesome": "^0.4.1",
         "@fortawesome/free-solid-svg-icons": "^6.2.0",
         "date-fns": "^2.30.0",
