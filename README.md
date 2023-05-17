@@ -1,6 +1,6 @@
-# @fleetbase/console-dev
+# @fleetbase/dev-engine
 
-[Short description of the addon.]
+Fleetbase Console extension for managing developer API Keys, Webhooks, Sockets, and viewing logs and API events.
 
 
 ## Compatibility
@@ -13,7 +13,7 @@
 ## Installation
 
 ```
-ember install @fleetbase/console-dev
+ember install @fleetbase/dev-engine
 ```
 
 
