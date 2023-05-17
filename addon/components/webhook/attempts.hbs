@@ -1,0 +1,91 @@
+<div class="content-panel" ...attributes>
+    <div class="content-panel-header">
+        <div class="flex items-center">
+            <div>
+                <h3 class="mb-1 mr-4 text-xl font-bold dark:text-gray-100">
+                    Webhook attempts
+                </h3>
+                <p class="dark:text-gray-100 text-sm">
+                    Attempts to send an event to your endpoint in the past 15 days
+                </p>
+            </div>
+        </div>
+
+        <div class="flex items-center section-header-actions">
+            <div class="rounded-lg border borer-gray-300 dark:border-gray-700 shadow-sm">
+                <div class="rounded-lg flex items-center justify-between px-2 py-1 text-sm bg-white dark:bg-gray-900">
+                    <a href="javascript:;" class="mx-4 no-underline text-gray-400 {{if this.noAttemptStatus "font-semibold text-blue-400"}}" {{on "click" this.changeAttemptStatus}}>
+                        All
+                    </a>
+                    <a href="javascript:;" class="mx-4 no-underline text-gray-400 {{if (eq this.attemptStatus "successful") "font-semibold text-blue-400"}}" {{on "click" (fn this.changeAttemptStatus "successful")}}>
+                        Succeeded
+                    </a>
+                    <a href="javascript:;" class="mx-4 no-underline text-gray-400 {{if (eq this.attemptStatus "failed") "font-semibold text-blue-400"}}" {{on "click" (fn this.changeAttemptStatus "failed")}}>
+                        Failed
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="content-panel-body table-wrapper table-fluid">
+        <Table @rows={{this.webhookRequestLogs}} @columns={{this.columns}} @canExpand={{true}} as |Table|>
+            <Table.head />
+            <Table.body as |body|>
+                <body.expanded-row as |row|>
+                    <table class="border-none table-fixed sub-table dark:text-gray-100 table-spaced-y-2 table-cells-valign-top">
+                        <tbody>
+                            <tr>
+                                <td class="w-64">
+                                    HTTP status code
+                                </td>
+                                <td>
+                                    {{row.status_code}} ({{row.reason_phrase}})
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="w-64">
+                                    Response time
+                                </td>
+                                <td>
+                                    {{format-milliseconds row.duration}}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    Request to your endpoint
+                                </td>
+                                <td>
+                                    {{#if row.api_event.data}}
+                                        <CodeBlock @code={{or (json-stringify row.api_event.data) ""}} @language="json" class="line-numbers" />
+                                    {{else}}
+                                        <div class="flex items-center justify-center h-24">
+                                            <span class="text-sm text-gray-600">
+                                                No request body
+                                            </span>
+                                        </div>
+                                    {{/if}}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    Response
+                                </td>
+                                <td>
+                                    {{#if row.response}}
+                                        <CodeBlock @code={{or (json-stringify row.response) ""}} @language="json" class="line-numbers" />
+                                    {{else}}
+                                        <div class="flex items-center justify-center h-24">
+                                            <span class="text-sm text-gray-600">
+                                                No response body
+                                            </span>
+                                        </div>
+                                    {{/if}}
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </body.expanded-row>
+            </Table.body>
+        </Table>
+    </div>
+</div>

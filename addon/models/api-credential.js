@@ -30,6 +30,10 @@ export default class ApiCredentialModel extends Model {
         return `${this.key}`;
     }
 
+    @computed('test_mode') get isTestKey() {
+        return this.test_mode === true;
+    }
+
     @computed('test_mode') get environment() {
         return this.test_mode ? 'Test' : 'Live';
     }

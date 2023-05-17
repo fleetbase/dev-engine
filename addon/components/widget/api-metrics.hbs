@@ -1,0 +1,20 @@
+<ContentPanel @title="Monitoring" @open={{or @open true}} @pad={{or @pad false}} @panelBodyClass="bg-white dark:bg-gray-800">
+    <div class="grid grid-cols-1 md:grid-cols-2">
+        <div class="w-full border-b border-r border-gray-200 dark:border-gray-900">
+            <h4 class="my-3 text-sm font-semibold mx-5">API Requests</h4>
+            <Chart @type="line" @labels={{this.chartLabels}} @datasets={{this.apiRequestData}} @options={{this.chartOptions}} />
+        </div>
+        <div class="w-full border-b border-gray-200 dark:border-gray-900">
+            <h4 class="my-3 text-sm font-semibold mx-5">API Error Distribution</h4>
+            <Chart @type="line" @labels={{this.chartLabels}} @datasets={{this.apiErrorDistributionData}} @options={{this.chartOptions}} />
+        </div>
+        <div class="w-full border-b border-r border-gray-200 dark:border-gray-900">
+            <h4 class="my-3 text-sm font-semibold mx-5">Webhooks</h4>
+            <Chart @type="line" @labels={{this.chartLabels}} @datasets={{this.webhookRequestData}} @options={{this.chartOptions}} />
+        </div>
+        <div class="w-full border-b border-gray-200 dark:border-gray-900">
+            <h4 class="my-3 text-sm font-semibold mx-5">Webhooks response time</h4>
+            <Chart @type="line" @labels={{this.chartLabels}} @datasets={{this.webhookRequestTimingData}} @options={{this.chartOptions}} />
+        </div>
+    </div>
+</ContentPanel>

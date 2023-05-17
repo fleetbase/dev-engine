@@ -1,1 +1,7 @@
-{{outlet}}
+<Layout::Section::Header @title="Channels receiving events from your account">
+    <Button @icon="headphones" @type="magic" @iconPrefix="fas" @text="Listen on custom channel" @onClick={{this.listenOnCustomChannel}} />
+</Layout::Section::Header>
+
+<Layout::Section::Body>
+    <Table @rows={{this.channels}} @columns={{this.columns}} @onSetup={{fn (mut this.table)}} />
+</Layout::Section::Body>

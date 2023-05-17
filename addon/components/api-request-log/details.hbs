@@ -1,0 +1,46 @@
+<ContentPanel @prefixTitle="Request" @title={{@apiRequest.description}} @titleStatus={{@apiRequest.status_code}} @prefixTitleRight={{@apiRequest.public_id}} @titleContainerClass="flex-col" @panelTitleClass="ml-4 flex flex-row items-center text-sm" @prefixTitleClass="text-sm" @prefixTitleRightClass="font-mono" @panelHeaderClass="items-stretch-i" @panelHeaderRightClass="items-start-i" @prefixTitleRightContainerClass="py-2" @open={{true}} @pad={{true}} @panelBodyClass="bg-white dark:bg-gray-800 text-sm">
+    <table class="border-none table-fixed dark:text-gray-100 table-spaced-y-2 table-cells-valign-top">
+        <tbody>
+            <tr>
+                <td class="w-40">
+                    Time
+                </td>
+                <td>
+                    {{@apiRequest.createdAt}}
+                </td>
+            </tr>
+            <tr>
+                <td class="w-40">
+                    Duration
+                </td>
+                <td>
+                    {{format-milliseconds @apiRequest.duration}}
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    IP Address
+                </td>
+                <td>
+                    {{@apiRequest.ip_address}}
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    Version
+                </td>
+                <td>
+                    {{@apiRequest.version}}
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    Source
+                </td>
+                <td>
+                    {{@apiRequest.source}}
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</ContentPanel>

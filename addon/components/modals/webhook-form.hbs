@@ -1,19 +1,17 @@
 <Modal::Default @modalIsOpened={{@modalIsOpened}} @options={{@options}} @confirm={{@onConfirm}} @decline={{@onDecline}} as |options|>
-    <div class="p-5 border-b border-gray-200 dark:border-gray-800">
-        <div class="mb-5 input-group">
+    <div class="px-5 border-b border-gray-200 dark:border-gray-800">
+        <div class="input-group">
             <InputLabel @labelText="Endpoint URL" @helpText="The URL Fleetbase should send event callbacks to." @required={{true}} />
-
             <Input @value={{options.webhook.url}} type="url" class="w-full form-input" placeholder="https://" />
         </div>
 
         <div class="input-group">
             <InputLabel @labelText="Description" @helpText="Optionally add a description for the webhook endpoint." />
-
             <Textarea @value={{options.webhook.description}} class="w-full form-input" placeholder="An optional description of what this webhook endpoint is used for." />
         </div>
     </div>
 
-    <div class="p-5 border-b border-gray-200 dark:border-gray-800">
+    <div class="px-5 pt-4 border-b border-gray-200 dark:border-gray-800">
         <div class="input-group">
             <InputLabel @labelText="API Credential" @helpText="Restrict the webhook endpoint to receive callbacks from a specific API key." />
 
@@ -33,7 +31,7 @@
         </div>
     </div>
 
-    <div class="p-5 border-b border-gray-200 dark:border-gray-800">
+    <div class="px-5 pt-4 border-b border-gray-200 dark:border-gray-800">
         <div class="input-group">
             <InputLabel @labelText="Version" @helpText="Select a specific API version to receive callbacks for." />
 
@@ -50,7 +48,7 @@
         </div>
     </div>
 
-    <div class="p-5">
+    <div class="px-5 pt-4">
         <div class="input-group">
             <div class="mb-4">
                 <InputLabel class="mb-2" @labelText="Events to send" @helpText="Explicilty set which events to receive callbacks for." />

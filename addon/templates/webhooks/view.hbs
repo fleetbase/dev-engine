@@ -1,1 +1,21 @@
-{{outlet}}
+<Layout::Section::Header @title={{@model.url}}>
+    {{!-- {{#if @model.isTestMode}}
+        <Button @icon="reply" @text="Send test webhook..." class="mr-2" />
+    {{/if}} --}}
+    {{#if @model.isEnabled}}
+        <Button @icon="ban" @text="Disable..." class="mr-2" @onClick={{fn this.disableWebhook @model}} />
+    {{else}}
+        <Button @icon="ban" @text="Enable..." class="mr-2" @onClick={{fn this.enableWebhook @model}} />
+    {{/if}}
+    <Button @iconPrefix="fas" @icon="times" @text="Delete..." @onClick={{fn this.deleteWebhook @model}} />
+</Layout::Section::Header>
+
+<Layout::Section::Body>
+    <div class="h-screen overflow-y-scroll pb-40">
+        <div class="space-y-6 py-6 max-w-6xl mx-auto">
+            <Webhook::Metrics @webhook={{@model}} />
+            <Webhook::Details @webhook={{@model}} @onClickUpdateWebhook={{this.updateWebhookDetails}} />
+            <Webhook::Attempts @webhook={{@model}} />
+        </div>
+    </div>
+</Layout::Section::Body>

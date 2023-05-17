@@ -3,40 +3,147 @@ import { tracked } from '@glimmer/tracking';
 import { inject as service } from '@ember/service';
 import { action, computed } from '@ember/object';
 import { isBlank } from '@ember/utils';
-import { not } from '@ember/object/computed';
+import { not, filterBy } from '@ember/object/computed';
 import { timeout } from 'ember-concurrency';
 import { task } from 'ember-concurrency-decorators';
+import { format as formatDate } from 'date-fns';
 
 export default class ApiKeysIndexController extends Controller {
+    /**
+     * Inject the `currentUser` service
+     *
+     * @var {Service}
+     */
     @service currentUser;
+
+    /**
+     * Inject the `modalsManager` service
+     *
+     * @var {Service}
+     */
     @service modalsManager;
+
+    /**
+     * Inject the `notifications` service
+     *
+     * @var {Service}
+     */
     @service notifications;
+
+    /**
+     * Inject the `store` service
+     *
+     * @var {Service}
+     */
     @service store;
+
+    /**
+     * Inject the `crud` service
+     *
+     * @var {Service}
+     */
+    @service crud;
+
+    /**
+     * Inject the `fetch` service
+     *
+     * @var {Service}
+     */
     @service fetch;
+
+    /**
+     * Inject the `theme` service
+     *
+     * @var {Service}
+     */
     @service theme;
+
+    /**
+     * Inject the `hostRouter` service
+     *
+     * @var {Service}
+     */
     @service hostRouter;
-    @tracked testMode;
+
+    /**
+     * Queryable parameters for this controller's model
+     *
+     * @var {Array}
+     */
+    queryParams = ['page', 'limit', 'sort'];
+
+    /**
+     * Expiration options for api keys
+     *
+     * @var {Array}
+     */
+    expirationOptions = ['never', 'immediately', 'in 1 hour', 'in 24 hours', 'in 3 days', 'in 7 days'];
+
+    /**
+     * Tracks the current console environment mode
+     *
+     * @memberof ApiKeysIndexController
+     */
+    @tracked testMode = false;
+
+    /**
+     * The current page of data being viewed
+     *
+     * @var {Integer}
+     */
     @tracked page = 1;
+
+    /**
+     * The maximum number of items to show per page
+     *
+     * @var {Integer}
+     */
     @tracked limit;
+
+    /**
+     * The param to sort the data on, the param with prepended `-` is descending
+     *
+     * @var {String}
+     */
     @tracked sort;
+
+    /**
+     * The param to query the data by
+     *
+     * @var {String}
+     */
     @tracked query;
+
+    /**
+     * Checks if console environment is in live mode
+     *
+     * @memberof ApiKeysIndexController
+     */
     @not('isTestMode') isLiveMode;
 
+    /**
+     * Checks if console environment is in test mode
+     *
+     * @memberof ApiKeysIndexController
+     */
     @computed('testMode') get isTestMode() {
         return this.testMode === true;
     }
 
+    /**
+     * gets the user selected key to view data from
+     *
+     * @memberof ApiKeysIndexController
+     */
     @computed('currentUser.options.testKey') get testKey() {
         return this.currentUser.getOption('testKey');
     }
 
-    @computed('@model.@each.test_mode') get testKeys() {
-        return this.model.filter((apiKey) => apiKey.test_mode);
-    }
-
-    queryParams = ['page', 'limit', 'sort'];
-    expirationOptions = ['never', 'immediately', 'in 1 hour', 'in 24 hours', 'in 3 days', 'in 7 days'];
-
+    /**
+     * Columns for table component.
+     *
+     * @var {Array}
+     */
     @tracked columns = [
         {
             label: 'Name',
@@ -115,12 +222,6 @@ export default class ApiKeysIndexController extends Controller {
         },
     ];
 
-    constructor() {
-        super(...arguments);
-
-        this.testMode = this.currentUser.getOption('sandbox', false);
-    }
-
     /**
      * The search task.
      *
@@ -155,7 +256,23 @@ export default class ApiKeysIndexController extends Controller {
         this.testMode = testMode;
         this.theme.setEnvironment();
         this.store.unloadAll();
-        this.hostRouter.refresh();
+        this.hostRouter.refresh().then(() => {
+            this.currentUser.setOption('testKey', this.model?.firstObject?.key);
+        });
+    }
+
+    /**
+     * Toggle test key
+     *
+     * @void
+     */
+    @action toggleTestKey({ target: { value } }) {
+        if (isBlank(value)) {
+            this.currentUser.setOption('testKey', null);
+            return;
+        }
+
+        this.currentUser.setOption('testKey', value);
     }
 
     /**
@@ -164,12 +281,15 @@ export default class ApiKeysIndexController extends Controller {
      * @void
      */
     @action createApiKey() {
-        const apiKey = this.store.createRecord('api-credential');
+        const apiKey = this.store.createRecord('api-credential', {
+            test_mode: this.testMode,
+        });
 
         this.editApiKey(apiKey, {
             title: 'New API Key',
             acceptButtonIcon: 'check',
             acceptButtonIconPrefix: 'fas',
+            successMessage: 'New API Credentials created.',
             apiKey,
         });
     }
@@ -180,14 +300,13 @@ export default class ApiKeysIndexController extends Controller {
      * @void
      */
     @action editApiKey(apiKey, options = {}) {
-        // const changeset = new Changeset(apiKey, lookupValidator(ApiCredentialValidations), ApiCredentialValidations);
-
         this.modalsManager.show('modals/api-key-form', {
             title: 'Edit API Key',
             acceptButtonIcon: 'save',
-            apiKey,
+            successMessage: 'API Credentials changes saved.',
             expirationOptions: this.expirationOptions,
             testMode: this.currentUser.getOption('sandbox') || false,
+            apiKey,
             setExpiration: ({ target }) => {
                 apiKey.expires_at = target.value || null;
             },
@@ -197,9 +316,10 @@ export default class ApiKeysIndexController extends Controller {
                 apiKey
                     .save()
                     .then((apiKey) => {
-                        this.notifications.success('New API Credentials created.');
-                        this.table.addRow(apiKey);
-                        return done();
+                        this.notifications.success(modal.getOption('successMessage'));
+                        return this.hostRouter.refresh().finally(() => {
+                            done();
+                        });
                     })
                     .catch((error) => {
                         this.notifications.serverError(error);
@@ -252,8 +372,9 @@ export default class ApiKeysIndexController extends Controller {
                     .destroyRecord()
                     .then((apiKey) => {
                         this.notifications.success(`API credential (${apiKey.name || 'Untitled'}) removed.`);
-                        this.table.removeRow(apiKey);
-                        return done();
+                        return this.hostRouter.refresh().finally(() => {
+                            done();
+                        });
                     })
                     .catch((error) => {
                         this.notifications.serverError(error);
@@ -264,12 +385,29 @@ export default class ApiKeysIndexController extends Controller {
     }
 
     /**
+     * Bulk deletes selected `api-credential` via confirm prompt
+     *
+     * @param {Array} selected an array of selected models
+     * @void
+     */
+    @action bulkDeleteApiCredentials() {
+        const selected = this.table.selectedRows;
+
+        this.crud.bulkDelete(selected, {
+            acceptButtonText: 'Delete API Credentials',
+            onSuccess: () => {
+                this.hostRouter.refresh();
+            },
+        });
+    }
+
+    /**
      * Toggles dialog to roll API key
      *
      * @void
      */
     @action rollApiKey(apiKey) {
-        this.modalsManager.show('modals/roll-api-key', {
+        this.modalsManager.show('modals/roll-api-key-form', {
             title: `Roll (${apiKey.name || 'Untitled'}) API Key`,
             modalClass: 'roll-key-modal',
             acceptButtonText: 'Roll API Key',
@@ -294,7 +432,6 @@ export default class ApiKeysIndexController extends Controller {
                     )
                     .then((apiKey) => {
                         this.notifications.success(`API credential (${apiKey.name || 'Untitled'}) rolled.`);
-                        replaceTableRow(this.table, apiKey, 'id');
                         return done();
                     })
                     .catch((error) => {
@@ -326,12 +463,15 @@ export default class ApiKeysIndexController extends Controller {
             title: `Export API Credentials`,
             acceptButtonText: 'Download',
             formatOptions: ['csv', 'xlsx', 'xls', 'html', 'pdf'],
+            format: 'xlsx',
             setFormat: ({ target }) => {
                 this.modalsManager.setOption('format', target.value || null);
             },
             confirm: (modal, done) => {
-                const format = modal.getOption('format') || 'xlsx';
                 modal.startLoading();
+
+                const format = modal.getOption('format', 'xlsx');
+                
                 this.fetch
                     .download(
                         `api-credentials/export`,
@@ -339,7 +479,7 @@ export default class ApiKeysIndexController extends Controller {
                             format,
                         },
                         {
-                            fileName: `api-credentials-${moment().format('YYYY-MM-DD-HH:mm')}.${format}`,
+                            fileName: `api-credentials-${formatDate(new Date(), 'yyyy-MM-dd-HH:mm')}.${format}`,
                         }
                     )
                     .then(() => {
