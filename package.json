@@ -2,7 +2,7 @@
     "name": "@fleetbase/dev-engine",
     "extension": "Developers",
     "icon": "code",
-    "version": "0.0.2",
+    "version": "0.0.3",
     "priority": 2,
     "description": "Fleetbase Developers extension provides a module for managing developer resources such as API keys, webhooks, sockets, events and logs.",
     "keywords": [
@@ -37,7 +37,7 @@
     },
     "dependencies": {
         "@fleetbase/ember-core": "^0.0.1",
-        "@fleetbase/ember-ui": "^0.0.2",
+        "@fleetbase/ember-ui": "^0.0.3",
         "@fleetbase/fleetops-data": "^0.0.1",
         "@fortawesome/ember-fontawesome": "^0.4.1",
         "@fortawesome/free-solid-svg-icons": "^6.2.0",
