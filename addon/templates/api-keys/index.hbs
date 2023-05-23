@@ -3,7 +3,7 @@
         <Toggle @isToggled={{this.isTestMode}} @onToggle={{this.toggleTestMode}} @label="View test data" @helpText="Toggling view test data will enable the console to display all test data from your sandbox environment." class="mr-1" />
         {{#if this.isTestMode}}
             <span class="ml-2">
-                <select class="form-select form-input-sm" {{on "change" this.toggleTestKey}}>
+                <select class="form-select form-input-sm" aria-label="Select API Key" {{on "change" this.toggleTestKey}}>
                     <option selected disabled>
                         Select specific key
                     </option>

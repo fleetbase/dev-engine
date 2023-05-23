@@ -30,7 +30,7 @@ export default class ApiKeysIndexRoute extends Route {
         return this.store.query('api-credential', { ...params });
     }
 
-    setupController(controller, model) {
+    setupController(controller) {
         controller.testMode = this.currentUser.getOption('sandbox', false);
     }
 }

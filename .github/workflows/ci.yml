@@ -7,12 +7,12 @@ on:
     branches: [ main ]
 
 jobs:
-  build_and_test:
+  build:
     runs-on: ubuntu-latest
 
     strategy:
       matrix:
-        node-version: [16.x]  # Build and test on Node.js 16
+        node-version: [16.x]  # Build on Node.js 16
 
     steps:
     - uses: actions/checkout@v2
@@ -30,17 +30,36 @@ jobs:
     - name: Install Dependencies
       run: pnpm install
 
+    - name: Build
+      run: pnpm run build
+
+  test:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Setup Node.js 16.x
+      uses: actions/setup-node@v2
+      with:
+        node-version: 16.x
+
+    - name: Setup pnpm
+      uses: pnpm/action-setup@v2.0.1
+      with:
+        version: latest
+
+    - name: Install Dependencies
+      run: pnpm install
+
     - name: Lint
       run: pnpm run lint
 
     - name: Test
       run: pnpm run test
 
-    - name: Build
-      run: pnpm run build
-
   npm_publish:
-    needs: build_and_test
+    needs: test
     runs-on: ubuntu-latest
     if: startsWith(github.ref, 'refs/tags/')
     steps:

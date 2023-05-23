@@ -2,12 +2,12 @@
     <div class="px-5 border-b border-gray-200 dark:border-gray-800">
         <div class="input-group">
             <InputLabel @labelText="Endpoint URL" @helpText="The URL Fleetbase should send event callbacks to." @required={{true}} />
-            <Input @value={{options.webhook.url}} type="url" class="w-full form-input" placeholder="https://" />
+            <Input @value={{options.webhook.url}} @type="url" aria-label="Webhook URL" class="w-full form-input" placeholder="https://" />
         </div>
 
         <div class="input-group">
             <InputLabel @labelText="Description" @helpText="Optionally add a description for the webhook endpoint." />
-            <Textarea @value={{options.webhook.description}} class="w-full form-input" placeholder="An optional description of what this webhook endpoint is used for." />
+            <Textarea @value={{options.webhook.description}} aria-label="Webhook Description" class="w-full form-input" placeholder="An optional description of what this webhook endpoint is used for." />
         </div>
     </div>
 
@@ -15,7 +15,7 @@
         <div class="input-group">
             <InputLabel @labelText="API Credential" @helpText="Restrict the webhook endpoint to receive callbacks from a specific API key." />
 
-            <select class="w-full form-select" {{on "change" @options.setApiCredential}}>
+            <select class="w-full form-select" aria-label="API Credential" {{on "change" @options.setApiCredential}}>
                 <option value={{null}} selected>
                     Receive from all API Credentials...
                 </option>
@@ -35,7 +35,7 @@
         <div class="input-group">
             <InputLabel @labelText="Version" @helpText="Select a specific API version to receive callbacks for." />
 
-            <select class="w-full form-select" {{on "change" @options.setVersion}}>
+            <select class="w-full form-select" aria-label="API Version" {{on "change" @options.setVersion}}>
                 <option selected disabled>
                     Select an API version...
                 </option>
@@ -63,7 +63,7 @@
                             </dd.Trigger>
                             <dd.Content class="w-full h-48 mt-1 overflow-y-hidden border bg-white border-gray-300 rounded shadow-md dark:border-gray-800 dark:bg-gray-700">
                                 <div class="w-full rounded shadow">
-                                    <Input placeholder="Search..." class="w-full px-3 py-2 text-sm leading-4 border-b border-gray-300 shadow-sm dark:border-gray-800 dark:bg-gray-700 dark:text-gray-100" {{on "keyup" @options.searchEvents}} />
+                                    <Input aria-label="Event Search" placeholder="Search..." class="w-full px-3 py-2 text-sm leading-4 border-b border-gray-300 shadow-sm dark:border-gray-800 dark:bg-gray-700 dark:text-gray-100" {{on "keyup" @options.searchEvents}} />
                                     <div class="w-full h-40 pb-2 overflow-y-scroll">
                                         {{#each-in @options.eventOptions as |resourceName events|}}
                                             <div class="">

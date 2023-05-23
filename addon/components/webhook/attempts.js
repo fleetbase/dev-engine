@@ -1,10 +1,9 @@
 import Component from '@glimmer/component';
 import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
-import { action, computed, get } from '@ember/object';
+import { action } from '@ember/object';
 import { none } from '@ember/object/computed';
 import copyToClipboard from '@fleetbase/ember-core/utils/copy-to-clipboard';
-import fromStore from '@fleetbase/ember-core/decorators/from-store';
 
 export default class WebhookAttemptsComponent extends Component {
     /**
@@ -161,7 +160,7 @@ export default class WebhookAttemptsComponent extends Component {
      * @void
      */
     @action copyEventIdToClipboard(webhook) {
-        copyToClipboard(get(webhook, 'api_event.public_id')).then(() => {
+        copyToClipboard(webhook.api_event?.public_id).then(() => {
             this.notifications.info('Event ID copied to clipboard.');
         });
     }

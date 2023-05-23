@@ -3,7 +3,7 @@ import { tracked } from '@glimmer/tracking';
 import { inject as service } from '@ember/service';
 import { action, computed } from '@ember/object';
 import { isBlank } from '@ember/utils';
-import { not, filterBy } from '@ember/object/computed';
+import { not } from '@ember/object/computed';
 import { timeout } from 'ember-concurrency';
 import { task } from 'ember-concurrency-decorators';
 import { format as formatDate } from 'date-fns';
@@ -315,7 +315,7 @@ export default class ApiKeysIndexController extends Controller {
 
                 apiKey
                     .save()
-                    .then((apiKey) => {
+                    .then(() => {
                         this.notifications.success(modal.getOption('successMessage'));
                         return this.hostRouter.refresh().finally(() => {
                             done();
@@ -471,7 +471,7 @@ export default class ApiKeysIndexController extends Controller {
                 modal.startLoading();
 
                 const format = modal.getOption('format', 'xlsx');
-                
+
                 this.fetch
                     .download(
                         `api-credentials/export`,
