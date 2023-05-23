@@ -34,6 +34,9 @@ dependencies:
   ember-wormhole:
     specifier: ^0.6.0
     version: 0.6.0
+  socketcluster-client:
+    specifier: ^17.1.1
+    version: 17.1.1
 
 devDependencies:
   '@ember/optional-features':
