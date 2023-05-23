@@ -4,12 +4,12 @@
             <label>
                 Name
             </label>
-            <Input @value={{options.apiKey.name}} type="text" class="w-full form-input" placeholder="Enter a nickname or environment name for API Key" />
+            <Input @value={{options.apiKey.name}} @type="text" aria-label="API Key Name" class="w-full form-input" placeholder="Enter a nickname or environment name for API Key" />
         </div>
         <div class="input-group">
             <InputLabel @labelText="Expiration" @helpText="Optionally set an expiry date for this api key." />
 
-            <select class="w-full mb-1 form-select" {{on "change" @options.setExpiration}}>
+            <select class="w-full mb-1 form-select" aria-label="API Key Expiration Date" {{on "change" @options.setExpiration}}>
                 <option selected disabled>
                     Select an expiration date...
                 </option>

@@ -2,7 +2,7 @@
     "name": "@fleetbase/dev-engine",
     "extension": "Developers",
     "icon": "code",
-    "version": "0.0.3",
+    "version": "0.0.4",
     "priority": 2,
     "description": "Fleetbase Developers extension provides a module for managing developer resources such as API keys, webhooks, sockets, events and logs.",
     "keywords": [
@@ -36,17 +36,19 @@
         "test:ember-compatibility": "ember try:each"
     },
     "dependencies": {
-        "@fleetbase/ember-core": "^0.0.1",
-        "@fleetbase/ember-ui": "^0.0.3",
+        "@fleetbase/ember-core": "^0.0.2",
+        "@fleetbase/ember-ui": "^0.0.4",
         "@fleetbase/fleetops-data": "^0.0.1",
         "@fortawesome/ember-fontawesome": "^0.4.1",
-        "@fortawesome/free-solid-svg-icons": "^6.2.0",
+        "@fortawesome/fontawesome-svg-core": "^6.4.0",
+        "@fortawesome/free-solid-svg-icons": "^6.4.0",
         "date-fns": "^2.30.0",
         "ember-cli-babel": "^7.26.11",
         "ember-cli-htmlbars": "^6.1.0",
         "ember-prism": "^0.13.0",
         "ember-tag-input": "^3.1.0",
-        "ember-wormhole": "^0.6.0"
+        "ember-wormhole": "^0.6.0",
+        "socketcluster-client": "^17.1.1"
     },
     "devDependencies": {
         "@ember/optional-features": "^2.0.0",

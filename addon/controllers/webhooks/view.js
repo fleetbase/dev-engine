@@ -1,5 +1,4 @@
 import Controller, { inject as controller } from '@ember/controller';
-import { tracked } from '@glimmer/tracking';
 import { inject as service } from '@ember/service';
 import { action, computed } from '@ember/object';
 import groupApiEvents from '@fleetbase/ember-core/utils/group-api-events';

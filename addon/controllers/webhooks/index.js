@@ -2,6 +2,7 @@ import Controller from '@ember/controller';
 import { tracked } from '@glimmer/tracking';
 import { inject as service } from '@ember/service';
 import { action, computed } from '@ember/object';
+import { isBlank } from '@ember/utils';
 import { timeout } from 'ember-concurrency';
 import { task } from 'ember-concurrency-decorators';
 import groupApiEvents from '@fleetbase/ember-core/utils/group-api-events';
@@ -266,7 +267,7 @@ export default class WebhooksIndexController extends Controller {
                 });
                 this.modalsManager.setOption('eventOptions', filteredEvents);
             },
-            addEvent: (event, dd) => {
+            addEvent: (event) => {
                 if (webhook.events.includes(event)) {
                     return;
                 }
@@ -285,7 +286,7 @@ export default class WebhooksIndexController extends Controller {
             confirm: (modal) => {
                 modal.startLoading();
 
-                return webhook.save().then((webhook) => {
+                return webhook.save().then(() => {
                     this.notifications.success('New Webhook created.');
                     return this.hostRouter.refresh();
                 });
@@ -308,7 +309,7 @@ export default class WebhooksIndexController extends Controller {
             confirm: (modal) => {
                 modal.startLoading();
 
-                return webhook.destroyRecord().then((webhook) => {
+                return webhook.destroyRecord().then(() => {
                     this.notifications.success(`Webhook endpoint removed.`);
                     return this.hostRouter.refresh();
                 });

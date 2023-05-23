@@ -36,7 +36,7 @@
                 </span>
             </div>
             <div class="w-3/4">
-                <select class="w-full mb-2 form-select form-input-sm" {{on "change" @options.setExpiration}}>
+                <select class="w-full mb-2 form-select form-input-sm" aria-label="API Key Expiration" {{on "change" @options.setExpiration}}>
                     <option selected disabled>
                         Select an expiration date...
                     </option>
@@ -67,14 +67,14 @@
             <label>
                 Email
             </label>
-            <Input @type="email" @value={{@options.user.email}} class="w-full form-input" disabled="true" />
+            <Input @type="email" @value={{@options.user.email}} aria-label="User Email" class="w-full form-input" disabled="true" />
         </div>
 
         <div class="input-group">
             <label>
                 Password
             </label>
-            <Input @type="password" @value={{@options.password}} placeholder="Authenticate request using your password" class="w-full form-input" />
+            <Input @type="password" @value={{@options.password}} aria-label="User Password" placeholder="Authenticate request using your password" class="w-full form-input" />
         </div>
     </div>
 </Modal::Default>

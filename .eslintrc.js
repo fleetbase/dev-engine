@@ -15,7 +15,13 @@ module.exports = {
     env: {
         browser: true,
     },
-    rules: {},
+    globals: {
+        socketClusterClient: 'readonly',
+    },
+    rules: {
+        'ember/no-array-prototype-extensions': 'off',
+        'ember/no-computed-properties-in-native-classes': 'off',
+    },
     overrides: [
         // node files
         {
