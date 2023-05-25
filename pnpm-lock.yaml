@@ -8,8 +8,8 @@ dependencies:
     specifier: ^0.0.4
     version: 0.0.4(@babel/core@7.21.8)(@ember/test-helpers@2.8.1)(ember-source@4.6.0)(rollup@3.23.0)(webpack@5.74.0)
   '@fleetbase/fleetops-data':
-    specifier: ^0.0.1
-    version: 0.0.1
+    specifier: ^0.0.2
+    version: 0.0.2
   '@fortawesome/ember-fontawesome':
     specifier: ^0.4.1
     version: 0.4.1(rollup@3.23.0)
@@ -1856,15 +1856,18 @@ packages:
       - webpack-command
     dev: false
 
-  /@fleetbase/fleetops-data@0.0.1:
-    resolution: {integrity: sha512-JXJDokbLrHhHZrKDsV2W0aF9owTcQeqfEWhCVVCT++tlMG8D2Tca/uZ666F2uVTYJg/gG7C9R/xv9x/G5TQ01w==}
+  /@fleetbase/fleetops-data@0.0.2:
+    resolution: {integrity: sha512-i+5mzHMhkc96rO8lUDLwUcti9nK1tten8h8F8zJS1WqodiHbdWYjiLOlW2DdsDgaCBPHfhegkCDWDL7XfVqF/g==}
     engines: {node: 14.* || >= 16}
     dependencies:
       date-fns: 2.30.0
       ember-cli-babel: 7.26.11
-      ember-cli-htmlbars: 6.1.0
+      ember-cli-htmlbars: 6.2.0
+      socketcluster-client: 17.1.1
     transitivePeerDependencies:
+      - bufferutil
       - supports-color
+      - utf-8-validate
     dev: false
 
   /@floating-ui/core@1.2.6:
@@ -5553,7 +5556,7 @@ packages:
     engines: {node: '>= 12'}
     dependencies:
       ember-cli-babel: 7.26.11
-      ember-cli-htmlbars: 6.1.0
+      ember-cli-htmlbars: 6.2.0
     transitivePeerDependencies:
       - supports-color
     dev: false
@@ -5694,7 +5697,7 @@ packages:
       '@glimmer/component': 1.1.2(@babel/core@7.21.8)
       '@glimmer/tracking': 1.1.2
       ember-cli-babel: 7.26.11
-      ember-cli-htmlbars: 6.1.0
+      ember-cli-htmlbars: 6.2.0
       ember-cli-typescript: 4.2.1
       ember-element-helper: 0.6.1(ember-source@4.6.0)
       ember-get-config: 2.1.1
@@ -6542,7 +6545,7 @@ packages:
     dependencies:
       '@embroider/util': 1.11.0(ember-source@4.6.0)
       ember-cli-babel: 7.26.11
-      ember-cli-htmlbars: 6.1.0
+      ember-cli-htmlbars: 6.2.0
       ember-source: 4.6.0(@babel/core@7.21.8)(webpack@5.74.0)
     transitivePeerDependencies:
       - '@glint/environment-ember-loose'
