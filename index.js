@@ -20,8 +20,6 @@ module.exports = buildEngine({
         };
     },
 
-    _concatStyles: () => {},
-
     isDevelopingAddon() {
         return true;
     },
