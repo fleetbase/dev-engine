@@ -2,8 +2,8 @@ lockfileVersion: '6.0'
 
 dependencies:
   '@fleetbase/ember-core':
-    specifier: ^0.0.2
-    version: 0.0.2(@babel/core@7.22.1)(ember-fetch@8.1.2)(postcss@8.4.24)(webpack@5.74.0)
+    specifier: ^0.0.3
+    version: 0.0.3(@babel/core@7.22.1)(ember-fetch@8.1.2)(postcss@8.4.24)(webpack@5.74.0)
   '@fleetbase/ember-ui':
     specifier: ^0.0.6
     version: 0.0.6(@babel/core@7.22.1)(@ember/test-helpers@2.8.1)(ember-source@4.6.0)(rollup@3.23.1)(webpack@5.74.0)
@@ -1866,14 +1866,14 @@ packages:
       - supports-color
     dev: true
 
-  /@fleetbase/ember-core@0.0.2(@babel/core@7.22.1)(ember-fetch@8.1.2)(postcss@8.4.24)(webpack@5.74.0):
-    resolution: {integrity: sha512-dwQHiWVMjJt/4ZPIioFSLXVv6Rrm+IReNdsy/n+Vp1Cfw967HgLHyMI+AxHjL4qusvThWx7epSg8LTqjfR8tYA==}
+  /@fleetbase/ember-core@0.0.3(@babel/core@7.22.1)(ember-fetch@8.1.2)(postcss@8.4.24)(webpack@5.74.0):
+    resolution: {integrity: sha512-0hGqFIs5J4SpFoeHnzVUkxg/oZCnRqPUAoRSBU0163UhidvZagZcnMZiDqpbTUdhpGHgbfY++WIImmGXaBFSpw==}
     engines: {node: 14.* || >= 16}
     dependencies:
       date-fns: 2.30.0
-      ember-auto-import: 2.4.2(webpack@5.74.0)
+      ember-auto-import: 2.6.3(webpack@5.74.0)
       ember-cli-babel: 7.26.11
-      ember-cli-htmlbars: 6.1.0
+      ember-cli-htmlbars: 6.2.0
       ember-cli-notifications: 8.0.0(@babel/core@7.22.1)(postcss@8.4.24)
       ember-concurrency: 2.3.7(@babel/core@7.22.1)
       ember-concurrency-decorators: 2.0.3(@babel/core@7.22.1)
@@ -5646,7 +5646,7 @@ packages:
     engines: {node: '>= 12'}
     dependencies:
       ember-cli-babel: 7.26.11
-      ember-cli-htmlbars: 6.1.0
+      ember-cli-htmlbars: 6.2.0
     transitivePeerDependencies:
       - supports-color
     dev: false
@@ -5787,7 +5787,7 @@ packages:
       '@glimmer/component': 1.1.2(@babel/core@7.22.1)
       '@glimmer/tracking': 1.1.2
       ember-cli-babel: 7.26.11
-      ember-cli-htmlbars: 6.1.0
+      ember-cli-htmlbars: 6.2.0
       ember-cli-typescript: 4.2.1
       ember-element-helper: 0.6.1(ember-source@4.6.0)
       ember-get-config: 2.1.1
@@ -6074,7 +6074,7 @@ packages:
       broccoli-merge-trees: 4.2.0
       broccoli-postcss: 6.1.0
       ember-cli-babel: 7.26.11
-      ember-cli-htmlbars: 6.1.0
+      ember-cli-htmlbars: 6.2.0
       ember-decorators-polyfill: 1.1.5(@babel/core@7.22.1)
       ember-get-config: 0.5.0
       ember-on-modifier: 1.0.1(@babel/core@7.22.1)
@@ -6635,7 +6635,7 @@ packages:
     dependencies:
       '@embroider/util': 1.11.0(ember-source@4.6.0)
       ember-cli-babel: 7.26.11
-      ember-cli-htmlbars: 6.1.0
+      ember-cli-htmlbars: 6.2.0
       ember-source: 4.6.0(@babel/core@7.22.1)(webpack@5.74.0)
     transitivePeerDependencies:
       - '@glint/environment-ember-loose'
