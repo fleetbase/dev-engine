@@ -2,6 +2,7 @@ import Controller from '@ember/controller';
 import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
+import { isBlank } from '@ember/utils';
 import { format } from 'date-fns';
 import config from 'ember-get-config';
 
@@ -29,14 +30,24 @@ export default class SocketsViewController extends Controller {
         return window.history.back();
     }
 
+    createSocketClusterClient() {
+        const socketConfig = { ...config.socket };
+
+        if (isBlank(socketConfig.hostname)) {
+            socketConfig.hostname = window.location.hostname;
+        }
+
+        return socketClusterClient.create(socketConfig);
+    }
+
     /**
      * Opens socket and logs all incoming events.
      *
      * @memberof SocketsViewController
      */
     @action async watchSocket(model) {
-        // initialize socket
-        const socket = socketClusterClient.create(config.socket);
+        // create socketcluster client
+        const socket = this.createSocketClusterClient();
 
         // listen on company channel
         const channel = socket.subscribe(model.name);
