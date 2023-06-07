@@ -2,7 +2,7 @@
     "name": "@fleetbase/dev-engine",
     "extension": "Developers",
     "icon": "code",
-    "version": "0.0.6",
+    "version": "0.0.7",
     "priority": 2,
     "description": "Fleetbase Developers extension provides a module for managing developer resources such as API keys, webhooks, sockets, events and logs.",
     "keywords": [
