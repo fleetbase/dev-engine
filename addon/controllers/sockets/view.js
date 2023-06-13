@@ -2,17 +2,22 @@ import Controller from '@ember/controller';
 import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
-import { isBlank } from '@ember/utils';
 import { format } from 'date-fns';
-import config from 'ember-get-config';
 
 export default class SocketsViewController extends Controller {
     /**
-     * Inject the router service
+     * Inject the `router` service
      *
      * @var {Service}
      */
     @service hostRouter;
+
+    /**
+     * Inject the `socket` service
+     *
+     * @var {Service}
+     */
+    @service socket;
 
     /**
      * Incoming events logged from socket
@@ -30,24 +35,24 @@ export default class SocketsViewController extends Controller {
         return window.history.back();
     }
 
-    createSocketClusterClient() {
-        const socketConfig = { ...config.socket };
-
-        if (isBlank(socketConfig.hostname)) {
-            socketConfig.hostname = window.location.hostname;
-        }
-
-        return socketClusterClient.create(socketConfig);
-    }
-
     /**
      * Opens socket and logs all incoming events.
      *
      * @memberof SocketsViewController
      */
     @action async watchSocket(model) {
+        /** 
+        @todo make this work later
+        this.socket.listen(model.name, ({ data }) => {
+            this.events.pushObject({
+                time: format(new Date(), 'PPPP'),
+                content: JSON.stringify(data, undefined, 2),
+            });
+        });
+        **/
+
         // create socketcluster client
-        const socket = this.createSocketClusterClient();
+        const socket = this.socket.instance();
 
         // listen on company channel
         const channel = socket.subscribe(model.name);
