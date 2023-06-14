@@ -2,8 +2,8 @@ lockfileVersion: '6.0'
 
 dependencies:
   '@fleetbase/ember-core':
-    specifier: ^0.0.6
-    version: 0.0.6(@babel/core@7.22.1)(ember-fetch@8.1.2)(postcss@8.4.24)(webpack@5.74.0)
+    specifier: ^0.0.7
+    version: 0.0.7(@babel/core@7.22.1)(ember-fetch@8.1.2)(postcss@8.4.24)(webpack@5.74.0)
   '@fleetbase/ember-ui':
     specifier: ^0.0.8
     version: 0.0.8(@babel/core@7.22.1)(@ember/test-helpers@2.8.1)(ember-source@4.6.0)(rollup@3.23.1)(webpack@5.74.0)
@@ -1866,8 +1866,8 @@ packages:
       - supports-color
     dev: true
 
-  /@fleetbase/ember-core@0.0.6(@babel/core@7.22.1)(ember-fetch@8.1.2)(postcss@8.4.24)(webpack@5.74.0):
-    resolution: {integrity: sha512-/m1UIIOKGn0kX74tct2gV1Nz8Fr1URyQia7p8QfjaiguLqjxOf1Php85RJaCZMUEy0XZ3URHTZYeLoDxK2/+Qg==}
+  /@fleetbase/ember-core@0.0.7(@babel/core@7.22.1)(ember-fetch@8.1.2)(postcss@8.4.24)(webpack@5.74.0):
+    resolution: {integrity: sha512-sHByATuNUjgihChE5/Pa2U35emlRVyAbvkOk+fSC1d3mX3sTm7mpsM+Z+gW8+ohbjCY+U3daWFio2458pntM0w==}
     engines: {node: 14.* || >= 16}
     dependencies:
       date-fns: 2.30.0
