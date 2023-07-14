@@ -14,6 +14,10 @@ export default class DevEngine extends Engine {
         services,
         externalRoutes,
     };
+    setupExtension = function (app, engine, universe) {
+        // register menu item in header
+        universe.registerHeaderMenuItem('Developers', 'console.developers', { icon: 'code', priority: 2 });
+    }
 }
 
 loadInitializers(DevEngine, modulePrefix);
