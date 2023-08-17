@@ -21,6 +21,12 @@ module.exports = {
     rules: {
         'ember/no-array-prototype-extensions': 'off',
         'ember/no-computed-properties-in-native-classes': 'off',
+        'node/no-unpublished-require': [
+            'error',
+            {
+                allowModules: ['resolve', 'broccoli-funnel'],
+            },
+        ],
     },
     overrides: [
         // node files
