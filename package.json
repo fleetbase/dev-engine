@@ -39,7 +39,7 @@
     },
     "dependencies": {
         "@fleetbase/ember-core": "^0.1.1",
-        "@fleetbase/ember-ui": "^0.1.5",
+        "@fleetbase/ember-ui": "^0.1.7",
         "@fortawesome/ember-fontawesome": "^0.4.1",
         "@fortawesome/fontawesome-svg-core": "^6.4.0",
         "@fortawesome/free-solid-svg-icons": "^6.4.0",
