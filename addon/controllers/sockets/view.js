@@ -27,6 +27,13 @@ export default class SocketsViewController extends Controller {
     @tracked events = [];
 
     /**
+     * Date format to use for socket console events.
+     *
+     * @memberof SocketsViewController
+     */
+    consoleDateFormat = 'MMM-dd HH:mm';
+
+    /**
      * Sends the user back.
      *
      * @memberof SocketsViewController
@@ -41,36 +48,66 @@ export default class SocketsViewController extends Controller {
      * @memberof SocketsViewController
      */
     @action async watchSocket(model) {
-        /** 
-        @todo make this work later
-        this.socket.listen(model.name, ({ data }) => {
-            this.events.pushObject({
-                time: format(new Date(), 'PPPP'),
-                content: JSON.stringify(data, undefined, 2),
-            });
-        });
-        **/
-
-        // create socketcluster client
+        // Create SocketClusterClient
         const socket = this.socket.instance();
 
-        // listen on company channel
+        // Listen for socket connection errors
+        (async () => {
+            // eslint-disable-next-line no-unused-vars
+            for await (let event of socket.listener('error')) {
+                // Push an event or notification for socket connection here
+                this.events.pushObject({
+                    time: format(new Date(), this.consoleDateFormat),
+                    content: 'Socket connection error!',
+                    color: 'red',
+                });
+            }
+        })();
+
+        // Listen for socket connection
+        (async () => {
+            // eslint-disable-next-line no-unused-vars
+            for await (let event of socket.listener('connect')) {
+                // Push an event or notification for socket connection here
+                this.events.pushObject({
+                    time: format(new Date(), this.consoleDateFormat),
+                    content: 'Socket is connected',
+                    color: 'green',
+                });
+            }
+        })();
+
+        // Listed on company channel
         const channel = socket.subscribe(model.name);
 
-        // listen to channel for events
-        await channel.listener('subscribe').once();
+        // Listen for channel subscription
+        (async () => {
+            // eslint-disable-next-line no-unused-vars
+            for await (let event of channel.listener('subscribe')) {
+                // Push an event or notification for channel subscription here
+                this.events.pushObject({
+                    time: format(new Date(), this.consoleDateFormat),
+                    content: `Socket subscribed to channel '${model.name}'`,
+                    color: 'blue',
+                });
+            }
+        })();
 
-        // get incoming data and console out
-        for await (let data of channel) {
-            this.events.pushObject({
-                time: format(new Date(), 'PPPP'),
-                content: JSON.stringify(data, undefined, 2),
-            });
-        }
+        // Listen for channel subscription
+        (async () => {
+            for await (let data of channel) {
+                this.events.pushObject({
+                    time: format(new Date(), this.consoleDateFormat),
+                    content: JSON.stringify(data, undefined, 2),
+                    color: 'green',
+                });
+            }
+        })();
 
         // disconnect when transitioning
         this.hostRouter.on('routeWillChange', () => {
             channel.close();
+            this.events = [];
         });
     }
 }
