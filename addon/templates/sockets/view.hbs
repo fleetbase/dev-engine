@@ -5,17 +5,17 @@
 <Layout::Section::Body>
     <div class="h-screen overflow-y-scroll pb-40">
         <div class="space-y-6 py-6 max-w-6xl mx-auto">
-            <ContentPanel @titleStatusRight="Channel" @titleStatusRightClass="info-status-badge" @hideStatusDot={{true}} @title={{@model.name}} @open={{true}} @pad={{false}} @panelBodyClass="bg-gray-800">
-                <div id="output" class="font-mono rounded-b-md max-h-full p-6 overflow-y-scroll bg-gray-900 shadow-inner dark:shadow-none dark:bg-gray-800">
-                    <div class="flex items-center justify-between">
-                        <div class="block w-1/2 mb-2 font-mono font-semibold text-green-300">
+            <ContentPanel @titleStatusRight="Channel" @titleStatusRightClass="info-status-badge" @hideStatusDot={{true}} @title={{@model.name}} @open={{true}} @pad={{false}} @panelBodyClass="bg-black">
+                <div id="output" class="font-mono rounded-b-md max-h-full p-6 overflow-y-scroll bg-black shadow-inner dark:shadow-none">
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="block w-1/2 font-mono font-semibold text-green-300">
                             Output
                         </div>
                         {{#if this.events.length}}
                             <div class="flex items-center justify-end w-1/2 text-sm text-green-300">
                                 <Spinner @iconClass="green-loader" />
 
-                                <span class="ml-2">
+                                <span class="ml-2 font-mono">
                                     Awaiting events...
                                 </span>
                             </div>
@@ -24,18 +24,18 @@
 
                     <div>
                         {{#each this.events as |event|}}
-                            <div class="mb-3">
-                                <div class="text-green-300">
-                                    {{event.time}}
+                            <div class="mb-3 text-sm font-mono rounded-lg shadow-sm flex flex-row">
+                                <div class="text-{{event.color}}-300 uppercase text-sm font-mono pr-2 flex-shrink-0">
+                                    [{{event.time}}]:
                                 </div>
-                                <div class="font-mono p-3 mb-3 text-green-300">
-                                    {{event.content}}
+                                <div class="text-{{event.color}}-300 text-sm font-mono">
+                                    {{html-safe event.content}}
                                 </div>
                             </div>
                         {{else}}
-                            <div class="flex items-center my-6 text-green-300">
+                            <div class="flex items-center mt-6 text-green-300">
                                 <Spinner @iconClass="green-loader" />
-                                <span class="ml-2">
+                                <span class="ml-2 font-mono">
                                     Awaiting events...
                                 </span>
                             </div>
