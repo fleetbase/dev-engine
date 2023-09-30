@@ -5,6 +5,7 @@ import { action, computed } from '@ember/object';
 import { isBlank } from '@ember/utils';
 import { not } from '@ember/object/computed';
 import { timeout } from 'ember-concurrency';
+import { later } from '@ember/runloop';
 import { task } from 'ember-concurrency-decorators';
 import { format as formatDate } from 'date-fns';
 
@@ -483,9 +484,13 @@ export default class ApiKeysIndexController extends Controller {
                         }
                     )
                     .then(() => {
-                        setTimeout(() => {
-                            return done();
-                        }, 600);
+                        later(
+                            this,
+                            () => {
+                                return done();
+                            },
+                            600
+                        );
                     })
                     .catch((error) => {
                         modal.stopLoading();
