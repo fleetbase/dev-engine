@@ -28,7 +28,7 @@ export default class EventsIndexRoute extends Route {
     };
 
     @action loading(transition) {
-        this.loader.showOnInitialTransition(transition, 'section.next-view-section', 'Loading events...');
+        this.loader.showOnInitialTransition(transition, 'section.next-view-section', { loadingMessage: 'Loading events...' });
     }
 
     model(params) {

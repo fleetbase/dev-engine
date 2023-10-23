@@ -34,7 +34,7 @@ export default class LogsIndexRoute extends Route {
     };
 
     @action loading(transition) {
-        this.loader.showOnInitialTransition(transition, 'section.next-view-section', 'Loading logs...');
+        this.loader.showOnInitialTransition(transition, 'section.next-view-section', { loadingMessage: 'Loading logs...' });
     }
 
     model(params) {
