@@ -6,6 +6,6 @@ export default class SocketsIndexRoute extends Route {
     @service loader;
 
     @action loading(transition) {
-        this.loader.showOnInitialTransition(transition, 'section.next-view-section', 'Loading websockets...');
+        this.loader.showOnInitialTransition(transition, 'section.next-view-section', { loadingMessage: 'Loading websockets...' });
     }
 }
