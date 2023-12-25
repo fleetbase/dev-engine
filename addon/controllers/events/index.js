@@ -1,4 +1,4 @@
-import Controller from '@ember/controller';
+import BaseController from '../base-controller';
 import { tracked } from '@glimmer/tracking';
 import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
@@ -7,7 +7,7 @@ import { timeout } from 'ember-concurrency';
 import { task } from 'ember-concurrency-decorators';
 import fetchFrom from '@fleetbase/ember-core/decorators/fetch-from';
 
-export default class EventsIndexController extends Controller {
+export default class EventsIndexController extends BaseController {
     /**
      * Inject the `filters` service
      *
