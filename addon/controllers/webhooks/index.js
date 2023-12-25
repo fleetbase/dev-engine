@@ -1,4 +1,4 @@
-import Controller from '@ember/controller';
+import BaseController from '../base-controller';
 import { tracked } from '@glimmer/tracking';
 import { inject as service } from '@ember/service';
 import { action, computed } from '@ember/object';
@@ -9,7 +9,7 @@ import groupApiEvents from '@fleetbase/ember-core/utils/group-api-events';
 import fromStore from '@fleetbase/ember-core/decorators/from-store';
 import fetchFrom from '@fleetbase/ember-core/decorators/fetch-from';
 
-export default class WebhooksIndexController extends Controller {
+export default class WebhooksIndexController extends BaseController {
     /**
      * Inject the `currentUser` service
      *

@@ -1,11 +1,12 @@
-import Controller, { inject as controller } from '@ember/controller';
+import BaseController from '../base-controller';
+import { inject as controller } from '@ember/controller';
 import { inject as service } from '@ember/service';
 import { action, computed } from '@ember/object';
 import groupApiEvents from '@fleetbase/ember-core/utils/group-api-events';
 import fromStore from '@fleetbase/ember-core/decorators/from-store';
 import fetchFrom from '@fleetbase/ember-core/decorators/fetch-from';
 
-export default class WebhooksViewController extends Controller {
+export default class WebhooksViewController extends BaseController {
     /**
      * Inject the `webhooks.index` controller
      *
@@ -33,6 +34,13 @@ export default class WebhooksViewController extends Controller {
      * @var {Service}
      */
     @service fetch;
+
+    /**
+     * Inject the `universe` service
+     *
+     * @var {Service}
+     */
+    @service universe;
 
     /**
      * All webhook events

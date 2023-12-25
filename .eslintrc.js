@@ -22,7 +22,7 @@ module.exports = {
     rules: {
         'ember/no-array-prototype-extensions': 'off',
         'ember/no-computed-properties-in-native-classes': 'off',
-        'node/no-unpublished-require': [
+        'n/no-unpublished-require': [
             'error',
             {
                 allowModules: ['resolve', 'broccoli-funnel'],
@@ -50,7 +50,6 @@ module.exports = {
                 browser: false,
                 node: true,
             },
-            plugins: ['node'],
             extends: ['plugin:n/recommended'],
         },
     ],

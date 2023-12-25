@@ -67,6 +67,13 @@ export default class ApiKeysIndexController extends Controller {
     @service hostRouter;
 
     /**
+     * Inject the `universe` service
+     *
+     * @var {Service}
+     */
+    @service universe;
+
+    /**
      * Queryable parameters for this controller's model
      *
      * @var {Array}
@@ -449,7 +456,7 @@ export default class ApiKeysIndexController extends Controller {
      * @void
      */
     @action viewRequestLogs(apiKey) {
-        return this.transitionToRoute('logs.index', {
+        return this.universe.transitionToEngineRoute('@fleetbase/dev-engine', 'logs.index', {
             queryParams: { key: apiKey.id },
         });
     }
