@@ -1,5 +1,5 @@
-<Layout::Section::Header @title="Webhooks" @searchQuery={{this.query}} @onSearch={{perform this.search}}>
-    <Button @type="primary" @icon="plus" @iconPrefix="fas" @text="Add new endpoint" class="mr-2" @onClick={{this.createWebhook}} />
+<Layout::Section::Header @title={{t "developers.webhooks.index.title"}} @searchQuery={{this.query}} @onSearch={{perform this.search}}>
+    <Button @type="primary" @icon="plus" @iconPrefix="fas" @text={{t "developers.webhooks.index.text"}} class="mr-2" @onClick={{this.createWebhook}} />
 </Layout::Section::Header>
 
 <Layout::Section::Body>

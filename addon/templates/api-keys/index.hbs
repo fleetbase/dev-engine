@@ -1,14 +1,14 @@
-<Layout::Section::Header @title="API Keys" @searchQuery={{this.query}} @onSearch={{perform this.search}}>
+<Layout::Section::Header @title={{t "developers.api-keys.index.title"}} @searchQuery={{this.query}} @onSearch={{perform this.search}}>
     <div class="flex items-center mr-3">
-        <Toggle @isToggled={{this.isTestMode}} @onToggle={{this.toggleTestMode}} @label="View test data" @helpText="Toggling view test data will enable the console to display all test data from your sandbox environment." class="mr-1" />
+        <Toggle @isToggled={{this.isTestMode}} @onToggle={{this.toggleTestMode}} @label={{t "developers.api-key.index.label"}} @helpText={{t "developers.api-key.index.helpText"}} class="mr-1" />
         {{#if this.isTestMode}}
             <span class="ml-2">
                 <select class="form-select form-input-sm" aria-label="Select API Key" {{on "change" this.toggleTestKey}}>
                     <option selected disabled>
-                        Select specific key
+                        {{t "developers.api-keys.index.select-key"}}
                     </option>
                     <option value="null" selected={{eq this.testKey null}}>
-                        All test data...
+                        {{t "developers.api-keys.index.test-data"}}
                     </option>
                     {{#each (filter-by 'isTestKey' @model) as |key|}}
                         <option value={{key.id}} selected={{eq this.testKey key.id}}>
@@ -24,14 +24,14 @@
             <div class="next-dd-menu mt-2 mx-0">
                 <div class="px-1">
                     <a href="#" class="text-red-500 next-dd-item" {{on "click" (dropdown-fn dd this.bulkDeleteApiCredentials)}}>
-                        Delete API Credentials
+                        {{t "developers.api-keys.index.delete-api"}}
                     </a>
                 </div>
             </div>
         </DropdownButton>
     {{/if}}
-    <Button @type="primary" @icon="plus" @iconPrefix="fas" @text="New" class="mr-2" @onClick={{this.createApiKey}} />
-    <Button @icon="long-arrow-up" @iconClass="rotate-icon-45" @text="Export" @onClick={{this.exportApiKeys}} />
+    <Button @type="primary" @icon="plus" @iconPrefix="fas" @text={{t "developers.common.new"}} class="mr-2" @onClick={{this.createApiKey}} />
+    <Button @icon="long-arrow-up" @iconClass="rotate-icon-45" @text={{t "developers.common.export"}} @onClick={{this.exportApiKeys}} />
 </Layout::Section::Header>
 
 <Layout::Section::Body>

@@ -1,23 +1,23 @@
 <Modal::Default @modalIsOpened={{@modalIsOpened}} @options={{@options}} @confirm={{@onConfirm}} @decline={{@onDecline}} as |options|>
     <div class="px-5 border-b border-gray-200 dark:border-gray-800">
         <div class="input-group">
-            <InputLabel @labelText="Endpoint URL" @helpText="The URL Fleetbase should send event callbacks to." @required={{true}} />
+            <InputLabel @labelText="Endpoint URL" @helpText={{t "developers.components.modals.webhook-form.helpText"}} @required={{true}} />
             <Input @value={{options.webhook.url}} @type="url" aria-label="Webhook URL" class="w-full form-input" placeholder="https://" />
         </div>
 
         <div class="input-group">
-            <InputLabel @labelText="Description" @helpText="Optionally add a description for the webhook endpoint." />
-            <Textarea @value={{options.webhook.description}} aria-label="Webhook Description" class="w-full form-input" placeholder="An optional description of what this webhook endpoint is used for." />
+            <InputLabel @labelText="Description" @helpText={{t "developers.components.modals.webhook-form.helpText-endpoint"}} />
+            <Textarea @value={{options.webhook.description}} aria-label="Webhook Description" class="w-full form-input" placeholder={{t "developers.components.modals.webhook-form.placeholder"}} />
         </div>
     </div>
 
     <div class="px-5 pt-4 border-b border-gray-200 dark:border-gray-800">
-        <div class="input-group">
-            <InputLabel @labelText="API Credential" @helpText="Restrict the webhook endpoint to receive callbacks from a specific API key." />
+        <div class="input-group">   
+            <InputLabel @labelText="API Credential" @helpText={{t "developers.components.modals.webhook-form.helpText-apikey"}} />
 
             <select class="w-full form-select" aria-label="API Credential" {{on "change" @options.setApiCredential}}>
                 <option value={{null}} selected>
-                    Receive from all API Credentials...
+                    {{t "developers.components.modals.webhook-form.api-credentials"}}
                 </option>
                 {{#each @options.apiCredentialOptions as |opt|}}
                     <option value={{opt.id}} selected={{eq @options.webhook.api_credential_uuid opt.id}}>
@@ -26,14 +26,14 @@
                 {{/each}}
             </select>
             <InfoBlock class="mt-3">
-                You can select a specific API credential that will be used to trigger callbacks to this webhook endpoint, or you can select "All API Credentials", and the webhook endpoint will receive callbacks regardless the API Credential being used.
+                {{t "developers. components.modals.webhook-form.select-credential"}}
             </InfoBlock>
         </div>
     </div>
 
     <div class="px-5 pt-4 border-b border-gray-200 dark:border-gray-800">
         <div class="input-group">
-            <InputLabel @labelText="Version" @helpText="Select a specific API version to receive callbacks for." />
+            <InputLabel @labelText="Version" @helpText={{t "developers.components.modals.webhook-form."}} />
 
             <select class="w-full form-select" aria-label="API Version" {{on "change" @options.setVersion}}>
                 <option selected disabled>

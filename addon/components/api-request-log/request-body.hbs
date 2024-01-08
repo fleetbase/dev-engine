@@ -4,7 +4,7 @@
     {{else}}
         <div class="flex items-center justify-center h-24">
             <span class="text-sm text-gray-400">
-                No request {{@apiRequest.method}} body
+                {{t "developers.components.api-request-log.request-body.no-request" htmlSafe=true method=@apiRequest.method}}
             </span>
         </div>
     {{/if}}

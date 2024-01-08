@@ -2,7 +2,7 @@
     <div class="modal-body-container">
         <div class="input-group">
             <label>
-                Name
+                {{t "developers.common.Name"}}
             </label>
             <Input @value={{options.apiKey.name}} @type="text" aria-label="API Key Name" class="w-full form-input" placeholder="Enter a nickname or environment name for API Key" />
         </div>
@@ -11,7 +11,7 @@
 
             <select class="w-full mb-1 form-select" aria-label="API Key Expiration Date" {{on "change" @options.setExpiration}}>
                 <option selected disabled>
-                    Select an expiration date...
+                    {{t " developers.modals.api-key-form.select-expiration-date"}}
                 </option>
                 {{#each @options.expirationOptions as |opt|}}
                     <option value={{opt}}>
@@ -20,7 +20,7 @@
                 {{/each}}
             </select>
             <p class="text-xs dark:text-gray-100">
-                Once this key expires, you can't perform any actions with it.
+                {{t "developers.components.modals.api-key-form.key-expires"}}
             </p>
         </div>
 
@@ -33,17 +33,17 @@
         <div class="flex flex-col input-group">
             {{#if @options.testMode}}
                 <Badge @status="test">
-                    Test Key
+                    {{t "developers.components.modals.api-key-form.test-key"}}
                 </Badge>
                 <p class="block my-2 text-sm text-blue-500 dark:text-blue-300">
-                    You are creating a test environment key, use this for testing environments.
+                    {{t "developers.components.modals.api-keys-form.testing-environments"}}
                 </p>
             {{else}}
                 <Badge @status="live">
-                    Live Key
+                    {{t "developers.components.modals.api-keys-form.live-key"}}
                 </Badge>
                 <p class="block my-2 text-sm text-blue-500 dark:text-blue-300">
-                    You are creating a live environment key, use this for production environments.
+                    {{t "developers.components.modals.api-keys-form.production-environments"}}
                 </p>
             {{/if}}
         </div>

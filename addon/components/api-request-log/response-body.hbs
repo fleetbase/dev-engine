@@ -1,10 +1,10 @@
-<ContentPanel @title="Response body" @panelTitleClass="text-sm" @open={{true}} @pad={{true}} @panelBodyClass="bg-white dark:bg-gray-800">
+<ContentPanel @title={{t "developers.components.api-request-log.response-body.title"}} @panelTitleClass="text-sm" @open={{true}} @pad={{true}} @panelBodyClass="bg-white dark:bg-gray-800">
     {{#if @apiRequest.response_body}}
         <CodeBlock @code={{or (json-stringify @apiRequest.response_body) ""}} @language="json" class="line-numbers" />
     {{else}}
         <div class="flex items-center justify-center h-24">
             <span class="text-sm text-gray-400">
-                No response body
+                {{t "developers.components.api-request-log.response-body.no-response-body"}}
             </span>
         </div>
     {{/if}}

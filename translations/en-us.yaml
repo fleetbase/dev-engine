@@ -1,2 +1,104 @@
 developers:
   extension-name: Developers
+  common:
+    new: New
+    export: Export
+    back: Back
+    date: Date  
+    source: Source
+    time: Time 
+    version: Version
+    name: Name
+    key: Key
+  components:
+    api-event: 
+      data: 
+        title: Event data  
+        no-data: No event data
+      details:
+        prefixTitle: Event 
+        description: Description 
+    api-request-log:
+      details:        
+        prefixTitle: Request
+        duration: Duration
+        ip-address: IP Address
+      query-params:
+        title: Request query parameters
+        no-parameters: No query parameters
+      request-headers: 
+        title: Request headers
+        no-headers: No request HEADERS
+      request-body:
+        title: Response body
+        no-response-body: No response body
+    modals:
+      api-key-form: 
+        select-expiration-date: Select an expiration date...
+        key-expires: Once this key expires, you can't perform any actions with it.
+        test-key: Test Key
+        testing-environments: You are creating a test environment key, use this for testing environments.
+        live-key: Live Key
+        production-environments: You are creating a live environment key, use this for production environments.
+      listen-custom-channel:
+        name: Event channel ID
+        helpText: Input the socket channel identifier you want to listen on
+      roll-api-key-form:
+        text: View logs
+        last-used: Last used
+        expiration: Expiration
+        select-date: Select an expiration date...
+        key-expires: Once this key expires, you can't perform any actions with it.
+        additional-required: Additional authentication required
+        enter-password: To continue, please enter your password.
+        email: Email
+        password: Password
+      webhook-form:
+        helpText: The URL Fleetbase should send event callbacks to.
+        helpText-endpoint: Optionally add a description for the webhook endpoint.
+        placeholder: An optional description of what this webhook endpoint is used for.
+        helpText-apikey: Restrict the webhook endpoint to receive callbacks from a specific API key.
+        api-credentials: Receive from all API Credentials...
+        select-credential: You can select a specific API credential that will be used to trigger callbacks to this webhook endpoint, or you can select "All API Credentials", and the webhook endpoint will receive callbacks regardless the API Credential being used.
+        helpText-callback: Select a specific API version to receive callbacks for.
+
+  application:
+    sidebar:
+      title: Developers Console
+      items:
+        home: Dashboard
+        api-keys: API Keys
+        globe: Webhooks
+        plug:  WebSockets
+        logs: Logs
+        events: Events
+  api-keys:
+    index:
+      title: API Keys
+      label: View test data 
+      helpText: Toggling view test data will enable the console to display all test data from your sandbox environment
+      select-key: Select specific key
+      test-data: All test data...
+      delete-api: Delete API Credentials
+  events:
+    index:
+      title: Events
+  logs:
+    index:
+      title: Logs
+  sockets:
+    index:
+      title: Channels receiving events from your account
+      text: Listen on custom channel
+    view:
+      output: Output
+      awaiting-events: Awaiting events...
+  webhooks:
+    index:
+      title: Webhooks
+      text: Add new endpoint
+    view:
+      text: Send test webhook...
+      text-disable: Disable...
+      text-enable: Enable...
+      text-delete: Delete...
