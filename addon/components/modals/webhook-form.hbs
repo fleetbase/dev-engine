@@ -37,7 +37,7 @@
 
             <select class="w-full form-select" aria-label="API Version" {{on "change" @options.setVersion}}>
                 <option selected disabled>
-                    Select an API version...
+                    {{t "developers.components.webhook-form.api-version"}}
                 </option>
                 {{#each @options.versionOptions as |opt|}}
                     <option value={{opt}} selected={{eq @options.webhook.version opt}}>
@@ -51,14 +51,14 @@
     <div class="px-5 pt-4">
         <div class="input-group">
             <div class="mb-4">
-                <InputLabel class="mb-2" @labelText="Events to send" @helpText="Explicilty set which events to receive callbacks for." />
+                <InputLabel class="mb-2" @labelText="Events to send" @helpText={{t "developers.components.modals.webhook-form.callback"}} />
 
                 <div class="flex items-start justify-between">
                     <div class="w-1/2">
                         <BasicDropdown @renderInPlace={{true}} as |dd|>
                             <dd.Trigger>
                                 <div class="w-full px-3 py-2 text-sm leading-4 cursor-pointer form-select hover:shadow-sm">
-                                    Select events...
+                                    {{t "developers.components.webhook-form.api.select-events"}}
                                 </div>
                             </dd.Trigger>
                             <dd.Content class="w-full h-48 mt-1 overflow-y-hidden border bg-white border-gray-300 rounded shadow-md dark:border-gray-800 dark:bg-gray-700">
@@ -88,7 +88,7 @@
                         </BasicDropdown>
                     </div>
                     <a href="javascript:;" class="no-underline" {{on "click" @options.clearEvents}}>
-                        Clear
+                        {{t "developers.common.clear"}}
                     </a>
                 </div>
             </div>
@@ -110,12 +110,12 @@
                     <div class="flex items-center justify-center h-full dark:text-gray-100">
                         <div class="flex flex-col items-center justify-center w-2/4 h-full my-8 text-center">
                             <div class="font-semibold">
-                                No events selected
+                                {{t "developers.components.webhook-form.no-selected"}}
                             </div>
                             <p>
-                                Search for events with the dropdown above, or
+                                {{t "developers.components.modals.webhook-form.dropdown"}}
                                 <a href="javascript:;" class="no-underline" {{on "click" @options.receiveAllEvents}}>
-                                    receive all events
+                                    {{t "developers.components.modals.webhook-form.all-events"}}
                                 </a>
                                 .
                             </p>

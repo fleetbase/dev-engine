@@ -10,6 +10,14 @@ developers:
     version: Version
     name: Name
     key: Key
+    clear: Clear
+    all: All 
+    succeeded: Succeeded
+    failed: Failed
+    url: URL
+    description: Description
+    status: Status
+    mode: Mode
   components:
     api-event: 
       data: 
@@ -61,6 +69,36 @@ developers:
         api-credentials: Receive from all API Credentials...
         select-credential: You can select a specific API credential that will be used to trigger callbacks to this webhook endpoint, or you can select "All API Credentials", and the webhook endpoint will receive callbacks regardless the API Credential being used.
         helpText-callback: Select a specific API version to receive callbacks for.
+        api-version: Select an API version...
+        callback: Explicilty set which events to receive callbacks for.
+        select-events: Select events...
+        no-selected: No events selected
+        dropdown: Search for events with the dropdown above, or
+        all-events: receive all events
+    webhook:
+      attempts: 
+        webhook-attempts: Webhook attempts
+        endpoint: Attempts to send an event to your endpoint in the past 15 days
+        http-code: HTTP status code
+        response-time: Response timer
+        request-endpoint: Request to your endpoint
+        no-request-body: No request body
+        response: Response
+        no-response-body: No response body
+      details:
+        webhook-details: Webhook details
+        update-details: Update details...
+        event-types: Event Types
+        helpText: You will receive webhooks for new event types as they are added, except for those that require explicit selection. Listening for all event types is usually not necessary and may increase load on your servers.
+        all-events: All Events
+        api-credential: API Credential
+        helpText-event: You will receive webhooks callbacks regardless what API Credential is used to trigger the event.
+        api-credentials: Receiving from all API Credentials
+      metrics:
+        date-created: Date Created
+    widget:
+      api-metrics:  
+        title: Monitoring
 
   application:
     sidebar:
