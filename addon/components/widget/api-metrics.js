@@ -7,6 +7,7 @@ import makeDataset from '@fleetbase/ember-core/utils/make-dataset';
 
 export default class WidgetApiMetricsComponent extends Component {
     @service store;
+    @service intl;
     @tracked chartDateEnd = new Date();
     @tracked chartDateStart = startOfDay(sub(new Date(), { days: 7 }));
     @tracked chartOptions = {
@@ -79,7 +80,7 @@ export default class WidgetApiMetricsComponent extends Component {
                     const errorResponses = makeDataset(apiRequestLogs, (req) => !req.status_code.startsWith(2));
 
                     datasets.pushObject({
-                        label: 'success',
+                        label: this.intl.t('developers.component.widget.api-metrics.success-label'),
                         data: successResponses,
                         backgroundColor: ['rgba(16, 185, 129, 0.2)'],
                         borderColor: ['rgba(16, 185, 129, 0.2)'],
@@ -87,7 +88,7 @@ export default class WidgetApiMetricsComponent extends Component {
                     });
 
                     datasets.pushObject({
-                        label: 'error',
+                        label: this.intl.t('developers.component.widget.api-metrics.error-label'),
                         data: errorResponses,
                         backgroundColor: ['rgba(239, 68, 68, 0.2)'],
                         borderColor: ['rgba(239, 68, 68, 0.2)'],
@@ -119,7 +120,7 @@ export default class WidgetApiMetricsComponent extends Component {
                     const deleteErrorResponses = makeDataset(apiRequestLogs, (req) => req.method === 'DELETE');
 
                     datasets.pushObject({
-                        label: 'GET Error',
+                        label: this.intl.t('developers.component.widget.api-metrics.get-error'),
                         data: getErrorResponses,
                         backgroundColor: ['#F87171'],
                         borderColor: ['#F87171'],
@@ -127,7 +128,7 @@ export default class WidgetApiMetricsComponent extends Component {
                     });
 
                     datasets.pushObject({
-                        label: 'POST Error',
+                        label: this.intl.t('developers.component.widget.api-metrics.post-error'),
                         data: postErrorResponses,
                         backgroundColor: ['#EF4444'],
                         borderColor: ['#EF4444'],
@@ -135,7 +136,7 @@ export default class WidgetApiMetricsComponent extends Component {
                     });
 
                     datasets.pushObject({
-                        label: 'PUT Error',
+                        label: this.intl.t('developers.component.widget.api-metrics.put-error'),
                         data: putErrorResponses,
                         backgroundColor: ['#DC2626'],
                         borderColor: ['#DC2626'],
@@ -143,7 +144,7 @@ export default class WidgetApiMetricsComponent extends Component {
                     });
 
                     datasets.pushObject({
-                        label: 'DELETE Error',
+                        label: this.intl.t('developers.component.widget.api-metrics.delete-error'),
                         data: deleteErrorResponses,
                         backgroundColor: ['#B91C1C'],
                         borderColor: ['#B91C1C'],
@@ -172,7 +173,7 @@ export default class WidgetApiMetricsComponent extends Component {
                     const errorResponses = makeDataset(webhookRequestLogs, (req) => !req.status_code.startsWith(2));
 
                     datasets.pushObject({
-                        label: 'success',
+                        label: this.intl.t('developers.component.widget.api-metrics.success-label'),
                         data: successResponses,
                         backgroundColor: ['rgba(16, 185, 129, 0.2)'],
                         borderColor: ['rgba(16, 185, 129, 0.2)'],
@@ -180,7 +181,7 @@ export default class WidgetApiMetricsComponent extends Component {
                     });
 
                     datasets.pushObject({
-                        label: 'error',
+                        label: this.intl.t('developers.component.widget.api-metrics.error-label'),
                         data: errorResponses,
                         backgroundColor: ['rgba(239, 68, 68, 0.2)'],
                         borderColor: ['rgba(239, 68, 68, 0.2)'],
@@ -212,7 +213,7 @@ export default class WidgetApiMetricsComponent extends Component {
                     }));
 
                     datasets.pushObject({
-                        label: 'Duration (ms)',
+                        label: this.intl.t('developers.component.widget.api-metrics.duration-ms'),
                         data,
                         backgroundColor: ['rgba(16, 185, 129, 0.2)'],
                         borderColor: ['rgba(16, 185, 129, 0.2)'],

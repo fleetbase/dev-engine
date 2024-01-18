@@ -1,6 +1,6 @@
 <Layout::Section::Header @title={{t "developers.api-keys.index.title"}} @searchQuery={{this.query}} @onSearch={{perform this.search}}>
     <div class="flex items-center mr-3">
-        <Toggle @isToggled={{this.isTestMode}} @onToggle={{this.toggleTestMode}} @label={{t "developers.api-key.index.label"}} @helpText={{t "developers.api-key.index.helpText"}} class="mr-1" />
+        <Toggle @isToggled={{this.isTestMode}} @onToggle={{this.toggleTestMode}} @label={{t "developers.api-keys.index.label"}} @helpText={{t "developers.api-keys.index.help-text"}} class="mr-1" />
         {{#if this.isTestMode}}
             <span class="ml-2">
                 <select class="form-select form-input-sm" aria-label="Select API Key" {{on "change" this.toggleTestKey}}>
@@ -20,7 +20,7 @@
         {{/if}}
     </div>
     {{#if (safe-has this.table "selectedRows")}}
-        <DropdownButton @icon="layer-group" @text="Bulk Action" @type="magic" @size="sm" @buttonWrapperClass="mr-2" @contentClass="dropdown-menu" as |dd|>
+        <DropdownButton @icon="layer-group" @text={{t "developers.common.bulk-action"}} @type="magic" @size="sm" @buttonWrapperClass="mr-2" @contentClass="dropdown-menu" as |dd|>
             <div class="next-dd-menu mt-2 mx-0">
                 <div class="px-1">
                     <a href="#" class="text-red-500 next-dd-item" {{on "click" (dropdown-fn dd this.bulkDeleteApiCredentials)}}>

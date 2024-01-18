@@ -14,6 +14,13 @@ export default class WebhookAttemptsComponent extends Component {
     @service store;
 
     /**
+     * Inject the `intl` service
+     *
+     * @var {Service}
+     */
+    @service intl;
+
+    /**
      * The current viewing webhook status
      *
      * @var {String}
@@ -48,21 +55,21 @@ export default class WebhookAttemptsComponent extends Component {
      */
     @tracked columns = [
         {
-            label: 'Result',
+            label: this.intl.t('developers.common.result'),
             valuePath: 'result',
             width: '20%',
             cellComponent: 'table/cell/status',
             cellClassNames: 'uppercase expands-row',
         },
-        { label: 'Event Type', valuePath: 'api_event.event', width: '20%' },
+        { label: this.intl.t('developers.common.event-type'), valuePath: 'api_event.event', width: '20%' },
         {
-            label: 'Event ID',
+            label: this.intl.t('developers.common.event-id'),
             valuePath: 'api_event.public_id',
             width: '15%',
             cellComponent: 'click-to-copy',
         },
-        { label: 'Created', valuePath: 'createdAt', width: '20%', align: 'center' },
-        { label: 'Attempt', valuePath: 'attempt', width: '10%' },
+        { label: this.intl.t('developers.common.created'), valuePath: 'createdAt', width: '20%', align: 'center' },
+        { label: this.intl.t('developers.common.attempt'), valuePath: 'attempt', width: '10%' },
         {
             label: '',
             cellComponent: 'table/cell/dropdown',
@@ -77,11 +84,11 @@ export default class WebhookAttemptsComponent extends Component {
             actions: [
                 // { label: 'Resend', action: this.viewWebhookRequestEvent },
                 {
-                    label: 'Copy event ID to clipboard',
+                    label: this.intl.t('developers.component.webhook.attempts.copy-event-id'),
                     fn: this.copyEventIdToClipboard,
                 },
                 {
-                    label: 'View Event',
+                    label: this.intl.t('developers.component.webhook.attempts.view-event'),
                     fn: this.viewWebhookRequestEvent,
                 },
             ],
@@ -161,7 +168,7 @@ export default class WebhookAttemptsComponent extends Component {
      */
     @action copyEventIdToClipboard(webhook) {
         copyToClipboard(webhook.api_event?.public_id).then(() => {
-            this.notifications.info('Event ID copied to clipboard.');
+            this.notifications.info(this.intl.t('developers.component.webhook.attempts.info-message'));
         });
     }
 }

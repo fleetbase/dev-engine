@@ -2,16 +2,16 @@
     <div class="modal-body-container">
         <div class="input-group">
             <label>
-                {{t "developers.common.Name"}}
+                {{t "developers.common.name"}}
             </label>
-            <Input @value={{options.apiKey.name}} @type="text" aria-label="API Key Name" class="w-full form-input" placeholder="Enter a nickname or environment name for API Key" />
+            <Input @value={{options.apiKey.name}} @type="text" aria-label={{t "developers.component.modals.api-key-form.api-name-aria-label"}} class="w-full form-input" placeholder={{t "developers.component.modals.api-key-form.name-placeholder"}} />
         </div>
         <div class="input-group">
-            <InputLabel @labelText="Expiration" @helpText="Optionally set an expiry date for this api key." />
+            <InputLabel @labelText={{t "developers.component.modals.api-key-form.expiration-label"}} @helpText={{t "developers.component.modals.api-key-form.expiration-help-text"}} />
 
-            <select class="w-full mb-1 form-select" aria-label="API Key Expiration Date" {{on "change" @options.setExpiration}}>
+            <select class="w-full mb-1 form-select" aria-label={{t "developers.component.modals.api-key-form.api-expiration-aria-label"}} {{on "change" @options.setExpiration}}>
                 <option selected disabled>
-                    {{t " developers.modals.api-key-form.select-expiration-date"}}
+                    {{t "developers.component.modals.api-key-form.select-expiration-date"}}
                 </option>
                 {{#each @options.expirationOptions as |opt|}}
                     <option value={{opt}}>
@@ -20,30 +20,30 @@
                 {{/each}}
             </select>
             <p class="text-xs dark:text-gray-100">
-                {{t "developers.components.modals.api-key-form.key-expires"}}
+                {{t "developers.component.modals.api-key-form.key-expires"}}
             </p>
         </div>
 
         <div class="input-group">
-            <ArrayInput @data={{@options.apiKey.browser_origins}} @placeholder="Enter domain" @onDataChanged={{fn (mut @options.apiKey.browser_origins)}}>
-                <InputLabel @labelText="Allowed Browser Origins" @helpText="Input domains that will dictate the CORS policy for browser request from this api key." />
+            <ArrayInput @data={{@options.apiKey.browser_origins}} @placeholder={{t "developers.component.modals.api-key-form.enter-domain-placeholder"}} @onDataChanged={{fn (mut @options.apiKey.browser_origins)}}>
+                <InputLabel @labelText={{t "developers.component.modals.api-key-form.allowed-browser-label"}} @helpText={{t "developers.component.modals.api-key-form.allowed-browser-help-text"}} />
             </ArrayInput>
         </div>
 
         <div class="flex flex-col input-group">
             {{#if @options.testMode}}
                 <Badge @status="test">
-                    {{t "developers.components.modals.api-key-form.test-key"}}
+                    {{t "developers.component.modals.api-key-form.test-key"}}
                 </Badge>
                 <p class="block my-2 text-sm text-blue-500 dark:text-blue-300">
-                    {{t "developers.components.modals.api-keys-form.testing-environments"}}
+                    {{t "developers.component.modals.api-key-form.testing-environments"}}
                 </p>
             {{else}}
                 <Badge @status="live">
-                    {{t "developers.components.modals.api-keys-form.live-key"}}
+                    {{t "developers.component.modals.api-key-form.live-key"}}
                 </Badge>
                 <p class="block my-2 text-sm text-blue-500 dark:text-blue-300">
-                    {{t "developers.components.modals.api-keys-form.production-environments"}}
+                    {{t "developers.component.modals.api-key-form.production-environments"}}
                 </p>
             {{/if}}
         </div>

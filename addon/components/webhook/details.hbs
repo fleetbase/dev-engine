@@ -2,12 +2,12 @@
     <div class="content-panel-header">
         <div class="flex items-center">
             <h3 class="mr-4 text-xl font-bold dark:text-gray-100">
-                {{t "developers.components.webhook.details.webhook-details"}}
+                {{t "developers.component.webhook.details.webhook-details"}}
             </h3>
         </div>
 
         <div class="flex items-center section-header-actions">
-            <Button @icon="pencil" @text={{t "developers.components.webhook.details.update-details"}} @onClick={{this.onClickUpdateWebhook}} />
+            <Button @icon="pencil" @text={{t "developers.component.webhook.details.update-details"}} @onClick={{this.onClickUpdateWebhook}} />
         </div>
     </div>
     <div class="text-sm content-panel-body">
@@ -31,14 +31,14 @@
                 </tr>
                 <tr>
                     <td>
-                        {{t "developers.components.webhook.details.event-types"}}
+                        {{t "developers.component.webhook.details.event-types"}}
                     </td>
                     <td>
                         {{#if @webhook.is_listening_on_all_events}}
-                            <Badge @status="warning" @hideStatusDot={{true}} @helpText={{t "developers.components.webhook.details.helpText"}}>
+                            <Badge @status="warning" @hideStatusDot={{true}} @helpText={{t "developers.component.webhook.details.help-text"}}>
                                 <FaIcon @icon="exclamation-triangle" />
                                 <span class="ml-2">
-                                    {{t "developers.components.webhook.details.all-events"}}
+                                    {{t "developers.component.webhook.details.all-events"}}
                                 </span>
                             </Badge>
                         {{else}}
@@ -48,14 +48,14 @@
                 </tr>
                 <tr>
                     <td>
-                        {{t "developers.components.webhook.details.api-credential"}}
+                        {{t "developers.component.webhook.details.api-credential"}}
                     </td>
                     <td>
                         {{#if @webhook.receivingFromAllApiCredentials}}
-                            <Badge @status="warning" @hideStatusDot={{true}} @helpText={{t "developers.components.webhook.details.helpText-event"}}>
+                            <Badge @status="warning" @hideStatusDot={{true}} @helpText={{t "developers.component.webhook.details.help-text-event"}}>
                                 <FaIcon @icon="exclamation-triangle" />
                                 <span class="ml-2">
-                                    {{t "developers.components.webhook.details.api-credentials"}}
+                                    {{t "developers.component.webhook.details.api-credentials"}}
                                 </span>
                             </Badge>
                         {{else}}

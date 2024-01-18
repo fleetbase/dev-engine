@@ -13,6 +13,13 @@ export default class SocketsIndexController extends BaseController {
     @service modalsManager;
 
     /**
+     * Inject the `intl` service
+     *
+     * @var {Service}
+     */
+    @service intl;
+
+    /**
      * Inject the `notifications` service
      *
      * @var {Service}
@@ -44,7 +51,7 @@ export default class SocketsIndexController extends BaseController {
             width: '12%',
             sortable: false,
             cellComponent: 'table/cell/link-to',
-            linkText: 'Watch Channel',
+            linkText: this.intl.t('developers.sockets.index.link-text'),
             linkClass: 'btn btn-default btn-xs flex flex-row-reverse',
             linkIcon: 'arrow-right',
             linkIconClass: 'ml-2',
@@ -52,7 +59,7 @@ export default class SocketsIndexController extends BaseController {
             cellClassNames: 'no-underline',
         },
         {
-            label: 'Channel',
+            label: this.intl.t('developers.sockets.index.channel'),
             valuePath: 'name',
             width: '88%',
             cellComponent: 'click-to-copy',
@@ -112,8 +119,8 @@ export default class SocketsIndexController extends BaseController {
      */
     @action listenOnCustomChannel() {
         this.modalsManager.show('modals/listen-custom-channel', {
-            title: 'Listen on a custom channel',
-            acceptButtonText: 'Listen',
+            title: this.intl.t('developers.sockets.index.listen-channel-title'),
+            acceptButtonText: this.intl.t('developers.sockets.index.listen-channel-button-text'),
             acceptButtonIcon: 'headphones',
             declineButtonIcon: 'times',
             declineButtonIconPrefix: 'fas',

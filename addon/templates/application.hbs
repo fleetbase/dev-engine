@@ -1,11 +1,11 @@
 <EmberWormhole @to="sidebar-menu-items">
-    <Layout::Sidebar::Panel @open={{true}} @title={{t "developers.application.title"}}>
+    <Layout::Sidebar::Panel @open={{true}} @title={{t "developers.application.sidebar.title"}}>
         <Layout::Sidebar::Item @route="console.developers.home" @icon="home">{{t "developers.application.sidebar.items.home"}}</Layout::Sidebar::Item>
         <Layout::Sidebar::Item @route="console.developers.api-keys" @icon="key">{{t "developers.application.sidebar.items.api-keys"}}</Layout::Sidebar::Item>
-        <Layout::Sidebar::Item @route="console.developers.webhooks" @icon="globe-asia">{{t "developers.application.sidebar.items.Webhooks"}}</Layout::Sidebar::Item>
-        <Layout::Sidebar::Item @route="console.developers.sockets" @icon="plug">{{t "developers.application.siderbar.items.WebSockets"}}</Layout::Sidebar::Item>
-        <Layout::Sidebar::Item @route="console.developers.logs" @icon="file-lines">{{t "developers.application.siderbar.items.Logs"}}</Layout::Sidebar::Item>
-        <Layout::Sidebar::Item @route="console.developers.events" @icon="calendar-day">{{t "developers.application.siderbar.items.Events"}}</Layout::Sidebar::Item>
+        <Layout::Sidebar::Item @route="console.developers.webhooks" @icon="globe-asia">{{t "developers.application.sidebar.items.webhooks"}}</Layout::Sidebar::Item>
+        <Layout::Sidebar::Item @route="console.developers.sockets" @icon="plug">{{t "developers.application.sidebar.items.websockets"}}</Layout::Sidebar::Item>
+        <Layout::Sidebar::Item @route="console.developers.logs" @icon="file-lines">{{t "developers.application.sidebar.items.logs"}}</Layout::Sidebar::Item>
+        <Layout::Sidebar::Item @route="console.developers.events" @icon="calendar-day">{{t "developers.application.sidebar.items.events"}}</Layout::Sidebar::Item>
     </Layout::Sidebar::Panel>
     
 </EmberWormhole>

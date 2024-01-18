@@ -22,6 +22,13 @@ export default class WebhooksViewController extends BaseController {
     @service modalsManager;
 
     /**
+     * Inject the `intl` service
+     *
+     * @var {Service}
+     */
+    @service intl;
+
+    /**
      * Inject the `notifications` service
      *
      * @var {Service}
@@ -83,7 +90,7 @@ export default class WebhooksViewController extends BaseController {
     @action deleteWebhook(webhook) {
         this.index.deleteWebhook(webhook, {
             onConfirm: () => {
-                this.notifications.success(`Webhook endpoint deleted.`);
+                this.notifications.success(this.intl.t('developers.webhooks.view.webhook-deleted-success-message'));
                 return this.transitionToRoute('webhooks.index');
             },
         });
@@ -96,14 +103,14 @@ export default class WebhooksViewController extends BaseController {
      */
     @action disableWebhook(webhook) {
         this.modalsManager.confirm({
-            title: `Disable a webhook endpoint`,
-            body: 'This webhook endpoint may be temporarily disabled so that it will not receive notifications until it is enabled again. Fleetbase will not retry any notifications that are generated while the endpoint is disabled.',
-            acceptButtonText: 'Disable webhook endpoint',
+            title: this.intl.t('developers.webhooks.view.disable-webhook-title'),
+            body: this.intl.t('developers.webhooks.view.disable-webhook-body'),
+            acceptButtonText: this.intl.t('developers.webhooks.view.disable-webhook-button-text'),
             confirm: (modal) => {
                 modal.startLoading();
                 webhook.set('status', 'disabled');
                 return webhook.save().then(() => {
-                    this.notifications.success(`Webhook disabled.`);
+                    this.notifications.success(this.intl.t('developers.webhooks.view.disable-webhook-success-message'));
                 });
             },
         });
@@ -116,14 +123,14 @@ export default class WebhooksViewController extends BaseController {
      */
     @action enableWebhook(webhook) {
         this.modalsManager.confirm({
-            title: `Enable a webhook endpoint`,
-            body: "This webhook is disabled and no longer receives notifications. This may have been done automatically because we detected an extended period of failures. If you've corrected the issue, you can re-enable the webhook endpoint here. Fleetbase will not retry any notifications that were generated in the intervening period, and if we continue to detect failures on this endpoint, we will disable the endpoint again.",
-            acceptButtonText: 'Enable webhook endpoint',
+            title: this.intl.t('developers.webhooks.view.enable-webhook-title'),
+            body: this.intl.t('developers.webhooks.view.enable-webhook-body'),
+            acceptButtonText: this.intl.t('developers.webhooks.view.enable-webhook-button-text'),
             confirm: (modal) => {
                 modal.startLoading();
                 webhook.set('status', 'enabled');
                 return webhook.save().then(() => {
-                    this.notifications.success(`Webhook enabled.`);
+                    this.notifications.success(this.intl.t('developers.webhooks.view.enable-webhook-success-message'));
                 });
             },
         });
@@ -137,13 +144,13 @@ export default class WebhooksViewController extends BaseController {
      */
     @action updateWebhookDetails(webhook) {
         this.index.editWebhook(webhook, {
-            acceptButtonText: 'Update endpoint',
+            acceptButtonText: this.intl.t('developers.webhooks.view.update-endpoint-button-text'),
             eventOptions: this.groupedApiEvents,
             versionOptions: this.apiVersions,
             apiCredentialOptions: this.apiCredentials,
             confirm: () => {
                 return webhook.save().then(() => {
-                    this.notifications.success('Webhook details updated.');
+                    this.notifications.success(this.intl.t('developers.webhooks.view.update-endpoint-success-message'));
                 });
             },
         });

@@ -8,6 +8,7 @@ import { timeout } from 'ember-concurrency';
 import { later } from '@ember/runloop';
 import { task } from 'ember-concurrency-decorators';
 import { format as formatDate } from 'date-fns';
+import getWithDefault from '@fleetbase/ember-core/utils/get-with-default';
 
 export default class ApiKeysIndexController extends Controller {
     /**
@@ -16,6 +17,13 @@ export default class ApiKeysIndexController extends Controller {
      * @var {Service}
      */
     @service currentUser;
+
+    /**
+     * Inject the `intl` service
+     *
+     * @var {Service}
+     */
+    @service intl;
 
     /**
      * Inject the `modalsManager` service
@@ -344,8 +352,10 @@ export default class ApiKeysIndexController extends Controller {
      * @void
      */
     @action renameApiKey(apiKey) {
+        const apiKeyName = getWithDefault(apiKey, 'name', this.intl.t('developers.api-keys.index.untitled'));
+
         this.modalsManager.show('modals/rename-api-key-form', {
-            title: `Rename (${apiKey.name || 'Untitled'}) API Key`,
+            title: this.intl.t('developers.api-keys.index.rename-api-key-title', { apiKeyName }),
             apiKey,
             confirm: (modal, done) => {
                 modal.startLoading();
@@ -353,7 +363,7 @@ export default class ApiKeysIndexController extends Controller {
                 apiKey
                     .save()
                     .then((apiKey) => {
-                        this.notifications.success(`API credential renamed to (${apiKey.name || 'Untitled'}).`);
+                        this.notifications.success(this.intl.t('developers.api-keys.index.rename-api-key-success-message', {apiKeyName}));
                         return done();
                     })
                     .catch((error) => {
@@ -370,16 +380,17 @@ export default class ApiKeysIndexController extends Controller {
      * @void
      */
     @action deleteApiKey(apiKey) {
+        const apiKeyName = getWithDefault(apiKey, 'name', this.intl.t('developers.api-keys.index.untitled'));
         this.modalsManager.confirm({
-            title: `Delete (${apiKey.name || 'Untitled'}) API Key`,
-            body: 'Are you sure you want to delete this API key? All of your data assosciated with this API key will become unreachable. This action cannot be undone.',
+            title: this.intl.t('developers.api-keys.index.delete-api-key-title', {apiKeyName}),
+            body: this.intl.t('developers.api-keys.index.delete-api-key-body'),
             confirm: (modal, done) => {
                 modal.startLoading();
 
                 apiKey
                     .destroyRecord()
                     .then((apiKey) => {
-                        this.notifications.success(`API credential (${apiKey.name || 'Untitled'}) removed.`);
+                        this.notifications.success(this.intl.t('developers.api-keys.index.delete-api-key-title', {apiKeyName}));
                         return this.hostRouter.refresh().finally(() => {
                             done();
                         });
@@ -402,7 +413,7 @@ export default class ApiKeysIndexController extends Controller {
         const selected = this.table.selectedRows;
 
         this.crud.bulkDelete(selected, {
-            acceptButtonText: 'Delete API Credentials',
+            acceptButtonText: this.intl.t('developers.api-keys.index.delete-accept-button-text'),
             onSuccess: () => {
                 this.hostRouter.refresh();
             },
@@ -415,10 +426,12 @@ export default class ApiKeysIndexController extends Controller {
      * @void
      */
     @action rollApiKey(apiKey) {
+        const apiKeyName = getWithDefault(apiKey, 'name', this.intl.t('developers.api-keys.index.untitled'));
+
         this.modalsManager.show('modals/roll-api-key-form', {
-            title: `Roll (${apiKey.name || 'Untitled'}) API Key`,
+            title: this.intl.t('developers.api-keys.index.roll-api-key', {apiKeyName}),
             modalClass: 'roll-key-modal',
-            acceptButtonText: 'Roll API Key',
+            acceptButtonText: this.intl.t('developers.api-keys.index.roll-api-key-button-text'),
             user: this.currentUser.user,
             expirationOptions: this.expirationOptions,
             setExpiration: ({ target }) => {
@@ -439,12 +452,12 @@ export default class ApiKeysIndexController extends Controller {
                         { normalizeToEmberData: true }
                     )
                     .then((apiKey) => {
-                        this.notifications.success(`API credential (${apiKey.name || 'Untitled'}) rolled.`);
+                        this.notifications.success(this.intl.t('developers.api-keys.index.roll-api-key-success-message', {apiKeyName}),);
                         return done();
                     })
                     .catch((error) => {
                         modal.stopLoading();
-                        this.notifications.serverError(error, 'Unable to roll api credentials.');
+                        this.notifications.serverError(error, this.intl.t('developers.api-keys.index.roll-api-key-error-message'));
                     });
             },
         });
@@ -468,8 +481,8 @@ export default class ApiKeysIndexController extends Controller {
      */
     @action exportApiKeys() {
         this.modalsManager.show('modals/export-form', {
-            title: `Export API Credentials`,
-            acceptButtonText: 'Download',
+            title: this.intl.t('developers.api-keys.index.export-api'),
+            acceptButtonText: this.intl.t('developers.api-keys.index.export-api-accept-button-text'),
             formatOptions: ['csv', 'xlsx', 'xls', 'html', 'pdf'],
             format: 'xlsx',
             setFormat: ({ target }) => {
@@ -501,7 +514,7 @@ export default class ApiKeysIndexController extends Controller {
                     })
                     .catch((error) => {
                         modal.stopLoading();
-                        this.notifications.serverError(error, 'Unable to download API credentials export.');
+                        this.notifications.serverError(error, this.intl.t('developers.api-keys.index.export-api-error-message'));
                     });
             },
         });

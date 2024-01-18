@@ -1,31 +1,42 @@
 developers:
   extension-name: Developers
   common:
-    new: New
-    export: Export
-    back: Back
-    date: Date  
-    source: Source
-    time: Time 
-    version: Version
-    name: Name
-    key: Key
-    clear: Clear
     all: All 
-    succeeded: Succeeded
-    failed: Failed
-    url: URL
+    attempt: Attempt
+    back: Back
+    bulk-action: Bulk Action
+    clear: Clear
+    code: Code
+    created: Created
+    date: Date
     description: Description
-    status: Status
+    email: Email
+    event-id: Event ID
+    event-type: Event Type
+    event: Event
+    export: Export
+    failed: Failed
+    id: ID
+    key: Key
     mode: Mode
-  components:
+    name: Name
+    new: New
+    password: Password
+    result: Result
+    source: Source
+    status: Status
+    succeeded: Succeeded
+    time: Time 
+    url: URL
+    version: Version
+
+  component:
     api-event: 
       data: 
         title: Event data  
         no-data: No event data
       details:
         prefixTitle: Event 
-        description: Description 
     api-request-log:
       details:        
         prefixTitle: Request
@@ -38,47 +49,75 @@ developers:
         title: Request headers
         no-headers: No request HEADERS
       request-body:
+        title: Request
+        title-second-part: body
+        no-request-body: No request {method} body
+      response-body:
         title: Response body
         no-response-body: No response body
     modals:
-      api-key-form: 
+      api-key-form:
+        api-name-aria-label: API Key Name
+        api-expiration-aria-label: API Key Expiration Date
+        name-placeholder: Enter a nickname or environment name for API Key
+        expiration-label: Expiration
+        expiration-help-text: Optionally set an expiry date for this api key.
         select-expiration-date: Select an expiration date...
         key-expires: Once this key expires, you can't perform any actions with it.
+        enter-domain-placeholder: Enter domain
+        allowed-browser-label: Allowed Browser Origins
+        allowed-browser-help-text: Input domains that will dictate the CORS policy for browser request from this api key.
         test-key: Test Key
         testing-environments: You are creating a test environment key, use this for testing environments.
         live-key: Live Key
         production-environments: You are creating a live environment key, use this for production environments.
       listen-custom-channel:
         name: Event channel ID
-        helpText: Input the socket channel identifier you want to listen on
+        name-help-text: Input the socket channel identifier you want to listen on
+      rename-api-key-form:
+        api-key-label: API Key Name
+        api-key-placeholder: Enter a nickname or environment name for API Key
       roll-api-key-form:
-        text: View logs
+        view-button-text: View logs
         last-used: Last used
         expiration: Expiration
+        api-key-expiration-label: API Key Expiration
         select-date: Select an expiration date...
         key-expires: Once this key expires, you can't perform any actions with it.
         additional-required: Additional authentication required
         enter-password: To continue, please enter your password.
-        email: Email
-        password: Password
+        user-email: User Email
+        user-password: User Password
+        user-password-placeholder: Authenticate request using your password
       webhook-form:
-        helpText: The URL Fleetbase should send event callbacks to.
-        helpText-endpoint: Optionally add a description for the webhook endpoint.
-        placeholder: An optional description of what this webhook endpoint is used for.
-        helpText-apikey: Restrict the webhook endpoint to receive callbacks from a specific API key.
-        api-credentials: Receive from all API Credentials...
-        select-credential: You can select a specific API credential that will be used to trigger callbacks to this webhook endpoint, or you can select "All API Credentials", and the webhook endpoint will receive callbacks regardless the API Credential being used.
-        helpText-callback: Select a specific API version to receive callbacks for.
-        api-version: Select an API version...
-        callback: Explicilty set which events to receive callbacks for.
+        endpoint-url: Endpoint URL
+        endpoint-url-help-text: The URL Fleetbase should send event callbacks to.
+        endpoint-url-placeholder: https://
+        description-label: Description
+        description-help-text: Optionally add a description for the webhook endpoint.
+        description-aria-label: Webhook Description
+        description-placeholder: An optional description of what this webhook endpoint is used for.
+        api-credential-label: API Credential
+        api-credential-help-text: Restrict the webhook endpoint to receive callbacks from a specific API key.
+        api-credential-message: Receive from all API Credentials...
+        api-credential-infoblock: You can select a specific API credential that will be used to trigger callbacks to this webhook endpoint, or you can select "All API Credentials", and the webhook endpoint will receive callbacks regardless the API Credential being used.
+        version-help-text: Select a specific API version to receive callbacks for.
+        version-message: Select an API version...
+        events-send-label: Events to send
+        events-send-help-text: Explicilty set which events to receive callbacks for.
         select-events: Select events...
+        event-search-label: Event Search
+        event-search-placeholder: Search...
         no-selected: No events selected
         dropdown: Search for events with the dropdown above, or
         all-events: receive all events
     webhook:
       attempts: 
-        webhook-attempts: Webhook attempts
-        endpoint: Attempts to send an event to your endpoint in the past 15 days
+        copy-event-id: Copy event ID to clipboard
+        view-event: View Event
+        info-message: Event ID copied to clipboard.
+        webhook-header: Webhook attempts
+        webhook-message: Attempts to send an event to your endpoint in the past 15 days
         http-code: HTTP status code
         response-time: Response timer
         request-endpoint: Request to your endpoint
@@ -89,32 +128,60 @@ developers:
         webhook-details: Webhook details
         update-details: Update details...
         event-types: Event Types
-        helpText: You will receive webhooks for new event types as they are added, except for those that require explicit selection. Listening for all event types is usually not necessary and may increase load on your servers.
+        help-text: You will receive webhooks for new event types as they are added, except for those that require explicit selection. Listening for all event types is usually not necessary and may increase load on your servers.
         all-events: All Events
         api-credential: API Credential
-        helpText-event: You will receive webhooks callbacks regardless what API Credential is used to trigger the event.
+        help-text-event: You will receive webhooks callbacks regardless what API Credential is used to trigger the event.
         api-credentials: Receiving from all API Credentials
       metrics:
         date-created: Date Created
     widget:
       api-metrics:  
         title: Monitoring
-
-  application:
-    sidebar:
-      title: Developers Console
-      items:
-        home: Dashboard
-        api-keys: API Keys
-        globe: Webhooks
-        plug:  WebSockets
-        logs: Logs
-        events: Events
+        api-requests: API Requests
+        api-error: API Error Distribution
+        webhooks: Webhooks
+        webhooks-response: Webhooks response time
+        success-label: success
+        error-label: error
+        get-error: GET Error
+        post-error: POST Error
+        put-error: PUT Error
+        delete-error: DELETE Error
+        duration-ms: Duration (ms)
   api-keys:
     index:
+      public-key: Public Key
+      secret-key: Secret Key
+      enviroment: Environment
+      expiry: Expiry
+      last-used: Last Used
+      edit-key: Edit key...
+      roll-key: Roll key...
+      view-logs: View request logs...
+      delete-key: Delete key...
+      new-api-key-title: New API Key
+      new-api-key-message: New API Credentials created.
+      edit-api-key-title: Edit API Key
+      edit-api-key-message: API Credentials changes saved.
+      rename-api-key-title: Rename {apiKeyName} API key
+      untitled: Untitled
+      rename-api-key-success-message: API credential renamed to {apiKeyName}
+      delete-api-key-title: Delete {apiKeyName} API Key
+      delete-api-key-body: Are you sure you want to delete this API key? All of your data assosciated with this API key will become unreachable. This action cannot be undone.
+      delete-api-key-success-message: API credential {apiKeyName} removed.
+      delete-accept-button-text: Delete API Credentials
+      roll-api-key: Roll {apiKeyName} API Key
+      roll-api-key-button-text: Roll API Key
+      roll-api-key-success-message: API credential {apiKeyName} rolled.
+      roll-api-key-error-message: Unable to roll api credentials.
+      export-api: Export API Credentials
+      export-api-accept-button-text: Download
+      export-api-error-message: Unable to download API credentials export.
       title: API Keys
       label: View test data 
-      helpText: Toggling view test data will enable the console to display all test data from your sandbox environment
+      help-text: Toggling view test data will enable the console to display all test data from your sandbox environment
+      select-api-key-aria-label: Select API Key
       select-key: Select specific key
       test-data: All test data...
       delete-api: Delete API Credentials
@@ -123,20 +190,61 @@ developers:
       title: Events
   logs:
     index:
+      api-credential: API Credential
+      http-method: HTTP Method
       title: Logs
   sockets:
     index:
+      link-text: Watch Channel
+      channel: Channel
+      listen-channel-title: Listen on a custom channel
+      listen-channel-button-text: Listen
       title: Channels receiving events from your account
-      text: Listen on custom channel
+      button-text: Listen on custom channel
     view:
+      socket-connection-error: Socket connection error!
+      socket-connected: Socket is connected
+      socket-subscribed: Socket subscribed to channel {modelName}
       output: Output
       awaiting-events: Awaiting events...
   webhooks:
     index:
+      view-logs: View Logs
+      edit-webhook: Edit Webhook
+      delete-webhook: Delete Webhook
+      add-webhook: Add a webhook endpoint
+      add-webhook-button-text: Confirm & Create
+      edit-webhook-endpoint: Edit webhook endpoint
+      edit-webhook-endpoint-button-text: Save Changes
+      new-webhook-success-message: New Webhook created.
+      delete-webhook-endpoint: Delete this Webhook Endpoint
+      delete-webhook-endpoint-body: Are you sure you want to delete this Webhook? All of your data assosciated with this Webhook will become unreachable. This endpoint will also stop receiving future events. This action cannot be undone.
+      delete-webhook-success-message: Webhook endpoint removed.
       title: Webhooks
-      text: Add new endpoint
+      button-text: Add new endpoint
     view:
-      text: Send test webhook...
-      text-disable: Disable...
-      text-enable: Enable...
-      text-delete: Delete...
+      webhook-deleted-success-message: Webhook endpoint deleted.
+      disable-webhook-title: Disable a webhook endpoint
+      disable-webhook-body: This webhook endpoint may be temporarily disabled so that it will not receive notifications until it is enabled again. Fleetbase will not retry any notifications that are generated while the endpoint is disabled.
+      disable-webhook-button-text: Disable webhook endpoint
+      disable-webhook-success-message: Webhook disabled.
+      enable-webhook-title: Enable a webhook endpoint
+      enable-webhook-body: This webhook is disabled and no longer receives notifications. This may have been done automatically because we detected an extended period of failures. If you've corrected the issue, you can re-enable the webhook endpoint here. Fleetbase will not retry any notifications that were generated in the intervening period, and if we continue to detect failures on this endpoint, we will disable the endpoint again.
+      enable-webhook-button-text: Enable webhook endpoint
+      enable-webhook-success-message: Webhook enabled.
+      update-endpoint-button-text: Update endpoint
+      update-endpoint-success-message: Webhook details updated.
+      send-button-text: Send test webhook...
+      disable-button-text: Disable...
+      enable-button-text: Enable...
+      delete-button-text: Delete...
+  application:
+    sidebar:
+      title: Developers Console
+      items:
+        home: Dashboard
+        api-keys: API Keys
+        webhooks: Webhooks
+        websockets:  WebSockets
+        logs: Logs
+        events: Events
