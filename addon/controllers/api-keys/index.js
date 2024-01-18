@@ -162,7 +162,7 @@ export default class ApiKeysIndexController extends Controller {
      */
     @tracked columns = [
         {
-            label: 'Name',
+            label: this.intl.t('developers.common.name'),
             valuePath: 'name',
             cellComponent: 'table/cell/anchor',
             action: this.editApiKey,
@@ -170,28 +170,28 @@ export default class ApiKeysIndexController extends Controller {
             sortable: false,
         },
         {
-            label: 'Public Key',
+            label: this.intl.t('developers.api-keys.index.public-key'),
             valuePath: 'key',
             width: '20%',
             sortable: false,
             cellComponent: 'click-to-copy',
         },
         {
-            label: 'Secret Key',
+            label: this.intl.t('developers.api-keys.index.secret-key'),
             valuePath: 'secret',
             width: '20%',
             sortable: false,
             cellComponent: 'click-to-reveal',
         },
         {
-            label: 'Environment',
+            label: this.intl.t('developers.api-keys.index.enviroment'),
             valuePath: 'environment',
             width: '12%',
             sortable: false,
             cellComponent: 'table/cell/status',
         },
         {
-            label: 'Expiry',
+            label: this.intl.t('developers.api-keys.index.expiry'),
             valuePath: 'expiresAt',
             sortable: false,
             width: '10%',
@@ -199,7 +199,7 @@ export default class ApiKeysIndexController extends Controller {
             cellClassNames: 'overflow-visible',
         },
         {
-            label: 'Last Used',
+            label: this.intl.t('developers.api-keys.index.last-used'),
             valuePath: 'lastUsed',
             sortable: false,
             width: '10%',
@@ -207,7 +207,7 @@ export default class ApiKeysIndexController extends Controller {
             cellClassNames: 'overflow-visible',
         },
         {
-            label: 'Created',
+            label: this.intl.t('developers.common.created'),
             valuePath: 'createdAt',
             sortable: false,
             width: '10%',
@@ -226,11 +226,11 @@ export default class ApiKeysIndexController extends Controller {
             width: '10%',
             align: 'right',
             actions: [
-                { label: 'Edit key...', fn: this.editApiKey },
-                { label: 'Roll key...', fn: this.rollApiKey },
-                { label: 'View request logs...', fn: this.viewRequestLogs },
+                { label: this.intl.t('developers.api-keys.index.edit-key'), fn: this.editApiKey },
+                { label: this.intl.t('developers.api-keys.index.roll-key'), fn: this.rollApiKey },
+                { label: this.intl.t('developers.api-keys.index.view-logs'), fn: this.viewRequestLogs },
                 {
-                    label: 'Delete key...',
+                    label: this.intl.t('developers.api-keys.index.delete-key'),
                     fn: this.deleteApiKey,
                     className: 'text-red-700 hover:text-red-800',
                 },
@@ -302,10 +302,10 @@ export default class ApiKeysIndexController extends Controller {
         });
 
         this.editApiKey(apiKey, {
-            title: 'New API Key',
+            title: this.intl.t('developers.api-keys.index.new-api-key-title'),
             acceptButtonIcon: 'check',
             acceptButtonIconPrefix: 'fas',
-            successMessage: 'New API Credentials created.',
+            successMessage: this.intl.t('developers.api-keys.index.new-api-key-message'),
             apiKey,
         });
     }
@@ -317,9 +317,9 @@ export default class ApiKeysIndexController extends Controller {
      */
     @action editApiKey(apiKey, options = {}) {
         this.modalsManager.show('modals/api-key-form', {
-            title: 'Edit API Key',
+            title: this.intl.t('developers.api-keys.index.edit-api-key-title'),
             acceptButtonIcon: 'save',
-            successMessage: 'API Credentials changes saved.',
+            successMessage: this.intl.t('developers.api-keys.index.edit-api-key-message'),
             expirationOptions: this.expirationOptions,
             testMode: this.currentUser.getOption('sandbox') || false,
             apiKey,
