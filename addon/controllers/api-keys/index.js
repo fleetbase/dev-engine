@@ -362,8 +362,8 @@ export default class ApiKeysIndexController extends Controller {
 
                 apiKey
                     .save()
-                    .then((apiKey) => {
-                        this.notifications.success(this.intl.t('developers.api-keys.index.rename-api-key-success-message', {apiKeyName}));
+                    .then(() => {
+                        this.notifications.success(this.intl.t('developers.api-keys.index.rename-api-key-success-message', { apiKeyName }));
                         return done();
                     })
                     .catch((error) => {
@@ -382,15 +382,15 @@ export default class ApiKeysIndexController extends Controller {
     @action deleteApiKey(apiKey) {
         const apiKeyName = getWithDefault(apiKey, 'name', this.intl.t('developers.api-keys.index.untitled'));
         this.modalsManager.confirm({
-            title: this.intl.t('developers.api-keys.index.delete-api-key-title', {apiKeyName}),
+            title: this.intl.t('developers.api-keys.index.delete-api-key-title', { apiKeyName }),
             body: this.intl.t('developers.api-keys.index.delete-api-key-body'),
             confirm: (modal, done) => {
                 modal.startLoading();
 
                 apiKey
                     .destroyRecord()
-                    .then((apiKey) => {
-                        this.notifications.success(this.intl.t('developers.api-keys.index.delete-api-key-title', {apiKeyName}));
+                    .then(() => {
+                        this.notifications.success(this.intl.t('developers.api-keys.index.delete-api-key-title', { apiKeyName }));
                         return this.hostRouter.refresh().finally(() => {
                             done();
                         });
@@ -429,7 +429,7 @@ export default class ApiKeysIndexController extends Controller {
         const apiKeyName = getWithDefault(apiKey, 'name', this.intl.t('developers.api-keys.index.untitled'));
 
         this.modalsManager.show('modals/roll-api-key-form', {
-            title: this.intl.t('developers.api-keys.index.roll-api-key', {apiKeyName}),
+            title: this.intl.t('developers.api-keys.index.roll-api-key', { apiKeyName }),
             modalClass: 'roll-key-modal',
             acceptButtonText: this.intl.t('developers.api-keys.index.roll-api-key-button-text'),
             user: this.currentUser.user,
@@ -451,8 +451,8 @@ export default class ApiKeysIndexController extends Controller {
                         },
                         { normalizeToEmberData: true }
                     )
-                    .then((apiKey) => {
-                        this.notifications.success(this.intl.t('developers.api-keys.index.roll-api-key-success-message', {apiKeyName}),);
+                    .then(() => {
+                        this.notifications.success(this.intl.t('developers.api-keys.index.roll-api-key-success-message', { apiKeyName }));
                         return done();
                     })
                     .catch((error) => {

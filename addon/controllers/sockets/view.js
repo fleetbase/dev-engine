@@ -94,7 +94,7 @@ export default class SocketsViewController extends Controller {
                 // Push an event or notification for channel subscription here
                 this.events.pushObject({
                     time: format(new Date(), this.consoleDateFormat),
-                    content: this.intl.t('developers.sockets.view.socket-subscribed', {modelName: model.name}),
+                    content: this.intl.t('developers.sockets.view.socket-subscribed', { modelName: model.name }),
                     color: 'blue',
                 });
             }
