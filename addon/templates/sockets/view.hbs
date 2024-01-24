@@ -1,5 +1,5 @@
 <Layout::Section::Header @title={{@model.name}}>
-    <Button @icon="long-arrow-left" @iconPrefix="fas" @text="Back" @onClick={{this.goBack}} />
+    <Button @icon="long-arrow-left" @iconPrefix="fas" @text={{t "developers.common.back"}} @onClick={{this.goBack}} />
 </Layout::Section::Header>
 
 <Layout::Section::Body>
@@ -9,14 +9,14 @@
                 <div id="output" class="font-mono rounded-b-md max-h-full p-6 overflow-y-scroll bg-black shadow-inner dark:shadow-none">
                     <div class="flex items-center justify-between mb-4">
                         <div class="block w-1/2 font-mono font-semibold text-green-300">
-                            Output
+                            {{t "developers.sockets.view.output"}}
                         </div>
                         {{#if this.events.length}}
                             <div class="flex items-center justify-end w-1/2 text-sm text-green-300">
                                 <Spinner @iconClass="green-loader" />
 
                                 <span class="ml-2 font-mono">
-                                    Awaiting events...
+                                    {{t "developers.sockets.view.awaiting-events"}}
                                 </span>
                             </div>
                         {{/if}}
@@ -36,7 +36,7 @@
                             <div class="flex items-center mt-6 text-green-300">
                                 <Spinner @iconClass="green-loader" />
                                 <span class="ml-2 font-mono">
-                                    Awaiting events...
+                                    {{t "developers.sockets.view.awaiting-events"}}
                                 </span>
                             </div>
                         {{/each}}
