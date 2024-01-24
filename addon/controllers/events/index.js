@@ -16,6 +16,13 @@ export default class EventsIndexController extends BaseController {
     @service filters;
 
     /**
+     * Inject the `intl` service
+     *
+     * @var {Service}
+     */
+    @service intl;
+
+    /**
      * All api versions
      *
      * @memberof LogsIndexController
@@ -79,13 +86,13 @@ export default class EventsIndexController extends BaseController {
      */
     @tracked columns = [
         {
-            label: 'Event',
+            label: this.intl.t('developers.common.event'),
             valuePath: 'description',
             width: '40%',
             sortable: false,
         },
         {
-            label: 'Code',
+            label: this.intl.t('developers.common.code'),
             valuePath: 'event',
             width: '20%',
             sortable: false,
@@ -94,7 +101,7 @@ export default class EventsIndexController extends BaseController {
             filterOptions: this.webhookEvents,
         },
         {
-            label: 'ID',
+            label: this.intl.t('developers.common.id'),
             valuePath: 'public_id',
             cellComponent: 'click-to-copy',
             width: '20%',
@@ -102,7 +109,7 @@ export default class EventsIndexController extends BaseController {
             sortable: false,
         },
         {
-            label: 'Date',
+            label: this.intl.t('developers.common.date'),
             valuePath: 'createdAt',
             filterParam: 'created_at',
             sortParam: 'created_at',

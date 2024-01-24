@@ -18,6 +18,13 @@ export default class WebhooksIndexController extends BaseController {
     @service currentUser;
 
     /**
+     * Inject the `intl` service
+     *
+     * @var {Service}
+     */
+    @service intl;
+
+    /**
      * Inject the `modalsManager` service
      *
      * @var {Service}
@@ -126,7 +133,7 @@ export default class WebhooksIndexController extends BaseController {
      */
     @tracked columns = [
         {
-            label: 'URL',
+            label: this.intl.t('developers.common.url'),
             valuePath: 'url',
             width: '40%',
             sortable: false,
@@ -135,21 +142,21 @@ export default class WebhooksIndexController extends BaseController {
             cellClassNames: 'no-underline',
         },
         {
-            label: 'Status',
+            label: this.intl.t('developers.common.status'),
             valuePath: 'status',
             width: '15%',
             sortable: false,
             cellComponent: 'table/cell/status',
         },
         {
-            label: 'Mode',
+            label: this.intl.t('developers.common.mode'),
             valuePath: 'mode',
             width: '15%',
             sortable: false,
             cellComponent: 'table/cell/status',
         },
-        { label: 'Version', valuePath: 'version', width: '10%', sortable: false },
-        { label: 'Created', valuePath: 'createdAt', sortable: false, width: '10%' },
+        { label: this.intl.t('developers.common.version'), valuePath: 'version', width: '10%', sortable: false },
+        { label: this.intl.t('developers.common.created'), valuePath: 'createdAt', sortable: false, width: '10%' },
         {
             label: '',
             cellComponent: 'table/cell/dropdown',
@@ -163,15 +170,15 @@ export default class WebhooksIndexController extends BaseController {
             align: 'right',
             actions: [
                 {
-                    label: 'View Logs',
+                    label: this.intl.t('developers.webhooks.index.view-logs'),
                     fn: this.viewWebhook,
                 },
                 {
-                    label: 'Edit Webhook',
+                    label: this.intl.t('developers.webhooks.index.edit-webhook'),
                     fn: this.editWebhook,
                 },
                 {
-                    label: 'Delete Webhook',
+                    label: this.intl.t('developers.webhooks.index.delete-webhook'),
                     fn: this.deleteWebhook,
                 },
             ],
@@ -218,8 +225,8 @@ export default class WebhooksIndexController extends BaseController {
         });
 
         this.editWebhook(webhook, {
-            title: 'Add a webhook endpoint',
-            acceptButtonText: 'Confirm & Create',
+            title: this.intl.t('developers.webhooks.index.add-webhook'),
+            acceptButtonText: this.intl.t('developers.webhooks.index.add-webhook-button-text'),
             acceptButtonIcon: 'check',
             acceptButtonIconPrefix: 'fas',
             webhook,
@@ -235,8 +242,8 @@ export default class WebhooksIndexController extends BaseController {
      */
     @action editWebhook(webhook, options = {}) {
         this.modalsManager.show('modals/webhook-form', {
-            title: 'Edit webhook endpoint',
-            acceptButtonText: 'Save Changes',
+            title: this.intl.t('developers.webhooks.index.edit-webhook-endpoint'),
+            acceptButtonText: this.intl.t('developers.webhooks.index.edit-webhook-endpoint-button-text'),
             acceptButtonIcon: 'save',
             declineButtonIcon: 'times',
             declineButtonIconPrefix: 'fas',
@@ -287,7 +294,7 @@ export default class WebhooksIndexController extends BaseController {
                 modal.startLoading();
 
                 return webhook.save().then(() => {
-                    this.notifications.success('New Webhook created.');
+                    this.notifications.success(this.intl.t('developers.webhooks.index.new-webhook-success-message'));
                     return this.hostRouter.refresh();
                 });
             },
@@ -304,13 +311,13 @@ export default class WebhooksIndexController extends BaseController {
      */
     @action deleteWebhook(webhook, options = {}) {
         this.modalsManager.confirm({
-            title: `Delete this Webhook Endpoint`,
-            body: 'Are you sure you want to delete this Webhook? All of your data assosciated with this Webhook will become unreachable. This endpoint will also stop receiving future events. This action cannot be undone.',
+            title: this.intl.t('developers.webhooks.index.delete-webhook-endpoint'),
+            body: this.intl.t('developers.webhooks.index.delete-webhook-endpoint-body'),
             confirm: (modal) => {
                 modal.startLoading();
 
                 return webhook.destroyRecord().then(() => {
-                    this.notifications.success(`Webhook endpoint removed.`);
+                    this.notifications.success(this.intl.t('developers.webhooks.index.delete-webhook-success-message'));
                     return this.hostRouter.refresh();
                 });
             },

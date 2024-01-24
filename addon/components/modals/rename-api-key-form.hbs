@@ -2,9 +2,9 @@
     <div class="modal-body-container">
         <div class="input-group">
             <label>
-                Name
+                {{t "developers.common.name"}}
             </label>
-            <Input @value={{options.apiKey.name}} @type="text" aria-label="API Key Name" class="w-full form-input" placeholder="Enter a nickname or environment name for API Key" />
+            <Input @value={{options.apiKey.name}} @type="text" aria-label={{t "developers.component.modals.rename-api-key-form.api-key-label"}} class="w-full form-input" placeholder={{t "developers.component.modals.rename-api-key-form.api-key-placeholder"}} />
         </div>
     </div>
 </Modal::Default>

@@ -1,13 +1,13 @@
 <Layout::Section::Header @title={{@model.url}}>
     {{!-- {{#if @model.isTestMode}}
-        <Button @icon="reply" @text="Send test webhook..." class="mr-2" />
+        <Button @icon="reply" @text={{t "developers.webhooks.view.send-button-text"}} class="mr-2" />
     {{/if}} --}}
     {{#if @model.isEnabled}}
-        <Button @icon="ban" @text="Disable..." class="mr-2" @onClick={{fn this.disableWebhook @model}} />
+        <Button @icon="ban" @text={{t "developers.webhooks.view.disable-button-text"}} class="mr-2" @onClick={{fn this.disableWebhook @model}} />
     {{else}}
-        <Button @icon="ban" @text="Enable..." class="mr-2" @onClick={{fn this.enableWebhook @model}} />
+        <Button @icon="ban" @text={{t "developers.webhooks.view.enable-button-text"}} class="mr-2" @onClick={{fn this.enableWebhook @model}} />
     {{/if}}
-    <Button @iconPrefix="fas" @icon="times" @text="Delete..." @onClick={{fn this.deleteWebhook @model}} />
+    <Button @iconPrefix="fas" @icon="times" @text={{t "developers.webhooks.view.delete-button-text"}} @onClick={{fn this.deleteWebhook @model}} />
 </Layout::Section::Header>
 
 <Layout::Section::Body>
