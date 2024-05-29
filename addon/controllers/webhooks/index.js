@@ -325,7 +325,21 @@ export default class WebhooksIndexController extends BaseController {
         });
     }
 
+    /**
+     * Transition to view the webhook
+     *
+     * @param {WebhookEndpointModel} webhook
+     * @return {Transition<Promise>}
+     * @memberof WebhooksIndexController
+     */
     @action viewWebhook(webhook) {
         return this.transitionToRoute('webhooks.view', webhook);
+    }
+
+    /**
+     * Reload data.
+     */
+    @action reload() {
+        return this.hostRouter.refresh();
     }
 }

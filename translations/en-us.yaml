@@ -29,6 +29,8 @@ developers:
     time: Time 
     url: URL
     version: Version
+    reload: Reload
+    reload-data: Reload data
 
   component:
     api-event: 

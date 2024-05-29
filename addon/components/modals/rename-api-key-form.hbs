@@ -4,7 +4,13 @@
             <label>
                 {{t "developers.common.name"}}
             </label>
-            <Input @value={{options.apiKey.name}} @type="text" aria-label={{t "developers.component.modals.rename-api-key-form.api-key-label"}} class="w-full form-input" placeholder={{t "developers.component.modals.rename-api-key-form.api-key-placeholder"}} />
+            <Input
+                @value={{options.apiKey.name}}
+                @type="text"
+                aria-label={{t "developers.component.modals.rename-api-key-form.api-key-label"}}
+                class="w-full form-input"
+                placeholder={{t "developers.component.modals.rename-api-key-form.api-key-placeholder"}}
+            />
         </div>
     </div>
 </Modal::Default>

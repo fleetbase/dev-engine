@@ -1,8 +1,14 @@
 <Layout::Section::Header @title={{t "developers.api-keys.index.title"}} @searchQuery={{this.query}} @onSearch={{perform this.search}}>
     <div class="flex items-center mr-3">
-        <Toggle @isToggled={{this.isTestMode}} @onToggle={{this.toggleTestMode}} @label={{t "developers.api-keys.index.label"}} @helpText={{t "developers.api-keys.index.help-text"}} class="mr-1" />
+        <Toggle
+            @isToggled={{this.isTestMode}}
+            @onToggle={{this.toggleTestMode}}
+            @label={{t "developers.api-keys.index.label"}}
+            @helpText={{t "developers.api-keys.index.help-text"}}
+            class="mr-1"
+        />
         {{#if this.isTestMode}}
-            <span class="ml-2">
+            <span class="mx-2">
                 <select class="form-select form-input-sm" aria-label="Select API Key" {{on "change" this.toggleTestKey}}>
                     <option selected disabled>
                         {{t "developers.api-keys.index.select-key"}}
@@ -10,7 +16,7 @@
                     <option value="null" selected={{eq this.testKey null}}>
                         {{t "developers.api-keys.index.test-data"}}
                     </option>
-                    {{#each (filter-by 'isTestKey' @model) as |key|}}
+                    {{#each (filter-by "isTestKey" @model) as |key|}}
                         <option value={{key.id}} selected={{eq this.testKey key.id}}>
                             {{or key.name key.key}}
                         </option>
@@ -19,6 +25,7 @@
             </span>
         {{/if}}
     </div>
+    <Button @icon="refresh" @onClick={{this.reload}} @helpText={{t "developers.common.reload-data"}} class="mr-2" />
     {{#if (safe-has this.table "selectedRows")}}
         <DropdownButton @icon="layer-group" @text={{t "developers.common.bulk-action"}} @type="magic" @size="sm" @buttonWrapperClass="mr-2" @contentClass="dropdown-menu" as |dd|>
             <div class="next-dd-menu mt-2 mx-0">
@@ -35,5 +42,15 @@
 </Layout::Section::Header>
 
 <Layout::Section::Body>
-    <Table @rows={{@model}} @columns={{this.columns}} @selectable={{true}} @canSelectAll={{true}} @onSetup={{fn (mut this.table)}} @pagination={{true}} @paginationMeta={{@model.meta}} @page={{this.page}} @onPageChange={{fn (mut this.page)}} @tfootVerticalOffset="53" @tfootVerticalOffsetElements=".next-view-section-subheader" />
+    <Table
+        @rows={{@model}}
+        @columns={{this.columns}}
+        @selectable={{true}}
+        @canSelectAll={{true}}
+        @onSetup={{fn (mut this.table)}}
+        @pagination={{true}}
+        @paginationMeta={{@model.meta}}
+        @page={{this.page}}
+        @onPageChange={{fn (mut this.page)}}
+    />
 </Layout::Section::Body>

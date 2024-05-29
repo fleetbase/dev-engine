@@ -4,7 +4,13 @@
             <label>
                 {{t "developers.common.name"}}
             </label>
-            <Input @value={{options.apiKey.name}} @type="text" aria-label={{t "developers.component.modals.api-key-form.api-name-aria-label"}} class="w-full form-input" placeholder={{t "developers.component.modals.api-key-form.name-placeholder"}} />
+            <Input
+                @value={{options.apiKey.name}}
+                @type="text"
+                aria-label={{t "developers.component.modals.api-key-form.api-name-aria-label"}}
+                class="w-full form-input"
+                placeholder={{t "developers.component.modals.api-key-form.name-placeholder"}}
+            />
         </div>
         <div class="input-group">
             <InputLabel @labelText={{t "developers.component.modals.api-key-form.expiration-label"}} @helpText={{t "developers.component.modals.api-key-form.expiration-help-text"}} />
@@ -22,12 +28,6 @@
             <p class="text-xs dark:text-gray-100">
                 {{t "developers.component.modals.api-key-form.key-expires"}}
             </p>
-        </div>
-
-        <div class="input-group">
-            <ArrayInput @data={{@options.apiKey.browser_origins}} @placeholder={{t "developers.component.modals.api-key-form.enter-domain-placeholder"}} @onDataChanged={{fn (mut @options.apiKey.browser_origins)}}>
-                <InputLabel @labelText={{t "developers.component.modals.api-key-form.allowed-browser-label"}} @helpText={{t "developers.component.modals.api-key-form.allowed-browser-help-text"}} />
-            </ArrayInput>
         </div>
 
         <div class="flex flex-col input-group">

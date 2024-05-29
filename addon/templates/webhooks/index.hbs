@@ -1,7 +1,17 @@
 <Layout::Section::Header @title={{t "developers.webhooks.index.title"}} @searchQuery={{this.query}} @onSearch={{perform this.search}}>
-    <Button @type="primary" @icon="plus" @iconPrefix="fas" @text={{t "developers.webhooks.index.button-text"}} class="mr-2" @onClick={{this.createWebhook}} />
+    <Button @icon="refresh" @onClick={{this.reload}} @helpText={{t "developers.common.reload-data"}} class="mr-2" />
+    <Button @type="primary" @icon="plus" @iconPrefix="fas" @text={{t "developers.webhooks.index.button-text"}} @onClick={{this.createWebhook}} />
 </Layout::Section::Header>
 
 <Layout::Section::Body>
-    <Table @rows={{@model}} @columns={{this.columns}} @onRowClick={{this.viewWebhook}} @onSetup={{fn (mut this.table)}} @pagination={{true}} @paginationMeta={{@model.meta}} @page={{this.page}} @onPageChange={{fn (mut this.page)}} @tfootVerticalOffset="53" @tfootVerticalOffsetElements=".next-view-section-subheader" />
+    <Table
+        @rows={{@model}}
+        @columns={{this.columns}}
+        @onRowClick={{this.viewWebhook}}
+        @onSetup={{fn (mut this.table)}}
+        @pagination={{true}}
+        @paginationMeta={{@model.meta}}
+        @page={{this.page}}
+        @onPageChange={{fn (mut this.page)}}
+    />
 </Layout::Section::Body>
