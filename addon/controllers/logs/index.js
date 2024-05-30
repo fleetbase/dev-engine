@@ -24,6 +24,13 @@ export default class LogsIndexController extends BaseController {
     @service intl;
 
     /**
+     * Inject the `hostRouter` service
+     *
+     * @var {Service}
+     */
+    @service hostRouter;
+
+    /**
      * All api versions
      *
      * @memberof WebhooksIndexController
@@ -202,5 +209,12 @@ export default class LogsIndexController extends BaseController {
      */
     @action onRowClick(log) {
         return this.transitionToRoute('logs.view', log);
+    }
+
+    /**
+     * Reload data.
+     */
+    @action reload() {
+        return this.hostRouter.refresh();
     }
 }

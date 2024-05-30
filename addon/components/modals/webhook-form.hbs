@@ -1,19 +1,37 @@
 <Modal::Default @modalIsOpened={{@modalIsOpened}} @options={{@options}} @confirm={{@onConfirm}} @decline={{@onDecline}} as |options|>
     <div class="px-5 border-b border-gray-200 dark:border-gray-800">
         <div class="input-group">
-            <InputLabel @labelText={{t "developers.component.modals.webhook-form.endpoint-url"}} @helpText={{t "developers.component.modals.webhook-form.endpoint-url-help-text"}} @required={{true}} />
-            <Input @value={{options.webhook.url}} @type="url" aria-label="Webhook URL" class="w-full form-input" placeholder={{t "developers.component.modals.webhook-form.endpoint-url-placeholder"}} />
+            <InputLabel
+                @labelText={{t "developers.component.modals.webhook-form.endpoint-url"}}
+                @helpText={{t "developers.component.modals.webhook-form.endpoint-url-help-text"}}
+                @required={{true}}
+            />
+            <Input
+                @value={{options.webhook.url}}
+                @type="url"
+                aria-label="Webhook URL"
+                class="w-full form-input"
+                placeholder={{t "developers.component.modals.webhook-form.endpoint-url-placeholder"}}
+            />
         </div>
 
         <div class="input-group">
             <InputLabel @labelText={{t "developers.component.modals.webhook-form.description-label"}} @helpText={{t "developers.component.modals.webhook-form.description-help-text"}} />
-            <Textarea @value={{options.webhook.description}} aria-label={{t "developers.component.modals.webhook-form.description-aria-label"}} class="w-full form-input" placeholder={{t "developers.component.modals.webhook-form.description-placeholder"}} />
+            <Textarea
+                @value={{options.webhook.description}}
+                aria-label={{t "developers.component.modals.webhook-form.description-aria-label"}}
+                class="w-full form-input"
+                placeholder={{t "developers.component.modals.webhook-form.description-placeholder"}}
+            />
         </div>
     </div>
 
     <div class="px-5 pt-4 border-b border-gray-200 dark:border-gray-800">
-        <div class="input-group">   
-            <InputLabel @labelText={{t "developers.component.modals.webhook-form.api-credential-label"}} @helpText={{t "developers.component.modals.webhook-form.api-credential-help-text"}} />
+        <div class="input-group">
+            <InputLabel
+                @labelText={{t "developers.component.modals.webhook-form.api-credential-label"}}
+                @helpText={{t "developers.component.modals.webhook-form.api-credential-help-text"}}
+            />
 
             <select class="w-full form-select" aria-label={{t "developers.component.modals.webhook-form.api-credential-label"}} {{on "change" @options.setApiCredential}}>
                 <option value={{null}} selected>
@@ -51,7 +69,11 @@
     <div class="px-5 pt-4">
         <div class="input-group">
             <div class="mb-4">
-                <InputLabel class="mb-2" @labelText={{t "developers.component.modals.webhook-form.events-send-label"}} @helpText={{t "developers.component.modals.webhook-form.events-send-help-text"}} />
+                <InputLabel
+                    class="mb-2"
+                    @labelText={{t "developers.component.modals.webhook-form.events-send-label"}}
+                    @helpText={{t "developers.component.modals.webhook-form.events-send-help-text"}}
+                />
 
                 <div class="flex items-start justify-between">
                     <div class="w-1/2">
@@ -63,7 +85,12 @@
                             </dd.Trigger>
                             <dd.Content class="w-full h-48 mt-1 overflow-y-hidden border bg-white border-gray-300 rounded shadow-md dark:border-gray-800 dark:bg-gray-700">
                                 <div class="w-full rounded shadow">
-                                    <Input aria-label={{t "developers.component.modals.webhook-form.event-search-label"}} placeholder={{t "developers.component.modals.webhook-form.event-search-placeholder"}} class="w-full px-3 py-2 text-sm leading-4 border-b border-gray-300 shadow-sm dark:border-gray-800 dark:bg-gray-700 dark:text-gray-100" {{on "keyup" @options.searchEvents}} />
+                                    <Input
+                                        aria-label={{t "developers.component.modals.webhook-form.event-search-label"}}
+                                        placeholder={{t "developers.component.modals.webhook-form.event-search-placeholder"}}
+                                        class="w-full px-3 py-2 text-sm leading-4 border-b border-gray-300 shadow-sm dark:border-gray-800 dark:bg-gray-700 dark:text-gray-100"
+                                        {{on "keyup" @options.searchEvents}}
+                                    />
                                     <div class="w-full h-40 pb-2 overflow-y-scroll">
                                         {{#each-in @options.eventOptions as |resourceName events|}}
                                             <div class="">
@@ -76,7 +103,12 @@
                                                     </span>
                                                 </div>
                                                 {{#each events as |event|}}
-                                                    <a href="javascript:;" class="block px-6 py-3 text-xs text-gray-700 no-underline cursor-pointer hover:opacity-75 dark:text-gray-100" disabled={{includes event @options.webhook.events}} {{on "click" (fn @options.addEvent event dd)}}>
+                                                    <a
+                                                        href="javascript:;"
+                                                        class="block px-6 py-3 text-xs text-gray-700 no-underline cursor-pointer hover:opacity-75 dark:text-gray-100"
+                                                        disabled={{includes event @options.webhook.events}}
+                                                        {{on "click" (fn @options.addEvent event dd)}}
+                                                    >
                                                         {{event}}
                                                     </a>
                                                 {{/each}}

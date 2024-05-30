@@ -10,7 +10,12 @@
                 <div class="mb-2 dark:text-gray-100">
                     {{@options.apiKey.key}}
                 </div>
-                <Button @text={{t "developers.component.modals.roll-api-key-form.view-button-text"}} @size="xs" @icon="arrow-right" @onClick={{fn @options.viewRequestLogs @options.apiKey}} />
+                <Button
+                    @text={{t "developers.component.modals.roll-api-key-form.view-button-text"}}
+                    @size="xs"
+                    @icon="arrow-right"
+                    @onClick={{fn @options.viewRequestLogs @options.apiKey}}
+                />
             </div>
         </div>
     </div>
@@ -36,7 +41,11 @@
                 </span>
             </div>
             <div class="w-3/4">
-                <select class="w-full mb-2 form-select form-input-sm" aria-label={{t "developers.component.modals.roll-api-key-form.api-key-expiration-label"}} {{on "change" @options.setExpiration}}>
+                <select
+                    class="w-full mb-2 form-select form-input-sm"
+                    aria-label={{t "developers.component.modals.roll-api-key-form.api-key-expiration-label"}}
+                    {{on "change" @options.setExpiration}}
+                >
                     <option selected disabled>
                         {{t "developers.component.modals.roll-api-key-form.select-date"}}
                     </option>
@@ -74,7 +83,13 @@
             <label>
                 {{t "developers.common.password"}}
             </label>
-            <Input @type="password" @value={{@options.password}} aria-label={{t "developers.component.modals.roll-api-key-form.user-password"}} placeholder={{t "developers.component.modals.roll-api-key-form.user-password-placeholder"}} class="w-full form-input" />
+            <Input
+                @type="password"
+                @value={{@options.password}}
+                aria-label={{t "developers.component.modals.roll-api-key-form.user-password"}}
+                placeholder={{t "developers.component.modals.roll-api-key-form.user-password-placeholder"}}
+                class="w-full form-input"
+            />
         </div>
     </div>
 </Modal::Default>

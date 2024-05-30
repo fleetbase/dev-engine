@@ -14,13 +14,21 @@
         <div class="flex items-center section-header-actions">
             <div class="rounded-lg border borer-gray-300 dark:border-gray-700 shadow-sm">
                 <div class="rounded-lg flex items-center justify-between px-2 py-1 text-sm bg-white dark:bg-gray-900">
-                    <a href="javascript:;" class="mx-4 no-underline text-gray-400 {{if this.noAttemptStatus "font-semibold text-blue-400"}}" {{on "click" this.changeAttemptStatus}}>
+                    <a href="javascript:;" class="mx-4 no-underline text-gray-400 {{if this.noAttemptStatus 'font-semibold text-blue-400'}}" {{on "click" this.changeAttemptStatus}}>
                         {{t "developers.common.all"}}
                     </a>
-                    <a href="javascript:;" class="mx-4 no-underline text-gray-400 {{if (eq this.attemptStatus "successful") "font-semibold text-blue-400"}}" {{on "click" (fn this.changeAttemptStatus "successful")}}>
+                    <a
+                        href="javascript:;"
+                        class="mx-4 no-underline text-gray-400 {{if (eq this.attemptStatus 'successful') 'font-semibold text-blue-400'}}"
+                        {{on "click" (fn this.changeAttemptStatus "successful")}}
+                    >
                         {{t "developers.common.succeeded"}}
                     </a>
-                    <a href="javascript:;" class="mx-4 no-underline text-gray-400 {{if (eq this.attemptStatus "failed") "font-semibold text-blue-400"}}" {{on "click" (fn this.changeAttemptStatus "failed")}}>
+                    <a
+                        href="javascript:;"
+                        class="mx-4 no-underline text-gray-400 {{if (eq this.attemptStatus 'failed') 'font-semibold text-blue-400'}}"
+                        {{on "click" (fn this.changeAttemptStatus "failed")}}
+                    >
                         {{t "developers.common.failed"}}
                     </a>
                 </div>
@@ -39,7 +47,8 @@
                                     {{t "developers.component.webhook.attempts.http-code"}}
                                 </td>
                                 <td>
-                                    {{row.status_code}} ({{row.reason_phrase}})
+                                    {{row.status_code}}
+                                    ({{row.reason_phrase}})
                                 </td>
                             </tr>
                             <tr>

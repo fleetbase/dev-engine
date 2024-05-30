@@ -23,6 +23,13 @@ export default class EventsIndexController extends BaseController {
     @service intl;
 
     /**
+     * Inject the `hostRouter` service
+     *
+     * @var {Service}
+     */
+    @service hostRouter;
+
+    /**
      * All api versions
      *
      * @memberof LogsIndexController
@@ -152,5 +159,12 @@ export default class EventsIndexController extends BaseController {
      */
     @action onRowClick(log) {
         return this.transitionToRoute('events.view', log);
+    }
+
+    /**
+     * Reload data.
+     */
+    @action reload() {
+        return this.hostRouter.refresh();
     }
 }

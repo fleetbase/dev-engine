@@ -166,52 +166,62 @@ export default class ApiKeysIndexController extends Controller {
             valuePath: 'name',
             cellComponent: 'table/cell/anchor',
             action: this.editApiKey,
+            resizable: true,
             width: '10%',
             sortable: false,
         },
         {
             label: this.intl.t('developers.api-keys.index.public-key'),
             valuePath: 'key',
-            width: '20%',
+            width: '18%',
             sortable: false,
+            resizable: true,
             cellComponent: 'click-to-copy',
         },
         {
             label: this.intl.t('developers.api-keys.index.secret-key'),
             valuePath: 'secret',
-            width: '20%',
+            width: '18%',
             sortable: false,
+            resizable: true,
             cellComponent: 'click-to-reveal',
+            cellComponentArgs: {
+                clickToCopy: true,
+            },
         },
         {
             label: this.intl.t('developers.api-keys.index.enviroment'),
             valuePath: 'environment',
-            width: '12%',
+            width: '10%',
             sortable: false,
+            resizable: true,
             cellComponent: 'table/cell/status',
         },
         {
             label: this.intl.t('developers.api-keys.index.expiry'),
             valuePath: 'expiresAt',
             sortable: false,
-            width: '10%',
+            width: '8%',
             tooltip: true,
+            resizable: true,
             cellClassNames: 'overflow-visible',
         },
         {
             label: this.intl.t('developers.api-keys.index.last-used'),
             valuePath: 'lastUsed',
             sortable: false,
-            width: '10%',
+            width: '14%',
             tooltip: true,
+            resizable: true,
             cellClassNames: 'overflow-visible',
         },
         {
             label: this.intl.t('developers.common.created'),
             valuePath: 'createdAt',
             sortable: false,
-            width: '10%',
+            width: '14%',
             tooltip: true,
+            resizable: true,
             cellClassNames: 'overflow-visible',
         },
         {
@@ -518,5 +528,12 @@ export default class ApiKeysIndexController extends Controller {
                     });
             },
         });
+    }
+
+    /**
+     * Reload data.
+     */
+    @action reload() {
+        return this.hostRouter.refresh();
     }
 }

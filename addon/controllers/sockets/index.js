@@ -41,6 +41,13 @@ export default class SocketsIndexController extends BaseController {
     @service store;
 
     /**
+     * Inject the `hostRouter` service
+     *
+     * @var {Service}
+     */
+    @service hostRouter;
+
+    /**
      * All columns applicable for orders
      *
      * @var {Array}
@@ -132,5 +139,12 @@ export default class SocketsIndexController extends BaseController {
                 return this.transitionToRoute('sockets.view', { name: channelId });
             },
         });
+    }
+
+    /**
+     * Reload data.
+     */
+    @action reload() {
+        return this.hostRouter.refresh();
     }
 }
