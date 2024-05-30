@@ -1,6 +1,6 @@
 {
     "name": "@fleetbase/dev-engine",
-    "version": "0.2.2",
+    "version": "0.2.3",
     "description": "Fleetbase Developers extension provides a module for managing developer resources such as API keys, webhooks, sockets, events and logs.",
     "fleetbase": {
         "route": "developers"
@@ -41,8 +41,8 @@
         "publish:github": "npm config set '@fleetbase:registry' https://npm.pkg.github.com/ && npm publish"
     },
     "dependencies": {
-        "@fleetbase/ember-core": "^0.2.8",
-        "@fleetbase/ember-ui": "^0.2.12",
+        "@fleetbase/ember-core": "^0.2.11",
+        "@fleetbase/ember-ui": "^0.2.16",
         "@babel/core": "^7.23.2",
         "ember-cli-babel": "^8.2.0",
         "ember-cli-htmlbars": "^6.3.0",
