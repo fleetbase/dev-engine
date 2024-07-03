@@ -2,6 +2,7 @@
     {{!-- {{#if @model.isTestMode}}
         <Button @icon="reply" @text={{t "developers.webhooks.view.send-button-text"}} class="mr-2" />
     {{/if}} --}}
+    <Button @icon="refresh" @onClick={{this.reload}} @helpText={{t "common.reload-data"}} class="mr-2" />
     {{#if @model.isEnabled}}
         <Button @icon="ban" @text={{t "developers.webhooks.view.disable-button-text"}} class="mr-2" @onClick={{fn this.disableWebhook @model}} />
     {{else}}
