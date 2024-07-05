@@ -50,6 +50,13 @@ export default class WebhooksViewController extends BaseController {
     @service universe;
 
     /**
+     * Inject the `hostRouter` service
+     *
+     * @var {Service}
+     */
+    @service hostRouter;
+
+    /**
      * All webhook events
      *
      * @memberof WebhooksIndexController
@@ -154,5 +161,14 @@ export default class WebhooksViewController extends BaseController {
                 });
             },
         });
+    }
+
+    /**
+     * Reloads the view data.
+     *
+     * @memberof WebhooksViewController
+     */
+    @action reload() {
+        this.hostRouter.refresh();
     }
 }
