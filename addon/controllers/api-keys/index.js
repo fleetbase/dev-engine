@@ -346,6 +346,8 @@ export default class ApiKeysIndexController extends Controller {
 
         this.modalsManager.show('modals/rename-api-key-form', {
             title: this.intl.t('developers.api-keys.index.rename-api-key-title', { apiKeyName }),
+            acceptButtonDisabled: this.abilities.cannot(formPermission),
+            acceptButtonHelpText: this.abilities.cannot(formPermission) ? this.intl.t('common.unauthorized') : null,
             apiKey,
             formPermission,
             confirm: async modal => {
@@ -411,12 +413,15 @@ export default class ApiKeysIndexController extends Controller {
      * @void
      */
     @action rollApiKey (apiKey) {
+        const formPermission = 'developers roll api-key';
         const apiKeyName = getWithDefault(apiKey, 'name', this.intl.t('developers.api-keys.index.untitled'));
 
         this.modalsManager.show('modals/roll-api-key-form', {
             title: this.intl.t('developers.api-keys.index.roll-api-key', { apiKeyName }),
             modalClass: 'roll-key-modal',
             acceptButtonText: this.intl.t('developers.api-keys.index.roll-api-key-button-text'),
+            acceptButtonDisabled: this.abilities.cannot(formPermission),
+            acceptButtonHelpText: this.abilities.cannot(formPermission) ? this.intl.t('common.unauthorized') : null,
             user: this.currentUser.user,
             expirationOptions: this.expirationOptions,
             setExpiration: ({ target }) => {
@@ -424,6 +429,7 @@ export default class ApiKeysIndexController extends Controller {
             },
             viewRequestLogs: this.viewRequestLogs,
             password: null,
+            formPermission,
             apiKey,
             confirm: async modal => {
                 modal.startLoading();
