@@ -6,65 +6,25 @@ import { isBlank } from '@ember/utils';
 import { timeout } from 'ember-concurrency';
 import { task } from 'ember-concurrency-decorators';
 import groupApiEvents from '@fleetbase/ember-core/utils/group-api-events';
-import fromStore from '@fleetbase/ember-core/decorators/from-store';
-import fetchFrom from '@fleetbase/ember-core/decorators/fetch-from';
+import fromStore from '@fleetbase/ember-core/decorators/legacy-from-store';
+import fetchFrom from '@fleetbase/ember-core/decorators/legacy-fetch-from';
 
 export default class WebhooksIndexController extends BaseController {
-    /**
-     * Inject the `currentUser` service
-     *
-     * @var {Service}
-     */
     @service currentUser;
-
-    /**
-     * Inject the `intl` service
-     *
-     * @var {Service}
-     */
     @service intl;
-
-    /**
-     * Inject the `modalsManager` service
-     *
-     * @var {Service}
-     */
     @service modalsManager;
-
-    /**
-     * Inject the `notifications` service
-     *
-     * @var {Service}
-     */
     @service notifications;
-
-    /**
-     * Inject the `store` service
-     *
-     * @var {Service}
-     */
     @service store;
-
-    /**
-     * Inject the `fetch` service
-     *
-     * @var {Service}
-     */
     @service fetch;
-
-    /**
-     * Inject the `hostRouter` service
-     *
-     * @var {Service}
-     */
     @service hostRouter;
+    @service abilities;
 
     /**
      * Group api events by resource
      *
      * @var {Object}
      */
-    @computed('webhookEvents.[]') get groupedApiEvents () {
+    @computed('webhookEvents.[]') get groupedApiEvents() {
         return groupApiEvents(this.webhookEvents);
     }
 
@@ -198,7 +158,7 @@ export default class WebhooksIndexController extends BaseController {
      *
      * @void
      */
-    @task({ restartable: true }) *search ({ target: { value } }) {
+    @task({ restartable: true }) *search({ target: { value } }) {
         // if no query don't search
         if (isBlank(value)) {
             this.query = null;
@@ -222,7 +182,7 @@ export default class WebhooksIndexController extends BaseController {
      *
      * @void
      */
-    @action createWebhook () {
+    @action createWebhook() {
         const formPermission = 'developers create webhook';
         const webhook = this.store.createRecord('webhook-endpoint', {
             events: [],
@@ -238,7 +198,7 @@ export default class WebhooksIndexController extends BaseController {
             acceptButtonHelpText: this.abilities.cannot(formPermission) ? this.intl.t('common.unauthorized') : null,
             formPermission,
             webhook,
-            confirm: async modal => {
+            confirm: async (modal) => {
                 modal.startLoading();
 
                 if (this.abilities.cannot(formPermission)) {
@@ -264,7 +224,9 @@ export default class WebhooksIndexController extends BaseController {
      * @param {Object} options
      * @void
      */
-    @action editWebhook (webhook, options = {}) {
+    @action async editWebhook(webhook, options = {}) {
+        await this.apiCredentials;
+
         const formPermission = 'developers update webhook';
         this.modalsManager.show('modals/webhook-form', {
             title: this.intl.t('developers.webhooks.index.edit-webhook-endpoint'),
@@ -285,14 +247,14 @@ export default class WebhooksIndexController extends BaseController {
             setApiCredential: ({ target }) => {
                 webhook.api_credential_uuid = target.value || null;
             },
-            searchEvents: query => {
+            searchEvents: (query) => {
                 if (typeof query !== 'string') {
                     return;
                 }
                 const resources = Object.keys(this.groupedApiEvents);
                 const filteredEvents = {};
-                resources.forEach(eventResource => {
-                    filteredEvents[eventResource] = this.groupedApiEvents[eventResource].filter(event => {
+                resources.forEach((eventResource) => {
+                    filteredEvents[eventResource] = this.groupedApiEvents[eventResource].filter((event) => {
                         return event.toLowerCase().includes(query.toLowerCase());
                     });
                     // if 0 events remove from filter
@@ -302,14 +264,14 @@ export default class WebhooksIndexController extends BaseController {
                 });
                 this.modalsManager.setOption('eventOptions', filteredEvents);
             },
-            addEvent: event => {
+            addEvent: (event) => {
                 if (webhook.events.includes(event)) {
                     return;
                 }
 
                 webhook.events.pushObject(event);
             },
-            removeEvent: event => {
+            removeEvent: (event) => {
                 webhook.events.removeObject(event);
             },
             clearEvents: () => {
@@ -318,7 +280,7 @@ export default class WebhooksIndexController extends BaseController {
             receiveAllEvents: () => {
                 webhook.events.pushObjects(this.webhookEvents);
             },
-            confirm: async modal => {
+            confirm: async (modal) => {
                 modal.startLoading();
 
                 if (this.abilities.cannot(formPermission)) {
@@ -345,11 +307,11 @@ export default class WebhooksIndexController extends BaseController {
      * @param {Object} options
      * @void
      */
-    @action deleteWebhook (webhook, options = {}) {
+    @action deleteWebhook(webhook, options = {}) {
         this.modalsManager.confirm({
             title: this.intl.t('developers.webhooks.index.delete-webhook-endpoint'),
             body: this.intl.t('developers.webhooks.index.delete-webhook-endpoint-body'),
-            confirm: async modal => {
+            confirm: async (modal) => {
                 modal.startLoading();
 
                 try {
@@ -372,14 +334,14 @@ export default class WebhooksIndexController extends BaseController {
      * @return {Transition<Promise>}
      * @memberof WebhooksIndexController
      */
-    @action viewWebhook (webhook) {
+    @action viewWebhook(webhook) {
         return this.transitionToRoute('webhooks.view', webhook);
     }
 
     /**
      * Reload data.
      */
-    @action reload () {
+    @action reload() {
         return this.hostRouter.refresh();
     }
 }

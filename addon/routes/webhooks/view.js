@@ -8,7 +8,7 @@ export default class WebhooksViewRoute extends Route {
     @service hostRouter;
     @service intl;
 
-    beforeModel () {
+    beforeModel() {
         if (this.abilities.cannot('developers view webhook')) {
             this.notifications.warning(this.intl.t('common.unauthorized-access'));
             return this.hostRouter.transitionTo('console.developers.webhooks.index');

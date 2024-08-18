@@ -5,25 +5,8 @@ import { action } from '@ember/object';
 import { format } from 'date-fns';
 
 export default class SocketsViewController extends Controller {
-    /**
-     * Inject the `router` service
-     *
-     * @var {Service}
-     */
     @service hostRouter;
-
-    /**
-     * Inject the `intl` service
-     *
-     * @var {Service}
-     */
     @service intl;
-
-    /**
-     * Inject the `socket` service
-     *
-     * @var {Service}
-     */
     @service socket;
 
     /**

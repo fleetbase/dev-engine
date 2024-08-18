@@ -22,18 +22,18 @@ export default class WebhooksIndexRoute extends Route {
         },
     };
 
-    @action loading (transition) {
+    @action loading(transition) {
         this.loader.showOnInitialTransition(transition, 'section.next-view-section', { loadingMessage: 'Loading webhooks...' });
     }
 
-    beforeModel () {
+    beforeModel() {
         if (this.abilities.cannot('developers list webhook')) {
             this.notifications.warning(this.intl.t('common.unauthorized-access'));
             return this.hostRouter.transitionTo('console.developers.home');
         }
     }
 
-    model (params) {
+    model(params) {
         return this.store.query('webhook-endpoint', params);
     }
 }

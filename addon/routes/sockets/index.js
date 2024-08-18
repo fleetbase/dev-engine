@@ -13,7 +13,7 @@ export default class SocketsIndexRoute extends Route {
         this.loader.showOnInitialTransition(transition, 'section.next-view-section', { loadingMessage: 'Loading websockets...' });
     }
 
-    beforeModel () {
+    beforeModel() {
         if (this.abilities.cannot('developers list socket')) {
             this.notifications.warning(this.intl.t('common.unauthorized-access'));
             return this.hostRouter.transitionTo('console.developers.home');

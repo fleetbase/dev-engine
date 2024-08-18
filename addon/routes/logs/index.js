@@ -41,7 +41,7 @@ export default class LogsIndexRoute extends Route {
         this.loader.showOnInitialTransition(transition, 'section.next-view-section', { loadingMessage: 'Loading logs...' });
     }
 
-    beforeModel () {
+    beforeModel() {
         if (this.abilities.cannot('developers list log')) {
             this.notifications.warning(this.intl.t('common.unauthorized-access'));
             return this.hostRouter.transitionTo('console.developers.home');

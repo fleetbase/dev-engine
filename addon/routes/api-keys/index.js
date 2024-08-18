@@ -30,7 +30,7 @@ export default class ApiKeysIndexRoute extends Route {
         this.loader.showOnInitialTransition(transition, 'section.next-view-section', { loadingMessage: 'Loading api keys...' });
     }
 
-    beforeModel () {
+    beforeModel() {
         if (this.abilities.cannot('developers list api-key')) {
             this.notifications.warning(this.intl.t('common.unauthorized-access'));
             return this.hostRouter.transitionTo('console.developers.home');

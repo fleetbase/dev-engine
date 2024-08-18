@@ -35,7 +35,7 @@ export default class EventsIndexRoute extends Route {
         this.loader.showOnInitialTransition(transition, 'section.next-view-section', { loadingMessage: 'Loading events...' });
     }
 
-    beforeModel () {
+    beforeModel() {
         if (this.abilities.cannot('developers list event')) {
             this.notifications.warning(this.intl.t('common.unauthorized-access'));
             return this.hostRouter.transitionTo('console.developers.home');

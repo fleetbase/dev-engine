@@ -21,6 +21,7 @@ export default class ApiKeysIndexController extends Controller {
     @service theme;
     @service hostRouter;
     @service universe;
+    @service abilities;
 
     /**
      * Queryable parameters for this controller's model
@@ -83,7 +84,7 @@ export default class ApiKeysIndexController extends Controller {
      *
      * @memberof ApiKeysIndexController
      */
-    @computed('testMode') get isTestMode () {
+    @computed('testMode') get isTestMode() {
         return this.testMode === true;
     }
 
@@ -92,7 +93,7 @@ export default class ApiKeysIndexController extends Controller {
      *
      * @memberof ApiKeysIndexController
      */
-    @computed('currentUser.options.testKey') get testKey () {
+    @computed('currentUser.options.testKey') get testKey() {
         return this.currentUser.getOption('testKey');
     }
 
@@ -208,7 +209,7 @@ export default class ApiKeysIndexController extends Controller {
      *
      * @void
      */
-    @task({ restartable: true }) *search ({ target: { value } }) {
+    @task({ restartable: true }) *search({ target: { value } }) {
         // if no query don't search
         if (isBlank(value)) {
             this.query = null;
@@ -232,7 +233,7 @@ export default class ApiKeysIndexController extends Controller {
      *
      * @void
      */
-    @action toggleTestMode (testMode = false) {
+    @action toggleTestMode(testMode = false) {
         this.currentUser.setOption('sandbox', testMode);
         this.testMode = testMode;
         this.theme.setEnvironment();
@@ -247,7 +248,7 @@ export default class ApiKeysIndexController extends Controller {
      *
      * @void
      */
-    @action toggleTestKey ({ target: { value } }) {
+    @action toggleTestKey({ target: { value } }) {
         if (isBlank(value)) {
             this.currentUser.setOption('testKey', null);
             return;
@@ -261,7 +262,7 @@ export default class ApiKeysIndexController extends Controller {
      *
      * @void
      */
-    @action createApiKey () {
+    @action createApiKey() {
         const formPermission = 'developers create api-key';
         const apiKey = this.store.createRecord('api-credential', {
             test_mode: this.testMode,
@@ -276,7 +277,7 @@ export default class ApiKeysIndexController extends Controller {
             successMessage: this.intl.t('developers.api-keys.index.new-api-key-message'),
             formPermission,
             apiKey,
-            confirm: async modal => {
+            confirm: async (modal) => {
                 modal.startLoading();
 
                 if (this.abilities.cannot(formPermission)) {
@@ -300,7 +301,7 @@ export default class ApiKeysIndexController extends Controller {
      *
      * @void
      */
-    @action editApiKey (apiKey, options = {}) {
+    @action editApiKey(apiKey, options = {}) {
         const formPermission = 'developers update api-key';
         this.modalsManager.show('modals/api-key-form', {
             title: this.intl.t('developers.api-keys.index.edit-api-key-title'),
@@ -315,7 +316,7 @@ export default class ApiKeysIndexController extends Controller {
             setExpiration: ({ target }) => {
                 apiKey.expires_at = target.value || null;
             },
-            confirm: async modal => {
+            confirm: async (modal) => {
                 modal.startLoading();
 
                 if (this.abilities.cannot(formPermission)) {
@@ -340,7 +341,7 @@ export default class ApiKeysIndexController extends Controller {
      *
      * @void
      */
-    @action renameApiKey (apiKey) {
+    @action renameApiKey(apiKey) {
         const formPermission = 'developers update api-key';
         const apiKeyName = getWithDefault(apiKey, 'name', this.intl.t('developers.api-keys.index.untitled'));
 
@@ -350,7 +351,7 @@ export default class ApiKeysIndexController extends Controller {
             acceptButtonHelpText: this.abilities.cannot(formPermission) ? this.intl.t('common.unauthorized') : null,
             apiKey,
             formPermission,
-            confirm: async modal => {
+            confirm: async (modal) => {
                 modal.startLoading();
 
                 try {
@@ -370,12 +371,12 @@ export default class ApiKeysIndexController extends Controller {
      *
      * @void
      */
-    @action deleteApiKey (apiKey) {
+    @action deleteApiKey(apiKey) {
         const apiKeyName = getWithDefault(apiKey, 'name', this.intl.t('developers.api-keys.index.untitled'));
         this.modalsManager.confirm({
             title: this.intl.t('developers.api-keys.index.delete-api-key-title', { apiKeyName }),
             body: this.intl.t('developers.api-keys.index.delete-api-key-body'),
-            confirm: async modal => {
+            confirm: async (modal) => {
                 modal.startLoading();
 
                 try {
@@ -396,7 +397,7 @@ export default class ApiKeysIndexController extends Controller {
      * @param {Array} selected an array of selected models
      * @void
      */
-    @action bulkDeleteApiCredentials () {
+    @action bulkDeleteApiCredentials() {
         const selected = this.table.selectedRows;
 
         this.crud.bulkDelete(selected, {
@@ -412,7 +413,7 @@ export default class ApiKeysIndexController extends Controller {
      *
      * @void
      */
-    @action rollApiKey (apiKey) {
+    @action rollApiKey(apiKey) {
         const formPermission = 'developers roll api-key';
         const apiKeyName = getWithDefault(apiKey, 'name', this.intl.t('developers.api-keys.index.untitled'));
 
@@ -431,7 +432,7 @@ export default class ApiKeysIndexController extends Controller {
             password: null,
             formPermission,
             apiKey,
-            confirm: async modal => {
+            confirm: async (modal) => {
                 modal.startLoading();
 
                 try {
@@ -455,7 +456,7 @@ export default class ApiKeysIndexController extends Controller {
      *
      * @void
      */
-    @action viewRequestLogs (apiKey) {
+    @action viewRequestLogs(apiKey) {
         return this.universe.transitionToEngineRoute('@fleetbase/dev-engine', 'logs.index', {
             queryParams: { key: apiKey.id },
         });
@@ -466,7 +467,7 @@ export default class ApiKeysIndexController extends Controller {
      *
      * @void
      */
-    @action exportApiKeys () {
+    @action exportApiKeys() {
         this.modalsManager.show('modals/export-form', {
             title: this.intl.t('developers.api-keys.index.export-api'),
             acceptButtonText: this.intl.t('developers.api-keys.index.export-api-accept-button-text'),
@@ -475,7 +476,7 @@ export default class ApiKeysIndexController extends Controller {
             setFormat: ({ target }) => {
                 this.modalsManager.setOption('format', target.value || null);
             },
-            confirm: async modal => {
+            confirm: async (modal) => {
                 modal.startLoading();
 
                 const format = modal.getOption('format', 'xlsx');
@@ -493,7 +494,7 @@ export default class ApiKeysIndexController extends Controller {
                     later(
                         this,
                         () => {
-                            return model.done();
+                            return modal.done();
                         },
                         600
                     );
@@ -508,7 +509,7 @@ export default class ApiKeysIndexController extends Controller {
     /**
      * Reload data.
      */
-    @action reload () {
+    @action reload() {
         return this.hostRouter.refresh();
     }
 }

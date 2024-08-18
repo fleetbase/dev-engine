@@ -18,7 +18,7 @@ export default class WebhookDetailsComponent extends Component {
         if (this.doesntHavePermission) {
             return;
         }
-        
+
         const { webhook, onClickUpdateWebhook } = this.args;
 
         if (typeof onClickUpdateWebhook === 'function') {
