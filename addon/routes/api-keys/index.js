@@ -6,6 +6,10 @@ export default class ApiKeysIndexRoute extends Route {
     @service store;
     @service loader;
     @service currentUser;
+    @service abilities;
+    @service notifications;
+    @service hostRouter;
+    @service intl;
 
     queryParams = {
         page: {
@@ -24,6 +28,13 @@ export default class ApiKeysIndexRoute extends Route {
 
     @action loading(transition) {
         this.loader.showOnInitialTransition(transition, 'section.next-view-section', { loadingMessage: 'Loading api keys...' });
+    }
+
+    beforeModel () {
+        if (this.abilities.cannot('developers list api-key')) {
+            this.notifications.warning(this.intl.t('common.unauthorized-access'));
+            return this.hostRouter.transitionTo('console.developers.home');
+        }
     }
 
     model(params) {

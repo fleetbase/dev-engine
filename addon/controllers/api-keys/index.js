@@ -11,74 +11,15 @@ import { format as formatDate } from 'date-fns';
 import getWithDefault from '@fleetbase/ember-core/utils/get-with-default';
 
 export default class ApiKeysIndexController extends Controller {
-    /**
-     * Inject the `currentUser` service
-     *
-     * @var {Service}
-     */
     @service currentUser;
-
-    /**
-     * Inject the `intl` service
-     *
-     * @var {Service}
-     */
     @service intl;
-
-    /**
-     * Inject the `modalsManager` service
-     *
-     * @var {Service}
-     */
     @service modalsManager;
-
-    /**
-     * Inject the `notifications` service
-     *
-     * @var {Service}
-     */
     @service notifications;
-
-    /**
-     * Inject the `store` service
-     *
-     * @var {Service}
-     */
     @service store;
-
-    /**
-     * Inject the `crud` service
-     *
-     * @var {Service}
-     */
     @service crud;
-
-    /**
-     * Inject the `fetch` service
-     *
-     * @var {Service}
-     */
     @service fetch;
-
-    /**
-     * Inject the `theme` service
-     *
-     * @var {Service}
-     */
     @service theme;
-
-    /**
-     * Inject the `hostRouter` service
-     *
-     * @var {Service}
-     */
     @service hostRouter;
-
-    /**
-     * Inject the `universe` service
-     *
-     * @var {Service}
-     */
     @service universe;
 
     /**
@@ -142,7 +83,7 @@ export default class ApiKeysIndexController extends Controller {
      *
      * @memberof ApiKeysIndexController
      */
-    @computed('testMode') get isTestMode() {
+    @computed('testMode') get isTestMode () {
         return this.testMode === true;
     }
 
@@ -151,7 +92,7 @@ export default class ApiKeysIndexController extends Controller {
      *
      * @memberof ApiKeysIndexController
      */
-    @computed('currentUser.options.testKey') get testKey() {
+    @computed('currentUser.options.testKey') get testKey () {
         return this.currentUser.getOption('testKey');
     }
 
@@ -165,6 +106,7 @@ export default class ApiKeysIndexController extends Controller {
             label: this.intl.t('developers.common.name'),
             valuePath: 'name',
             cellComponent: 'table/cell/anchor',
+            permission: 'developers view api-key',
             action: this.editApiKey,
             resizable: true,
             width: '10%',
@@ -236,13 +178,26 @@ export default class ApiKeysIndexController extends Controller {
             width: '10%',
             align: 'right',
             actions: [
-                { label: this.intl.t('developers.api-keys.index.edit-key'), fn: this.editApiKey },
-                { label: this.intl.t('developers.api-keys.index.roll-key'), fn: this.rollApiKey },
-                { label: this.intl.t('developers.api-keys.index.view-logs'), fn: this.viewRequestLogs },
+                {
+                    label: this.intl.t('developers.api-keys.index.edit-key'),
+                    fn: this.editApiKey,
+                    permission: 'developers view api-key',
+                },
+                {
+                    label: this.intl.t('developers.api-keys.index.roll-key'),
+                    fn: this.rollApiKey,
+                    permission: 'developers roll api-key',
+                },
+                {
+                    label: this.intl.t('developers.api-keys.index.view-logs'),
+                    fn: this.viewRequestLogs,
+                    permission: 'developers view log',
+                },
                 {
                     label: this.intl.t('developers.api-keys.index.delete-key'),
                     fn: this.deleteApiKey,
                     className: 'text-red-700 hover:text-red-800',
+                    permission: 'developers delete api-key',
                 },
             ],
         },
@@ -253,7 +208,7 @@ export default class ApiKeysIndexController extends Controller {
      *
      * @void
      */
-    @task({ restartable: true }) *search({ target: { value } }) {
+    @task({ restartable: true }) *search ({ target: { value } }) {
         // if no query don't search
         if (isBlank(value)) {
             this.query = null;
@@ -277,7 +232,7 @@ export default class ApiKeysIndexController extends Controller {
      *
      * @void
      */
-    @action toggleTestMode(testMode = false) {
+    @action toggleTestMode (testMode = false) {
         this.currentUser.setOption('sandbox', testMode);
         this.testMode = testMode;
         this.theme.setEnvironment();
@@ -292,7 +247,7 @@ export default class ApiKeysIndexController extends Controller {
      *
      * @void
      */
-    @action toggleTestKey({ target: { value } }) {
+    @action toggleTestKey ({ target: { value } }) {
         if (isBlank(value)) {
             this.currentUser.setOption('testKey', null);
             return;
@@ -306,7 +261,8 @@ export default class ApiKeysIndexController extends Controller {
      *
      * @void
      */
-    @action createApiKey() {
+    @action createApiKey () {
+        const formPermission = 'developers create api-key';
         const apiKey = this.store.createRecord('api-credential', {
             test_mode: this.testMode,
         });
@@ -315,8 +271,27 @@ export default class ApiKeysIndexController extends Controller {
             title: this.intl.t('developers.api-keys.index.new-api-key-title'),
             acceptButtonIcon: 'check',
             acceptButtonIconPrefix: 'fas',
+            acceptButtonDisabled: this.abilities.cannot(formPermission),
+            acceptButtonHelpText: this.abilities.cannot(formPermission) ? this.intl.t('common.unauthorized') : null,
             successMessage: this.intl.t('developers.api-keys.index.new-api-key-message'),
+            formPermission,
             apiKey,
+            confirm: async modal => {
+                modal.startLoading();
+
+                if (this.abilities.cannot(formPermission)) {
+                    return this.notifications.warning(this.intl.t('common.permissions-required-for-changes'));
+                }
+
+                try {
+                    await apiKey.save();
+                    this.notifications.success(modal.getOption('successMessage'));
+                    return this.hostRouter.refresh();
+                } catch (error) {
+                    this.notifications.serverError(error);
+                    modal.stopLoading();
+                }
+            },
         });
     }
 
@@ -325,32 +300,36 @@ export default class ApiKeysIndexController extends Controller {
      *
      * @void
      */
-    @action editApiKey(apiKey, options = {}) {
+    @action editApiKey (apiKey, options = {}) {
+        const formPermission = 'developers update api-key';
         this.modalsManager.show('modals/api-key-form', {
             title: this.intl.t('developers.api-keys.index.edit-api-key-title'),
             acceptButtonIcon: 'save',
+            acceptButtonDisabled: this.abilities.cannot(formPermission),
+            acceptButtonHelpText: this.abilities.cannot(formPermission) ? this.intl.t('common.unauthorized') : null,
             successMessage: this.intl.t('developers.api-keys.index.edit-api-key-message'),
             expirationOptions: this.expirationOptions,
             testMode: this.currentUser.getOption('sandbox') || false,
             apiKey,
+            formPermission,
             setExpiration: ({ target }) => {
                 apiKey.expires_at = target.value || null;
             },
-            confirm: (modal, done) => {
+            confirm: async modal => {
                 modal.startLoading();
 
-                apiKey
-                    .save()
-                    .then(() => {
-                        this.notifications.success(modal.getOption('successMessage'));
-                        return this.hostRouter.refresh().finally(() => {
-                            done();
-                        });
-                    })
-                    .catch((error) => {
-                        this.notifications.serverError(error);
-                        modal.stopLoading();
-                    });
+                if (this.abilities.cannot(formPermission)) {
+                    return this.notifications.warning(this.intl.t('common.permissions-required-for-changes'));
+                }
+
+                try {
+                    await apiKey.save();
+                    this.notifications.success(modal.getOption('successMessage'));
+                    return this.hostRouter.refresh();
+                } catch (error) {
+                    this.notifications.serverError(error);
+                    modal.stopLoading();
+                }
             },
             ...options,
         });
@@ -361,25 +340,25 @@ export default class ApiKeysIndexController extends Controller {
      *
      * @void
      */
-    @action renameApiKey(apiKey) {
+    @action renameApiKey (apiKey) {
+        const formPermission = 'developers update api-key';
         const apiKeyName = getWithDefault(apiKey, 'name', this.intl.t('developers.api-keys.index.untitled'));
 
         this.modalsManager.show('modals/rename-api-key-form', {
             title: this.intl.t('developers.api-keys.index.rename-api-key-title', { apiKeyName }),
             apiKey,
-            confirm: (modal, done) => {
+            formPermission,
+            confirm: async modal => {
                 modal.startLoading();
 
-                apiKey
-                    .save()
-                    .then(() => {
-                        this.notifications.success(this.intl.t('developers.api-keys.index.rename-api-key-success-message', { apiKeyName }));
-                        return done();
-                    })
-                    .catch((error) => {
-                        this.notifications.serverError(error);
-                        modal.stopLoading();
-                    });
+                try {
+                    await apiKey.save();
+                    this.notifications.success(this.intl.t('developers.api-keys.index.rename-api-key-success-message', { apiKeyName }));
+                    modal.done();
+                } catch (error) {
+                    this.notifications.serverError(error);
+                    modal.stopLoading();
+                }
             },
         });
     }
@@ -389,26 +368,22 @@ export default class ApiKeysIndexController extends Controller {
      *
      * @void
      */
-    @action deleteApiKey(apiKey) {
+    @action deleteApiKey (apiKey) {
         const apiKeyName = getWithDefault(apiKey, 'name', this.intl.t('developers.api-keys.index.untitled'));
         this.modalsManager.confirm({
             title: this.intl.t('developers.api-keys.index.delete-api-key-title', { apiKeyName }),
             body: this.intl.t('developers.api-keys.index.delete-api-key-body'),
-            confirm: (modal, done) => {
+            confirm: async modal => {
                 modal.startLoading();
 
-                apiKey
-                    .destroyRecord()
-                    .then(() => {
-                        this.notifications.success(this.intl.t('developers.api-keys.index.delete-api-key-title', { apiKeyName }));
-                        return this.hostRouter.refresh().finally(() => {
-                            done();
-                        });
-                    })
-                    .catch((error) => {
-                        this.notifications.serverError(error);
-                        modal.stopLoading();
-                    });
+                try {
+                    await apiKey.destroyRecord();
+                    this.notifications.success(this.intl.t('developers.api-keys.index.delete-api-key-title', { apiKeyName }));
+                    return this.hostRouter.refresh();
+                } catch (error) {
+                    this.notifications.serverError(error);
+                    modal.stopLoading();
+                }
             },
         });
     }
@@ -419,7 +394,7 @@ export default class ApiKeysIndexController extends Controller {
      * @param {Array} selected an array of selected models
      * @void
      */
-    @action bulkDeleteApiCredentials() {
+    @action bulkDeleteApiCredentials () {
         const selected = this.table.selectedRows;
 
         this.crud.bulkDelete(selected, {
@@ -435,7 +410,7 @@ export default class ApiKeysIndexController extends Controller {
      *
      * @void
      */
-    @action rollApiKey(apiKey) {
+    @action rollApiKey (apiKey) {
         const apiKeyName = getWithDefault(apiKey, 'name', this.intl.t('developers.api-keys.index.untitled'));
 
         this.modalsManager.show('modals/roll-api-key-form', {
@@ -450,25 +425,21 @@ export default class ApiKeysIndexController extends Controller {
             viewRequestLogs: this.viewRequestLogs,
             password: null,
             apiKey,
-            confirm: (modal, done) => {
+            confirm: async modal => {
                 modal.startLoading();
-                this.fetch
-                    .patch(
+
+                try {
+                    await this.fetch.patch(
                         `api-credentials/roll/${apiKey.id}`,
-                        {
-                            password: modal.getOption('password'),
-                            expiration: apiKey.get('expires_at'),
-                        },
+                        { password: modal.getOption('password'), expiration: apiKey.get('expires_at') },
                         { normalizeToEmberData: true }
-                    )
-                    .then(() => {
-                        this.notifications.success(this.intl.t('developers.api-keys.index.roll-api-key-success-message', { apiKeyName }));
-                        return done();
-                    })
-                    .catch((error) => {
-                        modal.stopLoading();
-                        this.notifications.serverError(error, this.intl.t('developers.api-keys.index.roll-api-key-error-message'));
-                    });
+                    );
+                    this.notifications.success(this.intl.t('developers.api-keys.index.roll-api-key-success-message', { apiKeyName }));
+                    modal.done();
+                } catch (error) {
+                    this.notifications.serverError(error, this.intl.t('developers.api-keys.index.roll-api-key-error-message'));
+                    modal.stopLoading();
+                }
             },
         });
     }
@@ -478,7 +449,7 @@ export default class ApiKeysIndexController extends Controller {
      *
      * @void
      */
-    @action viewRequestLogs(apiKey) {
+    @action viewRequestLogs (apiKey) {
         return this.universe.transitionToEngineRoute('@fleetbase/dev-engine', 'logs.index', {
             queryParams: { key: apiKey.id },
         });
@@ -489,7 +460,7 @@ export default class ApiKeysIndexController extends Controller {
      *
      * @void
      */
-    @action exportApiKeys() {
+    @action exportApiKeys () {
         this.modalsManager.show('modals/export-form', {
             title: this.intl.t('developers.api-keys.index.export-api'),
             acceptButtonText: this.intl.t('developers.api-keys.index.export-api-accept-button-text'),
@@ -498,13 +469,13 @@ export default class ApiKeysIndexController extends Controller {
             setFormat: ({ target }) => {
                 this.modalsManager.setOption('format', target.value || null);
             },
-            confirm: (modal, done) => {
+            confirm: async modal => {
                 modal.startLoading();
 
                 const format = modal.getOption('format', 'xlsx');
 
-                this.fetch
-                    .download(
+                try {
+                    await this.fetch.download(
                         `api-credentials/export`,
                         {
                             format,
@@ -512,20 +483,18 @@ export default class ApiKeysIndexController extends Controller {
                         {
                             fileName: `api-credentials-${formatDate(new Date(), 'yyyy-MM-dd-HH:mm')}.${format}`,
                         }
-                    )
-                    .then(() => {
-                        later(
-                            this,
-                            () => {
-                                return done();
-                            },
-                            600
-                        );
-                    })
-                    .catch((error) => {
-                        modal.stopLoading();
-                        this.notifications.serverError(error, this.intl.t('developers.api-keys.index.export-api-error-message'));
-                    });
+                    );
+                    later(
+                        this,
+                        () => {
+                            return model.done();
+                        },
+                        600
+                    );
+                } catch (error) {
+                    this.notifications.serverError(error, this.intl.t('developers.api-keys.index.export-api-error-message'));
+                    modal.stopLoading();
+                }
             },
         });
     }
@@ -533,7 +502,7 @@ export default class ApiKeysIndexController extends Controller {
     /**
      * Reload data.
      */
-    @action reload() {
+    @action reload () {
         return this.hostRouter.refresh();
     }
 }

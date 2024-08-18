@@ -7,7 +7,7 @@
         </div>
 
         <div class="flex items-center section-header-actions">
-            <Button @icon="pencil" @text={{t "developers.component.webhook.details.update-details"}} @onClick={{this.onClickUpdateWebhook}} />
+            <Button @icon="pencil" @text={{t "developers.component.webhook.details.update-details"}} @onClick={{this.onClickUpdateWebhook}} @permission={{@permission}} />
         </div>
     </div>
     <div class="text-sm content-panel-body">

@@ -64,7 +64,7 @@ export default class WebhooksIndexController extends BaseController {
      *
      * @var {Object}
      */
-    @computed('webhookEvents.[]') get groupedApiEvents() {
+    @computed('webhookEvents.[]') get groupedApiEvents () {
         return groupApiEvents(this.webhookEvents);
     }
 
@@ -138,6 +138,7 @@ export default class WebhooksIndexController extends BaseController {
             width: '40%',
             sortable: false,
             cellComponent: 'table/cell/link-to',
+            permission: 'developers view webhook',
             route: 'webhooks.view',
             cellClassNames: 'no-underline',
         },
@@ -172,14 +173,17 @@ export default class WebhooksIndexController extends BaseController {
                 {
                     label: this.intl.t('developers.webhooks.index.view-logs'),
                     fn: this.viewWebhook,
+                    permission: 'developers view webhook',
                 },
                 {
                     label: this.intl.t('developers.webhooks.index.edit-webhook'),
                     fn: this.editWebhook,
+                    permission: 'developers update webhook',
                 },
                 {
                     label: this.intl.t('developers.webhooks.index.delete-webhook'),
                     fn: this.deleteWebhook,
+                    permission: 'developers delete webhook',
                 },
             ],
             sortable: false,
@@ -194,7 +198,7 @@ export default class WebhooksIndexController extends BaseController {
      *
      * @void
      */
-    @task({ restartable: true }) *search({ target: { value } }) {
+    @task({ restartable: true }) *search ({ target: { value } }) {
         // if no query don't search
         if (isBlank(value)) {
             this.query = null;
@@ -218,7 +222,8 @@ export default class WebhooksIndexController extends BaseController {
      *
      * @void
      */
-    @action createWebhook() {
+    @action createWebhook () {
+        const formPermission = 'developers create webhook';
         const webhook = this.store.createRecord('webhook-endpoint', {
             events: [],
             mode: this.currentUser.getOption('sandbox') ? 'test' : 'live',
@@ -229,7 +234,26 @@ export default class WebhooksIndexController extends BaseController {
             acceptButtonText: this.intl.t('developers.webhooks.index.add-webhook-button-text'),
             acceptButtonIcon: 'check',
             acceptButtonIconPrefix: 'fas',
+            acceptButtonDisabled: this.abilities.cannot(formPermission),
+            acceptButtonHelpText: this.abilities.cannot(formPermission) ? this.intl.t('common.unauthorized') : null,
+            formPermission,
             webhook,
+            confirm: async modal => {
+                modal.startLoading();
+
+                if (this.abilities.cannot(formPermission)) {
+                    return this.notifications.warning(this.intl.t('common.permissions-required-for-changes'));
+                }
+
+                try {
+                    await webhook.save();
+                    this.notifications.success(this.intl.t('developers.webhooks.index.new-webhook-success-message'));
+                    return this.hostRouter.refresh();
+                } catch (error) {
+                    this.notifications.serverError(error);
+                    modal.stopLoading();
+                }
+            },
         });
     }
 
@@ -240,11 +264,15 @@ export default class WebhooksIndexController extends BaseController {
      * @param {Object} options
      * @void
      */
-    @action editWebhook(webhook, options = {}) {
+    @action editWebhook (webhook, options = {}) {
+        const formPermission = 'developers update webhook';
         this.modalsManager.show('modals/webhook-form', {
             title: this.intl.t('developers.webhooks.index.edit-webhook-endpoint'),
             acceptButtonText: this.intl.t('developers.webhooks.index.edit-webhook-endpoint-button-text'),
             acceptButtonIcon: 'save',
+            acceptButtonDisabled: this.abilities.cannot(formPermission),
+            acceptButtonHelpText: this.abilities.cannot(formPermission) ? this.intl.t('common.unauthorized') : null,
+            formPermission,
             declineButtonIcon: 'times',
             declineButtonIconPrefix: 'fas',
             eventOptions: this.groupedApiEvents,
@@ -257,14 +285,14 @@ export default class WebhooksIndexController extends BaseController {
             setApiCredential: ({ target }) => {
                 webhook.api_credential_uuid = target.value || null;
             },
-            searchEvents: (query) => {
+            searchEvents: query => {
                 if (typeof query !== 'string') {
                     return;
                 }
                 const resources = Object.keys(this.groupedApiEvents);
                 const filteredEvents = {};
-                resources.forEach((eventResource) => {
-                    filteredEvents[eventResource] = this.groupedApiEvents[eventResource].filter((event) => {
+                resources.forEach(eventResource => {
+                    filteredEvents[eventResource] = this.groupedApiEvents[eventResource].filter(event => {
                         return event.toLowerCase().includes(query.toLowerCase());
                     });
                     // if 0 events remove from filter
@@ -274,14 +302,14 @@ export default class WebhooksIndexController extends BaseController {
                 });
                 this.modalsManager.setOption('eventOptions', filteredEvents);
             },
-            addEvent: (event) => {
+            addEvent: event => {
                 if (webhook.events.includes(event)) {
                     return;
                 }
 
                 webhook.events.pushObject(event);
             },
-            removeEvent: (event) => {
+            removeEvent: event => {
                 webhook.events.removeObject(event);
             },
             clearEvents: () => {
@@ -290,13 +318,21 @@ export default class WebhooksIndexController extends BaseController {
             receiveAllEvents: () => {
                 webhook.events.pushObjects(this.webhookEvents);
             },
-            confirm: (modal) => {
+            confirm: async modal => {
                 modal.startLoading();
 
-                return webhook.save().then(() => {
+                if (this.abilities.cannot(formPermission)) {
+                    return this.notifications.warning(this.intl.t('common.permissions-required-for-changes'));
+                }
+
+                try {
+                    await webhook.save();
                     this.notifications.success(this.intl.t('developers.webhooks.index.new-webhook-success-message'));
                     return this.hostRouter.refresh();
-                });
+                } catch (error) {
+                    this.notifications.serverError(error);
+                    modal.stopLoading();
+                }
             },
             ...options,
         });
@@ -309,17 +345,21 @@ export default class WebhooksIndexController extends BaseController {
      * @param {Object} options
      * @void
      */
-    @action deleteWebhook(webhook, options = {}) {
+    @action deleteWebhook (webhook, options = {}) {
         this.modalsManager.confirm({
             title: this.intl.t('developers.webhooks.index.delete-webhook-endpoint'),
             body: this.intl.t('developers.webhooks.index.delete-webhook-endpoint-body'),
-            confirm: (modal) => {
+            confirm: async modal => {
                 modal.startLoading();
 
-                return webhook.destroyRecord().then(() => {
+                try {
+                    await webhook.destroyRecord();
                     this.notifications.success(this.intl.t('developers.webhooks.index.delete-webhook-success-message'));
                     return this.hostRouter.refresh();
-                });
+                } catch (error) {
+                    this.notifications.serverError(error);
+                    modal.stopLoading();
+                }
             },
             ...options,
         });
@@ -332,14 +372,14 @@ export default class WebhooksIndexController extends BaseController {
      * @return {Transition<Promise>}
      * @memberof WebhooksIndexController
      */
-    @action viewWebhook(webhook) {
+    @action viewWebhook (webhook) {
         return this.transitionToRoute('webhooks.view', webhook);
     }
 
     /**
      * Reload data.
      */
-    @action reload() {
+    @action reload () {
         return this.hostRouter.refresh();
     }
 }

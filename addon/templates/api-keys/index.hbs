@@ -1,4 +1,4 @@
-<Layout::Section::Header @title={{t "developers.api-keys.index.title"}} @searchQuery={{this.query}} @onSearch={{perform this.search}}>
+<Layout::Section::Header @title={{t "developers.api-keys.index.title"}} @searchQuery={{this.query}} @onSearch={{perform this.search}} @searchDisabled={{cannot "developers list api-keys"}}>
     <div class="flex items-center mr-3">
         <Toggle
             @isToggled={{this.isTestMode}}
@@ -27,7 +27,7 @@
     </div>
     <Button @icon="refresh" @onClick={{this.reload}} @helpText={{t "developers.common.reload-data"}} class="mr-2" />
     {{#if (safe-has this.table "selectedRows")}}
-        <DropdownButton @icon="layer-group" @text={{t "developers.common.bulk-action"}} @type="magic" @size="sm" @buttonWrapperClass="mr-2" @contentClass="dropdown-menu" as |dd|>
+        <DropdownButton @icon="layer-group" @text={{t "developers.common.bulk-action"}} @type="magic" @size="sm" @buttonWrapperClass="mr-2" @contentClass="dropdown-menu" @permission="developers delete api-key" as |dd|>
             <div class="next-dd-menu mt-2 mx-0">
                 <div class="px-1">
                     <a href="#" class="text-red-500 next-dd-item" {{on "click" (dropdown-fn dd this.bulkDeleteApiCredentials)}}>
@@ -37,8 +37,8 @@
             </div>
         </DropdownButton>
     {{/if}}
-    <Button @type="primary" @icon="plus" @iconPrefix="fas" @text={{t "developers.common.new"}} class="mr-2" @onClick={{this.createApiKey}} />
-    <Button @icon="long-arrow-up" @iconClass="rotate-icon-45" @text={{t "developers.common.export"}} @onClick={{this.exportApiKeys}} />
+    <Button @type="primary" @icon="plus" @iconPrefix="fas" @text={{t "developers.common.new"}} class="mr-2" @onClick={{this.createApiKey}} @permission="developers create api-key" />
+    <Button @icon="long-arrow-up" @iconClass="rotate-icon-45" @text={{t "developers.common.export"}} @onClick={{this.exportApiKeys}} @permission="developers export api-key" />
 </Layout::Section::Header>
 
 <Layout::Section::Body>
