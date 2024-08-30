@@ -1,6 +1,6 @@
-<Layout::Section::Header @title={{t "developers.webhooks.index.title"}} @searchQuery={{this.query}} @onSearch={{perform this.search}}>
+<Layout::Section::Header @title={{t "developers.webhooks.index.title"}} @searchQuery={{this.query}} @onSearch={{perform this.search}} @searchDisabled={{cannot "developers list webhook"}}>
     <Button @icon="refresh" @onClick={{this.reload}} @helpText={{t "developers.common.reload-data"}} class="mr-2" />
-    <Button @type="primary" @icon="plus" @iconPrefix="fas" @text={{t "developers.webhooks.index.button-text"}} @onClick={{this.createWebhook}} />
+    <Button @type="primary" @icon="plus" @iconPrefix="fas" @text={{t "developers.webhooks.index.button-text"}} @onClick={{this.createWebhook}} @permission="developers create webhook" />
 </Layout::Section::Header>
 
 <Layout::Section::Body>

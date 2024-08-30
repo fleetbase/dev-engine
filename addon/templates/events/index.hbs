@@ -1,4 +1,4 @@
-<Layout::Section::Header @title={{t "developers.events.index.title"}} @searchQuery={{this.query}} @onSearch={{perform this.search}}>
+<Layout::Section::Header @title={{t "developers.events.index.title"}} @searchQuery={{this.query}} @onSearch={{perform this.search}} @searchDisabled="developers list event">
     <Button @icon="refresh" @onClick={{this.reload}} @helpText={{t "developers.common.reload-data"}} class="mr-2" />
     <FiltersPicker
         @columns={{this.columns}}

@@ -1,21 +1,17 @@
 <Modal::Default @modalIsOpened={{@modalIsOpened}} @options={{@options}} @confirm={{@onConfirm}} @decline={{@onDecline}} as |options|>
     <div class="modal-body-container">
-        <div class="input-group">
-            <label>
-                {{t "developers.common.name"}}
-            </label>
-            <Input
-                @value={{options.apiKey.name}}
-                @type="text"
-                aria-label={{t "developers.component.modals.api-key-form.api-name-aria-label"}}
-                class="w-full form-input"
-                placeholder={{t "developers.component.modals.api-key-form.name-placeholder"}}
-            />
-        </div>
+        <InputGroup
+            @name={{t "developers.common.name"}}
+            @value={{options.apiKey.name}}
+            @placeholder={{t "developers.component.modals.api-key-form.name-placeholder"}}
+            @disabled={{cannot @options.formPermission}}
+            aria-label={{t "developers.component.modals.api-key-form.api-name-aria-label"}}
+            class="w-full form-input"
+        />
         <div class="input-group">
             <InputLabel @labelText={{t "developers.component.modals.api-key-form.expiration-label"}} @helpText={{t "developers.component.modals.api-key-form.expiration-help-text"}} />
 
-            <select class="w-full mb-1 form-select" aria-label={{t "developers.component.modals.api-key-form.api-expiration-aria-label"}} {{on "change" @options.setExpiration}}>
+            <select class="w-full mb-1 form-select" disabled={{cannot @options.formPermission}} aria-label={{t "developers.component.modals.api-key-form.api-expiration-aria-label"}} {{on "change" @options.setExpiration}}>
                 <option selected disabled>
                     {{t "developers.component.modals.api-key-form.select-expiration-date"}}
                 </option>

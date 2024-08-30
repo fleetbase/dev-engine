@@ -1,34 +1,18 @@
 import BaseController from '../base-controller';
 import { tracked } from '@glimmer/tracking';
 import { inject as service } from '@ember/service';
-import { action } from '@ember/object';
+import { action, computed } from '@ember/object';
 import { isBlank } from '@ember/utils';
 import { timeout } from 'ember-concurrency';
 import { task } from 'ember-concurrency-decorators';
-import fromStore from '@fleetbase/ember-core/decorators/from-store';
-import fetchFrom from '@fleetbase/ember-core/decorators/fetch-from';
+import fromStore from '@fleetbase/ember-core/decorators/legacy-from-store';
+import fetchFrom from '@fleetbase/ember-core/decorators/legacy-fetch-from';
 
 export default class LogsIndexController extends BaseController {
-    /**
-     * Inject the `filters` service
-     *
-     * @var {Service}
-     */
     @service filters;
-
-    /**
-     * Inject the `intl` service
-     *
-     * @var {Service}
-     */
     @service intl;
-
-    /**
-     * Inject the `hostRouter` service
-     *
-     * @var {Service}
-     */
     @service hostRouter;
+    @service abilities;
 
     /**
      * All api versions
@@ -113,70 +97,72 @@ export default class LogsIndexController extends BaseController {
      *
      * @var {Array}
      */
-    @tracked columns = [
-        {
-            label: this.intl.t('developers.common.status'),
-            valuePath: 'status',
-            width: '15%',
-            sortable: false,
-            cellComponent: 'table/cell/status',
-            cellClassNames: 'uppercase',
-        },
-        {
-            label: this.intl.t('developers.common.id'),
-            valuePath: 'public_id',
-            cellComponent: 'click-to-copy',
-            width: '10%',
-            align: 'right',
-            sortable: false,
-        },
-        {
-            label: this.intl.t('developers.common.description'),
-            valuePath: 'description',
-            width: '15%',
-            sortable: false,
-        },
-        {
-            label: this.intl.t('developers.logs.index.api-credential'),
-            valuePath: 'api_credential_name',
-            cellComponent: 'click-to-copy',
-            filterParam: 'key',
-            width: '25%',
-            sortable: false,
-            filterable: true,
-            filterComponent: 'filter/select',
-            filterOptionLabel: 'fullName',
-            filterOptionValue: 'id',
-            filterOptions: this.apiCredentials,
-        },
-        {
-            label: this.intl.t('developers.logs.index.http-method'),
-            valuePath: 'method',
-            width: '8%',
-            filterable: true,
-            filterComponent: 'filter/multi-option',
-            filterOptions: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'],
-        },
-        {
-            label: this.intl.t('developers.common.version'),
-            valuePath: 'version',
-            width: '8%',
-            filterable: true,
-            filterComponent: 'filter/select',
-            filterOptions: this.apiVersions,
-        },
-        {
-            label: this.intl.t('developers.common.date'),
-            valuePath: 'createdAt',
-            filterParam: 'created_at',
-            sortParam: 'created_at',
-            sortable: false,
-            width: '19%',
-            align: 'right',
-            filterable: true,
-            filterComponent: 'filter/date',
-        },
-    ];
+    @computed('apiCredentials.@each.id', 'apiVersions.[]') get columns() {
+        return [
+            {
+                label: this.intl.t('developers.common.status'),
+                valuePath: 'status',
+                width: '15%',
+                sortable: false,
+                cellComponent: 'table/cell/status',
+                cellClassNames: 'uppercase',
+            },
+            {
+                label: this.intl.t('developers.common.id'),
+                valuePath: 'public_id',
+                cellComponent: 'click-to-copy',
+                width: '10%',
+                align: 'right',
+                sortable: false,
+            },
+            {
+                label: this.intl.t('developers.common.description'),
+                valuePath: 'description',
+                width: '15%',
+                sortable: false,
+            },
+            {
+                label: this.intl.t('developers.logs.index.api-credential'),
+                valuePath: 'api_credential_name',
+                cellComponent: 'click-to-copy',
+                filterParam: 'key',
+                width: '25%',
+                sortable: false,
+                filterable: true,
+                filterComponent: 'filter/select',
+                filterOptionLabel: 'fullName',
+                filterOptionValue: 'id',
+                filterOptions: this.apiCredentials,
+            },
+            {
+                label: this.intl.t('developers.logs.index.http-method'),
+                valuePath: 'method',
+                width: '8%',
+                filterable: true,
+                filterComponent: 'filter/multi-option',
+                filterOptions: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'],
+            },
+            {
+                label: this.intl.t('developers.common.version'),
+                valuePath: 'version',
+                width: '8%',
+                filterable: true,
+                filterComponent: 'filter/select',
+                filterOptions: this.apiVersions,
+            },
+            {
+                label: this.intl.t('developers.common.date'),
+                valuePath: 'createdAt',
+                filterParam: 'created_at',
+                sortParam: 'created_at',
+                sortable: false,
+                width: '19%',
+                align: 'right',
+                filterable: true,
+                filterComponent: 'filter/date',
+            },
+        ];
+    }
 
     /**
      * The search task.

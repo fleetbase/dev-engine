@@ -5,29 +5,13 @@ import { action } from '@ember/object';
 import { isBlank } from '@ember/utils';
 import { timeout } from 'ember-concurrency';
 import { task } from 'ember-concurrency-decorators';
-import fetchFrom from '@fleetbase/ember-core/decorators/fetch-from';
+import fetchFrom from '@fleetbase/ember-core/decorators/legacy-fetch-from';
 
 export default class EventsIndexController extends BaseController {
-    /**
-     * Inject the `filters` service
-     *
-     * @var {Service}
-     */
     @service filters;
-
-    /**
-     * Inject the `intl` service
-     *
-     * @var {Service}
-     */
     @service intl;
-
-    /**
-     * Inject the `hostRouter` service
-     *
-     * @var {Service}
-     */
     @service hostRouter;
+    @service abilities;
 
     /**
      * All api versions

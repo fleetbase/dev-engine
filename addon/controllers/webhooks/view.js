@@ -3,58 +3,18 @@ import { inject as controller } from '@ember/controller';
 import { inject as service } from '@ember/service';
 import { action, computed } from '@ember/object';
 import groupApiEvents from '@fleetbase/ember-core/utils/group-api-events';
-import fromStore from '@fleetbase/ember-core/decorators/from-store';
-import fetchFrom from '@fleetbase/ember-core/decorators/fetch-from';
+import fromStore from '@fleetbase/ember-core/decorators/legacy-from-store';
+import fetchFrom from '@fleetbase/ember-core/decorators/legacy-fetch-from';
 
 export default class WebhooksViewController extends BaseController {
-    /**
-     * Inject the `webhooks.index` controller
-     *
-     * @var {Controller}
-     */
-    @controller('webhooks.index') index;
-
-    /**
-     * Inject the `modalsManager` service
-     *
-     * @var {Service}
-     */
+    @controller('webhooks.index') webhooksIndexController;
     @service modalsManager;
-
-    /**
-     * Inject the `intl` service
-     *
-     * @var {Service}
-     */
     @service intl;
-
-    /**
-     * Inject the `notifications` service
-     *
-     * @var {Service}
-     */
     @service notifications;
-
-    /**
-     * Inject the `fetch` service
-     *
-     * @var {Service}
-     */
     @service fetch;
-
-    /**
-     * Inject the `universe` service
-     *
-     * @var {Service}
-     */
     @service universe;
-
-    /**
-     * Inject the `hostRouter` service
-     *
-     * @var {Service}
-     */
     @service hostRouter;
+    @service abilities;
 
     /**
      * All webhook events
@@ -95,7 +55,7 @@ export default class WebhooksViewController extends BaseController {
      * @void
      */
     @action deleteWebhook(webhook) {
-        this.index.deleteWebhook(webhook, {
+        this.webhooksIndexController.deleteWebhook(webhook, {
             onConfirm: () => {
                 this.notifications.success(this.intl.t('developers.webhooks.view.webhook-deleted-success-message'));
                 return this.transitionToRoute('webhooks.index');
@@ -113,12 +73,17 @@ export default class WebhooksViewController extends BaseController {
             title: this.intl.t('developers.webhooks.view.disable-webhook-title'),
             body: this.intl.t('developers.webhooks.view.disable-webhook-body'),
             acceptButtonText: this.intl.t('developers.webhooks.view.disable-webhook-button-text'),
-            confirm: (modal) => {
+            confirm: async (modal) => {
                 modal.startLoading();
-                webhook.set('status', 'disabled');
-                return webhook.save().then(() => {
+
+                try {
+                    await webhook.disable();
                     this.notifications.success(this.intl.t('developers.webhooks.view.disable-webhook-success-message'));
-                });
+                    modal.done();
+                } catch (error) {
+                    this.notifications.serverError(error);
+                    modal.stopLoading();
+                }
             },
         });
     }
@@ -133,12 +98,17 @@ export default class WebhooksViewController extends BaseController {
             title: this.intl.t('developers.webhooks.view.enable-webhook-title'),
             body: this.intl.t('developers.webhooks.view.enable-webhook-body'),
             acceptButtonText: this.intl.t('developers.webhooks.view.enable-webhook-button-text'),
-            confirm: (modal) => {
+            confirm: async (modal) => {
                 modal.startLoading();
-                webhook.set('status', 'enabled');
-                return webhook.save().then(() => {
+
+                try {
+                    await webhook.enable();
                     this.notifications.success(this.intl.t('developers.webhooks.view.enable-webhook-success-message'));
-                });
+                    modal.done();
+                } catch (error) {
+                    this.notifications.serverError(error);
+                    modal.stopLoading();
+                }
             },
         });
     }
@@ -150,7 +120,7 @@ export default class WebhooksViewController extends BaseController {
      * @void
      */
     @action updateWebhookDetails(webhook) {
-        this.index.editWebhook(webhook, {
+        this.webhooksIndexController.editWebhook(webhook, {
             acceptButtonText: this.intl.t('developers.webhooks.view.update-endpoint-button-text'),
             eventOptions: this.groupedApiEvents,
             versionOptions: this.apiVersions,

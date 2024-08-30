@@ -1,5 +1,6 @@
 import Model, { attr } from '@ember-data/model';
-import { computed } from '@ember/object';
+import { computed, set } from '@ember/object';
+import { getOwner } from '@ember/application';
 import { format as formatDate, isValid as isValidDate, formatDistanceToNow } from 'date-fns';
 
 export default class WebhookEndpointModel extends Model {
@@ -23,6 +24,29 @@ export default class WebhookEndpointModel extends Model {
     @attr('date') deleted_at;
     @attr('date') created_at;
     @attr('date') updated_at;
+
+    /** @methods */
+    enable() {
+        const owner = getOwner(this);
+        const fetch = owner.lookup('service:fetch');
+
+        return fetch.patch(`webhook-endpoints/enable/${this.id}`).then((response) => {
+            set(this, 'status', 'enabled');
+
+            return response;
+        });
+    }
+
+    disable() {
+        const owner = getOwner(this);
+        const fetch = owner.lookup('service:fetch');
+
+        return fetch.patch(`webhook-endpoints/disable/${this.id}`).then((response) => {
+            set(this, 'status', 'disabled');
+
+            return response;
+        });
+    }
 
     /** @computed */
     @computed('api_credential_uuid') get receivingFromAllApiCredentials() {

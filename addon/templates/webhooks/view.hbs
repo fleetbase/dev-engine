@@ -4,18 +4,18 @@
     {{/if}} --}}
     <Button @icon="refresh" @onClick={{this.reload}} @helpText={{t "common.reload-data"}} class="mr-2" />
     {{#if @model.isEnabled}}
-        <Button @icon="ban" @text={{t "developers.webhooks.view.disable-button-text"}} class="mr-2" @onClick={{fn this.disableWebhook @model}} />
+        <Button @icon="ban" @text={{t "developers.webhooks.view.disable-button-text"}} class="mr-2" @onClick={{fn this.disableWebhook @model}} @permission="developers disable webhook" />
     {{else}}
-        <Button @icon="ban" @text={{t "developers.webhooks.view.enable-button-text"}} class="mr-2" @onClick={{fn this.enableWebhook @model}} />
+        <Button @icon="ban" @text={{t "developers.webhooks.view.enable-button-text"}} class="mr-2" @onClick={{fn this.enableWebhook @model}} @permission="developers enable webhook" />
     {{/if}}
-    <Button @iconPrefix="fas" @icon="times" @text={{t "developers.webhooks.view.delete-button-text"}} @onClick={{fn this.deleteWebhook @model}} />
+    <Button @iconPrefix="fas" @icon="times" @text={{t "developers.webhooks.view.delete-button-text"}} @onClick={{fn this.deleteWebhook @model}} @permission="developers delete webhook" />
 </Layout::Section::Header>
 
 <Layout::Section::Body>
     <div class="h-screen overflow-y-scroll pb-40">
         <div class="space-y-6 py-6 max-w-6xl mx-auto">
             <Webhook::Metrics @webhook={{@model}} />
-            <Webhook::Details @webhook={{@model}} @onClickUpdateWebhook={{this.updateWebhookDetails}} />
+            <Webhook::Details @webhook={{@model}} @onClickUpdateWebhook={{this.updateWebhookDetails}} @permission="developers update webhook" />
             <Webhook::Attempts @webhook={{@model}} />
         </div>
     </div>

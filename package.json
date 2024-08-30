@@ -1,6 +1,6 @@
 {
     "name": "@fleetbase/dev-engine",
-    "version": "0.2.5",
+    "version": "0.2.6",
     "description": "Fleetbase Developers extension provides a module for managing developer resources such as API keys, webhooks, sockets, events and logs.",
     "fleetbase": {
         "route": "developers"
@@ -41,32 +41,33 @@
         "publish:github": "npm config set '@fleetbase:registry' https://npm.pkg.github.com/ && npm publish"
     },
     "dependencies": {
-        "@fleetbase/ember-core": "^0.2.13",
-        "@fleetbase/ember-ui": "^0.2.19",
         "@babel/core": "^7.23.2",
-        "ember-cli-babel": "^8.2.0",
-        "ember-cli-htmlbars": "^6.3.0",
+        "@fleetbase/ember-core": "^0.2.17",
+        "@fleetbase/ember-ui": "^0.2.24",
         "@fortawesome/ember-fontawesome": "^2.0.0",
         "@fortawesome/fontawesome-svg-core": "6.4.0",
+        "@fortawesome/free-brands-svg-icons": "6.4.0",
         "@fortawesome/free-solid-svg-icons": "6.4.0",
+        "ember-cli-babel": "^8.2.0",
+        "ember-cli-htmlbars": "^6.3.0",
         "ember-intl": "6.3.2",
         "ember-prism": "^0.13.0",
         "ember-tag-input": "^3.1.0",
         "ember-wormhole": "^0.6.0"
     },
     "devDependencies": {
-        "@fleetbase/intl-lint": "^0.0.1",
         "@babel/eslint-parser": "^7.22.15",
         "@babel/plugin-proposal-decorators": "^7.23.2",
         "@ember/optional-features": "^2.0.0",
         "@ember/test-helpers": "^3.2.0",
         "@embroider/test-setup": "^3.0.2",
+        "@fleetbase/intl-lint": "^0.0.1",
         "@glimmer/component": "^1.1.2",
         "@glimmer/tracking": "^1.1.2",
         "broccoli-asset-rev": "^3.0.0",
         "broccoli-funnel": "^3.0.8",
         "concurrently": "^8.2.2",
-        "ember-auto-import": "^2.6.3",
+        "ember-auto-import": "^2.7.4",
         "ember-cli": "~5.4.1",
         "ember-cli-clean-css": "^3.0.0",
         "ember-cli-dependency-checker": "^3.3.2",

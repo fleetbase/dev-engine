@@ -44,6 +44,7 @@
                 <select
                     class="w-full mb-2 form-select form-input-sm"
                     aria-label={{t "developers.component.modals.roll-api-key-form.api-key-expiration-label"}}
+                    disabled={{cannot @options.formPermission}}
                     {{on "change" @options.setExpiration}}
                 >
                     <option selected disabled>
@@ -89,6 +90,7 @@
                 aria-label={{t "developers.component.modals.roll-api-key-form.user-password"}}
                 placeholder={{t "developers.component.modals.roll-api-key-form.user-password-placeholder"}}
                 class="w-full form-input"
+                disabled={{cannot @options.formPermission}}
             />
         </div>
     </div>
