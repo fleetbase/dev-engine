@@ -18,7 +18,7 @@ module.exports = function (environment) {
     return ENV;
 };
 
-function getMountedEngineRoutePrefix () {
+function getMountedEngineRoutePrefix() {
     let mountedEngineRoutePrefix = 'developers';
     if (fleetbase && typeof fleetbase.route === 'string') {
         mountedEngineRoutePrefix = fleetbase.route;
