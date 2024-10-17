@@ -58,7 +58,7 @@ export default class WebhooksViewController extends BaseController {
         this.webhooksIndexController.deleteWebhook(webhook, {
             onConfirm: () => {
                 this.notifications.success(this.intl.t('developers.webhooks.view.webhook-deleted-success-message'));
-                return this.transitionToRoute('webhooks.index');
+                return this.hostRouter.transitionTo('console.developers.webhooks.index');
             },
         });
     }

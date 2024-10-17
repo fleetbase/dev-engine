@@ -335,7 +335,7 @@ export default class WebhooksIndexController extends BaseController {
      * @memberof WebhooksIndexController
      */
     @action viewWebhook(webhook) {
-        return this.transitionToRoute('webhooks.view', webhook);
+        return this.hostRouter.transitionTo('console.developers.webhooks.view', webhook);
     }
 
     /**

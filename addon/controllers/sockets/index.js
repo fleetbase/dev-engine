@@ -82,7 +82,7 @@ export default class SocketsIndexController extends BaseController {
      * @void
      */
     @action onRowClick(row) {
-        return this.transitionToRoute('sockets.view', row);
+        return this.hostRouter.transitionTo('console.developers.sockets.view', row);
     }
 
     /**
@@ -102,7 +102,7 @@ export default class SocketsIndexController extends BaseController {
                 modal.startLoading();
                 const channelId = modal.getOption('channelId');
 
-                return this.transitionToRoute('sockets.view', { name: channelId });
+                return this.hostRouter.transitionTo('console.developers.sockets.view', { name: channelId });
             },
         });
     }

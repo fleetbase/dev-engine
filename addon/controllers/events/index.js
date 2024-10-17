@@ -142,7 +142,7 @@ export default class EventsIndexController extends BaseController {
      * @void
      */
     @action onRowClick(log) {
-        return this.transitionToRoute('events.view', log);
+        return this.hostRouter.transitionTo('console.developers.events.view', log);
     }
 
     /**
