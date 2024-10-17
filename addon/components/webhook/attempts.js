@@ -6,19 +6,9 @@ import { none } from '@ember/object/computed';
 import copyToClipboard from '@fleetbase/ember-core/utils/copy-to-clipboard';
 
 export default class WebhookAttemptsComponent extends Component {
-    /**
-     * Inject the `store` service
-     *
-     * @var {Service}
-     */
     @service store;
-
-    /**
-     * Inject the `intl` service
-     *
-     * @var {Service}
-     */
     @service intl;
+    @service hostRouter;
 
     /**
      * The current viewing webhook status
@@ -158,7 +148,7 @@ export default class WebhookAttemptsComponent extends Component {
      * @void
      */
     @action viewWebhookRequestEvent(webhook) {
-        return this.transitionToRoute('events.event', webhook.api_event);
+        return this.hostRouter.transitionTo('console.developers.events.view', webhook.api_event);
     }
 
     /**

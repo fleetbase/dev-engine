@@ -457,7 +457,7 @@ export default class ApiKeysIndexController extends Controller {
      * @void
      */
     @action viewRequestLogs(apiKey) {
-        return this.universe.transitionToEngineRoute('@fleetbase/dev-engine', 'logs.index', {
+        return this.hostRouter.transitionTo('console.developers.logs.index', {
             queryParams: { key: apiKey.id },
         });
     }

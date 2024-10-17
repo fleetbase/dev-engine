@@ -194,7 +194,7 @@ export default class LogsIndexController extends BaseController {
      * @void
      */
     @action onRowClick(log) {
-        return this.transitionToRoute('logs.view', log);
+        return this.hostRouter.transitionTo('console.developers.logs.view', log);
     }
 
     /**
