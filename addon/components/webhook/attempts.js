@@ -2,41 +2,17 @@ import Component from '@glimmer/component';
 import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
-import { none } from '@ember/object/computed';
+import { task } from 'ember-concurrency';
 import copyToClipboard from '@fleetbase/ember-core/utils/copy-to-clipboard';
 
 export default class WebhookAttemptsComponent extends Component {
     @service store;
     @service intl;
     @service hostRouter;
-
-    /**
-     * The current viewing webhook status
-     *
-     * @var {String}
-     */
+    @service notifications;
     @tracked attemptStatus = null;
-
-    /**
-     * The webhook request logs for this endpoint.
-     *
-     * @var {String}
-     */
     @tracked webhookRequestLogs = [];
-
-    /**
-     * The loading state for webhook request logs.
-     *
-     * @var {Boolean}
-     */
-    @tracked isLoading = false;
-
-    /**
-     * If not attempt status is set
-     *
-     * @var {Boolean}
-     */
-    @none('attemptStatus') noAttemptStatus;
+    @tracked webhook;
 
     /**
      * All columns applicable for orders
@@ -89,29 +65,19 @@ export default class WebhookAttemptsComponent extends Component {
      * Creates an instance of WebhookAttemptsComponent.
      * @memberof WebhookAttemptsComponent
      */
-    constructor() {
+    constructor(owner, { webhook }) {
         super(...arguments);
-        this.loadWebhookRequestLogs();
+        this.webhook = webhook;
+        this.getWebhookRequestLogs.perform();
     }
 
-    /**
-     * Load webhook request logs for this webhook
-     *
-     * @memberof WebhookAttemptsComponent
-     */
-    @action loadWebhookRequestLogs(params = {}, options = {}) {
-        const { webhook } = this.args;
 
-        this.isLoading = true;
-
-        return this.store
-            .query('webhook-request-log', { limit: -1, webhook_uuid: webhook.id, ...params }, options)
-            .then((webhookRequestLogs) => {
-                this.webhookRequestLogs = webhookRequestLogs;
-            })
-            .finally(() => {
-                this.isLoading = false;
-            });
+    @task *getWebhookRequestLogs(params = {}, options = {}) {
+        try {
+            this.webhookRequestLogs = yield this.store.query('webhook-request-log', { limit: -1, sort: '-created_at', webhook_uuid: this.webhook.id, ...params }, options);
+        } catch (error) {
+            this.notifications.serverError(error);
+        }
     }
 
     /**
