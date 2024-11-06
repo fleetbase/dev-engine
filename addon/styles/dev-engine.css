@@ -1,0 +1,46 @@
+.webhook-attempts-pagination.fleetbase-pagination,
+.webhook-attempts-pagination {
+    padding-top: 0;
+    justify-content: end;
+}
+
+.webhook-attempts-pagination > .fleetbase-pagination-meta-info-wrapper {
+    flex: none;
+}
+
+.webhook-attempts-date-filter-container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    position: relative;
+    font-size: 0.875rem;
+    line-height: 1.25rem;
+    padding: 0.25rem 0.75rem;
+}
+
+.webhook-attempts-date-filter-container > .date-picker-container input.fleetbase-date-picker {
+    width: 100%;
+    flex: 1;
+    padding: 0;
+    box-shadow: 0;
+    background-color: transparent;
+    font-size: 0.875rem;
+    line-height: 1.25rem;
+    border: 0;
+    outline: 0;
+}
+
+.webhook-attempts-date-filter-container > .date-picker-container input.fleetbase-date-picker:focus {
+    box-shadow: none;
+    border: 0;
+    outline: 0;
+}
+
+.webhook-attempts-date-filter-container > .date-filter-label {
+    margin-right: 0.25rem;
+    color: #000;
+}
+
+body[data-theme='dark'] .webhook-attempts-date-filter-container > .date-filter-label {
+    color: #9ca3af;
+}
