@@ -2,41 +2,25 @@ import Component from '@glimmer/component';
 import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
-import { none } from '@ember/object/computed';
+import { task } from 'ember-concurrency';
 import copyToClipboard from '@fleetbase/ember-core/utils/copy-to-clipboard';
+
+function filterParams(obj) {
+    // eslint-disable-next-line no-unused-vars
+    return Object.fromEntries(Object.entries(obj).filter(([_, value]) => value !== null && value !== undefined));
+}
 
 export default class WebhookAttemptsComponent extends Component {
     @service store;
     @service intl;
     @service hostRouter;
-
-    /**
-     * The current viewing webhook status
-     *
-     * @var {String}
-     */
+    @service notifications;
+    @service urlSearchParams;
     @tracked attemptStatus = null;
-
-    /**
-     * The webhook request logs for this endpoint.
-     *
-     * @var {String}
-     */
     @tracked webhookRequestLogs = [];
-
-    /**
-     * The loading state for webhook request logs.
-     *
-     * @var {Boolean}
-     */
-    @tracked isLoading = false;
-
-    /**
-     * If not attempt status is set
-     *
-     * @var {Boolean}
-     */
-    @none('attemptStatus') noAttemptStatus;
+    @tracked webhook;
+    @tracked page = 1;
+    @tracked date = null;
 
     /**
      * All columns applicable for orders
@@ -89,29 +73,78 @@ export default class WebhookAttemptsComponent extends Component {
      * Creates an instance of WebhookAttemptsComponent.
      * @memberof WebhookAttemptsComponent
      */
-    constructor() {
+    constructor(owner, { webhook }) {
         super(...arguments);
-        this.loadWebhookRequestLogs();
+        this.webhook = webhook;
+        this.restoreParams();
+        this.getWebhookRequestLogs.perform();
+    }
+
+    restoreParams() {
+        if (this.urlSearchParams.has('page')) {
+            this.page = new Number(this.urlSearchParams.get('page'));
+        }
+
+        if (this.urlSearchParams.has('status')) {
+            this.status = this.urlSearchParams.get('status');
+        }
+
+        if (this.urlSearchParams.has('date')) {
+            this.status = this.urlSearchParams.get('date');
+        }
     }
 
     /**
-     * Load webhook request logs for this webhook
+     * Load webhook request logs.
+     *
+     * @param {Object} [params={}]
+     * @param {Object} [options={}]
+     * @memberof WebhookAttemptsComponent
+     */
+    @task *getWebhookRequestLogs(params = {}, options = {}) {
+        params = filterParams({ ...params, created_at: this.date, status: this.attemptStatus, page: this.page });
+
+        try {
+            this.webhookRequestLogs = yield this.store.query('webhook-request-log', { limit: 12, sort: '-created_at', webhook_uuid: this.webhook.id, page: this.page, ...params }, options);
+        } catch (error) {
+            this.notifications.serverError(error);
+        }
+    }
+
+    /**
+     * Filter webhook attempt logs by date.
+     *
+     * @param {Object} { formattedDate }
+     * @memberof WebhookAttemptsComponent
+     */
+    @action filterByDate({ formattedDate }) {
+        this.date = formattedDate;
+        this.urlSearchParams.addParamToCurrentUrl('date', formattedDate);
+        this.getWebhookRequestLogs.perform();
+    }
+
+    /**
+     * Clear date filter.
      *
      * @memberof WebhookAttemptsComponent
      */
-    @action loadWebhookRequestLogs(params = {}, options = {}) {
-        const { webhook } = this.args;
+    @action clearDate() {
+        this.date = null;
+        this.urlSearchParams.removeParamFromCurrentUrl('date');
+        this.getWebhookRequestLogs.perform();
+    }
 
-        this.isLoading = true;
-
-        return this.store
-            .query('webhook-request-log', { limit: -1, webhook_uuid: webhook.id, ...params }, options)
-            .then((webhookRequestLogs) => {
-                this.webhookRequestLogs = webhookRequestLogs;
-            })
-            .finally(() => {
-                this.isLoading = false;
-            });
+    /**
+     * Handle page change.
+     *
+     * @param {number} [page=1]
+     * @memberof WebhookAttemptsComponent
+     * @void
+     */
+    @action changePage(page = 1) {
+        this.page = page;
+        this.urlSearchParams.addParamToCurrentUrl('page', page);
+        this.getWebhookRequestLogs.perform();
     }
 
     /**
@@ -136,10 +169,12 @@ export default class WebhookAttemptsComponent extends Component {
         status = typeof status === 'string' ? status : null;
 
         this.attemptStatus = status;
-
-        if (status) {
-            this.loadWebhookRequestLogs({ status });
+        if (status === null) {
+            this.urlSearchParams.removeParamFromCurrentUrl('status');
+        } else {
+            this.urlSearchParams.addParamToCurrentUrl('status', status);
         }
+        this.getWebhookRequestLogs.perform();
     }
 
     /**

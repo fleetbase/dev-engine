@@ -1,38 +1,60 @@
 <div class="content-panel" ...attributes>
     <div class="content-panel-header">
-        <div class="flex items-center">
-            <div>
-                <h3 class="mb-1 mr-4 text-xl font-bold dark:text-gray-100">
-                    {{t "developers.component.webhook.attempts.webhook-header"}}
-                </h3>
-                <p class="dark:text-gray-100 text-sm">
-                    {{t "developers.component.webhook.attempts.webhook-message"}}
-                </p>
-            </div>
-        </div>
-
-        <div class="flex items-center section-header-actions">
-            <div class="rounded-lg border borer-gray-300 dark:border-gray-700 shadow-sm">
-                <div class="rounded-lg flex items-center justify-between px-2 py-1 text-sm bg-white dark:bg-gray-900">
-                    <a href="javascript:;" class="mx-4 no-underline text-gray-400 {{if this.noAttemptStatus 'font-semibold text-blue-400'}}" {{on "click" this.changeAttemptStatus}}>
-                        {{t "developers.common.all"}}
-                    </a>
-                    <a
-                        href="javascript:;"
-                        class="mx-4 no-underline text-gray-400 {{if (eq this.attemptStatus 'successful') 'font-semibold text-blue-400'}}"
-                        {{on "click" (fn this.changeAttemptStatus "successful")}}
-                    >
-                        {{t "developers.common.succeeded"}}
-                    </a>
-                    <a
-                        href="javascript:;"
-                        class="mx-4 no-underline text-gray-400 {{if (eq this.attemptStatus 'failed') 'font-semibold text-blue-400'}}"
-                        {{on "click" (fn this.changeAttemptStatus "failed")}}
-                    >
-                        {{t "developers.common.failed"}}
-                    </a>
+        <div class="flex-1">
+            <div class="flex items-center mb-4">
+                <div>
+                    <h3 class="mb-1 mr-4 text-xl font-bold dark:text-gray-100">
+                        {{t "developers.component.webhook.attempts.webhook-header"}}
+                    </h3>
+                    <p class="dark:text-gray-100 text-sm">
+                        {{t "developers.component.webhook.attempts.webhook-message"}}
+                    </p>
                 </div>
             </div>
+            <div class="flex items-center section-header-actions space-x-2">
+                <div class="rounded-lg border borer-gray-300 dark:border-gray-700 shadow-sm">
+                    <div class="rounded-lg flex items-center justify-between px-2 py-1 text-sm bg-white dark:bg-gray-900">
+                        <a href="javascript:;" class="mx-4 no-underline {{unless this.attemptStatus 'font-semibold text-blue-400' 'text-gray-400'}}" {{on "click" this.changeAttemptStatus}}>
+                            {{t "developers.common.all"}}
+                        </a>
+                        <a
+                            href="javascript:;"
+                            class="mx-4 no-underline {{if (eq this.attemptStatus 'successful') 'font-semibold text-blue-400' 'text-gray-400'}}"
+                            {{on "click" (fn this.changeAttemptStatus "successful")}}
+                        >
+                            {{t "developers.common.succeeded"}}
+                        </a>
+                        <a
+                            href="javascript:;"
+                            class="mx-4 no-underline {{if (eq this.attemptStatus 'failed') 'font-semibold text-blue-400' 'text-gray-400'}}"
+                            {{on "click" (fn this.changeAttemptStatus "failed")}}
+                        >
+                            {{t "developers.common.failed"}}
+                        </a>
+                    </div>
+                </div>
+                <div class="rounded-lg border borer-gray-300 dark:border-gray-700 shadow-sm">
+                    <div class="webhook-attempts-date-filter-container">
+                        <div class="date-filter-label">Filter by date:</div>
+                        <DatePicker @value={{this.date}} @onSelect={{this.filterByDate}} placeholder="Filter by date" class="form-input-sm" />
+                        {{#if this.date}}
+                            <Button @type="link" @icon="times" @helpText="Clear date" @onClick={{this.clearDate}} />
+                        {{/if}}
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="flex-1">
+            {{#if this.webhookRequestLogs.meta}}
+                <Pagination
+                    @meta={{this.webhookRequestLogs.meta}}
+                    @currentPage={{this.page}}
+                    @onPageChange={{this.changePage}}
+                    @isLoading={{this.getWebhookRequestLogs.isRunning}}
+                    @metaInfoClass="hidden"
+                    class="webhook-attempts-pagination"
+                />
+            {{/if}}
         </div>
     </div>
     <div class="content-panel-body table-wrapper table-fluid">
