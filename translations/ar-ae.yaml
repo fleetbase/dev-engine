@@ -1,0 +1,272 @@
+developers:
+  extension-name: Developers
+  common:
+    all: الكل
+    attempt: محاولة
+    back: رجوع
+    bulk-action: إجراء جماعي
+    clear: مسح
+    code: رمز
+    created: تم الإنشاء
+    date: التاريخ
+    description: الوصف
+    email: البريد الإلكتروني
+    event-id: معرف الحدث
+    event-type: نوع الحدث
+    event: الحدث
+    export: تصدير
+    failed: فشل
+    id: المعرف
+    key: المفتاح
+    mode: الوضع
+    name: الاسم
+    new: جديد
+    password: كلمة المرور
+    result: النتيجة
+    source: المصدر
+    status: الحالة
+    succeeded: ناجح
+    time: الوقت
+    url: رابط
+    version: الإصدار
+    reload: إعادة تحميل
+    reload-data: إعادة تحميل البيانات
+  component:
+    api-event:
+      data:
+        title: بيانات الحدث
+        no-data: لا توجد بيانات للحدث
+      details:
+        prefixTitle: الحدث
+    api-request-log:
+      details:
+        prefixTitle: الطلب
+        duration: المدة
+        ip-address: عنوان IP
+      query-params:
+        title: معاملات استعلام الطلب
+        no-parameters: لا توجد معاملات استعلام
+      request-headers:
+        title: رؤوس الطلب
+        no-headers: لا توجد رؤوس للطلب
+      request-body:
+        title: جسم
+        title-second-part: الطلب
+        no-request-body: لا يوجد جسم طلب {method}
+      response-body:
+        title: جسم الاستجابة
+        no-response-body: لا يوجد جسم استجابة
+    modals:
+      api-key-form:
+        api-name-aria-label: اسم مفتاح API
+        api-expiration-aria-label: تاريخ انتهاء صلاحية مفتاح API
+        name-placeholder: أدخل اسم مستعار أو اسم بيئة لمفتاح API
+        expiration-label: انتهاء الصلاحية
+        expiration-help-text: يمكنك اختيار تعيين تاريخ انتهاء صلاحية لهذا المفتاح.
+        select-expiration-date: اختر تاريخ انتهاء الصلاحية...
+        key-expires: بمجرد انتهاء صلاحية هذا المفتاح، لن تتمكن من إجراء أي عمليات
+          به.
+        enter-domain-placeholder: أدخل النطاق
+        allowed-browser-label: أصول المتصفح المسموح بها
+        allowed-browser-help-text: أدخل النطاقات التي ستحدد سياسة CORS لطلبات المتصفح
+          من هذا المفتاح.
+        test-key: مفتاح اختبار
+        testing-environments: أنت تقوم بإنشاء مفتاح بيئة اختبار، استخدمه لبيئات الاختبار.
+        live-key: مفتاح مباشر
+        production-environments: أنت تقوم بإنشاء مفتاح بيئة مباشرة، استخدمه لبيئات
+          الإنتاج.
+      listen-custom-channel:
+        name: معرف قناة الحدث
+        name-help-text: أدخل معرف قناة السوكيت التي تريد الاستماع إليها
+      rename-api-key-form:
+        api-key-label: اسم مفتاح API
+        api-key-placeholder: أدخل لقبًا أو اسم بيئة لمفتاح API
+      roll-api-key-form:
+        view-button-text: عرض السجلات
+        last-used: آخر استخدام
+        expiration: تاريخ الانتهاء
+        api-key-expiration-label: انتهاء صلاحية مفتاح API
+        select-date: اختر تاريخ انتهاء الصلاحية...
+        key-expires: بمجرد انتهاء صلاحية هذا المفتاح، لن تتمكن من إجراء أي عمليات
+          به.
+        additional-required: مطلوب مصادقة إضافية
+        enter-password: للمتابعة، يرجى إدخال كلمة المرور الخاصة بك.
+        user-email: البريد الإلكتروني للمستخدم
+        user-password: كلمة مرور المستخدم
+        user-password-placeholder: قم بالمصادقة على الطلب باستخدام كلمة المرور الخاصة
+          بك
+      webhook-form:
+        endpoint-url: رابط نقطة النهاية
+        endpoint-url-help-text: الرابط الذي يجب على Fleetbase إرسال ردود الأحداث إليه.
+        endpoint-url-placeholder: https://
+        description-label: الوصف
+        description-help-text: يمكنك إضافة وصف اختياري لنقطة نهاية الويب هوك.
+        description-aria-label: وصف الويب هوك
+        description-placeholder: وصف اختياري لما تستخدمه نقطة نهاية الويب هوك هذه.
+        api-credential-label: بيانات اعتماد API
+        api-credential-help-text: قيد نقطة نهاية الويب هوك لتستقبل الردود من مفتاح
+          API محدد.
+        api-credential-message: استقبال من جميع بيانات اعتماد API...
+        api-credential-infoblock: يمكنك اختيار بيانات اعتماد API محددة ستُستخدم لتفعيل
+          الردود إلى نقطة نهاية الويب هوك هذه، أو يمكنك اختيار "جميع بيانات اعتماد
+          API"، وستتلقى نقطة النهاية الردود بغض النظر عن بيانات الاعتماد المستخدمة.
+        version-help-text: اختر إصدار API محدد لتلقي الردود الخاصة به.
+        version-message: اختر إصدار API...
+        events-send-label: الأحداث للإرسال
+        events-send-help-text: حدد صراحةً الأحداث التي تريد تلقي الردود الخاصة بها.
+        select-events: اختر الأحداث...
+        event-search-label: بحث عن حدث
+        event-search-placeholder: بحث...
+        no-selected: لم يتم اختيار أحداث
+        dropdown: ابحث عن الأحداث باستخدام القائمة المنسدلة أعلاه، أو
+        all-events: استقبال جميع الأحداث
+    webhook:
+      attempts:
+        copy-event-id: نسخ معرف الحدث إلى الحافظة
+        view-event: عرض الحدث
+        info-message: تم نسخ معرف الحدث إلى الحافظة.
+        webhook-header: محاولات الويب هوك
+        webhook-message: محاولات إرسال حدث إلى نقطة النهاية الخاصة بك في آخر 15 يومًا
+        http-code: رمز حالة HTTP
+        response-time: مؤقت الاستجابة
+        request-endpoint: طلب إلى نقطة النهاية الخاصة بك
+        no-request-body: لا يوجد محتوى للطلب
+        response: الاستجابة
+        no-response-body: لا يوجد محتوى للاستجابة
+      details:
+        webhook-details: تفاصيل الويب هوك
+        update-details: تحديث التفاصيل...
+        event-types: أنواع الأحداث
+        help-text: ستتلقى ويب هوك لأنواع الأحداث الجديدة عند إضافتها، باستثناء تلك
+          التي تتطلب اختيارًا صريحًا. عادةً لا يكون الاستماع لجميع أنواع الأحداث ضروريًا
+          وقد يزيد من الحمل على خوادمك.
+        all-events: جميع الأحداث
+        api-credential: بيانات اعتماد API
+        help-text-event: ستتلقى ردود ويب هوك بغض النظر عن بيانات اعتماد API المستخدمة
+          لتشغيل الحدث.
+        api-credentials: التلقي من جميع بيانات اعتماد API
+      metrics:
+        date-created: تاريخ الإنشاء
+    widget:
+      api-metrics:
+        title: المراقبة
+        api-requests: طلبات API
+        api-error: توزيع أخطاء API
+        webhooks: ويب هوك
+        webhooks-response: وقت استجابة الويب هوك
+        success-label: نجاح
+        error-label: خطأ
+        get-error: خطأ GET
+        post-error: خطأ POST
+        put-error: خطأ PUT
+        delete-error: خطأ DELETE
+        duration-ms: المدة (مللي ثانية)
+  api-keys:
+    index:
+      public-key: المفتاح العام
+      secret-key: المفتاح السري
+      enviroment: البيئة
+      expiry: تاريخ الانتهاء
+      last-used: آخر استخدام
+      edit-key: تعديل المفتاح...
+      roll-key: تغيير المفتاح...
+      view-logs: عرض سجلات الطلب...
+      delete-key: حذف المفتاح...
+      new-api-key-title: مفتاح API جديد
+      new-api-key-message: تم إنشاء بيانات اعتماد API جديدة.
+      edit-api-key-title: تعديل مفتاح API
+      edit-api-key-message: تم حفظ تغييرات بيانات اعتماد API.
+      rename-api-key-title: إعادة تسمية مفتاح API {apiKeyName}
+      untitled: بدون عنوان
+      rename-api-key-success-message: تمت إعادة تسمية بيانات اعتماد API إلى {apiKeyName}
+      delete-api-key-title: حذف مفتاح API {apiKeyName}
+      delete-api-key-body: هل أنت متأكد من رغبتك في حذف هذا المفتاح؟ جميع بياناتك
+        المرتبطة بهذا المفتاح ستصبح غير قابلة للوصول. لا يمكن التراجع عن هذا الإجراء.
+      delete-api-key-success-message: تمت إزالة بيانات اعتماد API {apiKeyName}.
+      delete-accept-button-text: حذف بيانات اعتماد API
+      roll-api-key: تغيير مفتاح API {apiKeyName}
+      roll-api-key-button-text: تغيير مفتاح API
+      roll-api-key-success-message: تم تحديث بيانات اعتماد API {apiKeyName}.
+      roll-api-key-error-message: غير قادر على تحديث بيانات اعتماد API.
+      export-api: تصدير بيانات اعتماد API
+      export-api-accept-button-text: تنزيل
+      export-api-error-message: غير قادر على تنزيل تصدير بيانات اعتماد API.
+      title: مفاتيح API
+      label: عرض بيانات الاختبار
+      help-text: تبديل عرض بيانات الاختبار سيمكن وحدة التحكم من عرض جميع بيانات الاختبار
+        من بيئة الصندوق الرمل الخاصة بك
+      select-api-key-aria-label: اختر مفتاح API
+      select-key: اختر مفتاح محدد
+      test-data: جميع بيانات الاختبار...
+      delete-api: حذف بيانات اعتماد API
+  events:
+    index:
+      title: الأحداث
+  logs:
+    index:
+      api-credential: بيانات اعتماد API
+      http-method: طريقة HTTP
+      title: السجلات
+  sockets:
+    index:
+      link-text: مشاهدة القناة
+      channel: القناة
+      listen-channel-title: الاستماع إلى قناة مخصصة
+      listen-channel-button-text: استمع
+      title: القنوات التي تستقبل الأحداث من حسابك
+      button-text: الاستماع على قناة مخصصة
+    view:
+      socket-connection-error: خطأ في اتصال المقبس!
+      socket-connected: المقبس متصل
+      socket-subscribed: المقبس مشترك في القناة {modelName}
+      output: الإخراج
+      awaiting-events: في انتظار الأحداث...
+  webhooks:
+    index:
+      view-logs: عرض السجلات
+      edit-webhook: تعديل Webhook
+      delete-webhook: حذف Webhook
+      add-webhook: إضافة نقطة نهاية Webhook
+      add-webhook-button-text: تأكيد وإنشاء
+      edit-webhook-endpoint: تعديل نقطة نهاية Webhook
+      edit-webhook-endpoint-button-text: حفظ التغييرات
+      new-webhook-success-message: تم إنشاء Webhook جديد.
+      delete-webhook-endpoint: حذف نقطة نهاية Webhook هذه
+      delete-webhook-endpoint-body: هل أنت متأكد من رغبتك في حذف هذا الـ Webhook؟
+        جميع بياناتك المرتبطة بهذا الـ Webhook ستصبح غير قابلة للوصول. كما أن هذه
+        النقطة ستتوقف عن استقبال الأحداث المستقبلية. هذا الإجراء لا يمكن التراجع عنه.
+      delete-webhook-success-message: تمت إزالة نقطة نهاية Webhook.
+      title: Webhooks
+      button-text: إضافة نقطة نهاية جديدة
+    view:
+      webhook-deleted-success-message: تم حذف نقطة نهاية Webhook.
+      disable-webhook-title: تعطيل نقطة نهاية Webhook
+      disable-webhook-body: يمكن تعطيل نقطة نهاية Webhook هذه مؤقتًا بحيث لا تستقبل
+        الإشعارات حتى يتم تمكينها مرة أخرى. فلينتباس لن يعيد محاولة أي إشعارات تم
+        إنشاؤها أثناء تعطيل النقطة.
+      disable-webhook-button-text: تعطيل نقطة نهاية Webhook
+      disable-webhook-success-message: تم تعطيل Webhook.
+      enable-webhook-title: تمكين نقطة نهاية Webhook
+      enable-webhook-body: هذا الـ Webhook معطل ولم يعد يستقبل الإشعارات. قد يكون
+        ذلك قد تم تلقائيًا لأننا اكتشفنا فترة طويلة من الفشل. إذا قمت بإصلاح المشكلة،
+        يمكنك إعادة تمكين نقطة نهاية الـ Webhook هنا. فلينتباس لن يعيد محاولة أي إشعارات
+        تم إنشاؤها في الفترة الفاصلة، وإذا استمررنا في اكتشاف فشل في هذه النقطة، سنقوم
+        بتعطيلها مرة أخرى.
+      enable-webhook-button-text: تمكين نقطة نهاية Webhook
+      enable-webhook-success-message: تم تمكين Webhook.
+      update-endpoint-button-text: تحديث النقطة
+      update-endpoint-success-message: تم تحديث تفاصيل الويب هوك.
+      send-button-text: إرسال اختبار الويب هوك...
+      disable-button-text: تعطيل...
+      enable-button-text: تمكين...
+      delete-button-text: حذف...
+  application:
+    sidebar:
+      title: وحدة تحكم المطورين
+      items:
+        home: لوحة التحكم
+        api-keys: مفاتيح API
+        webhooks: ويب هوكس
+        websockets: ويب سوكيتس
+        logs: السجلات
+        events: الأحداث

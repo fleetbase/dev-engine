@@ -1,0 +1,279 @@
+developers:
+  extension-name: Developers
+  common:
+    all: Бүгд
+    attempt: Оролдлого
+    back: Буцах
+    bulk-action: Бөөн үйлдэл
+    clear: Цэвэрлэх
+    code: Код
+    created: Үүсгэсэн
+    date: Огноо
+    description: Тайлбар
+    email: И-мэйл
+    event-id: Үйл явдлын ID
+    event-type: Үйл явдлын төрөл
+    event: Үйл явдал
+    export: Экспорт
+    failed: Амжилтгүй
+    id: ID
+    key: Түлхүүр
+    mode: Газар
+    name: Нэр
+    new: Шинэ
+    password: Нууц үг
+    result: Үр дүн
+    source: Эх сурвалж
+    status: Төлөв
+    succeeded: Амжилттай
+    time: Цаг
+    url: URL
+    version: Хувилбар
+    reload: Дахин ачааллах
+    reload-data: Өгөгдлийг дахин ачааллах
+  component:
+    api-event:
+      data:
+        title: Үйл явдлын өгөгдөл
+        no-data: Үйл явдлын өгөгдөл байхгүй
+      details:
+        prefixTitle: Үйл явдал
+    api-request-log:
+      details:
+        prefixTitle: Хүсэлт
+        duration: Үргэлжлэх хугацаа
+        ip-address: IP хаяг
+      query-params:
+        title: Хүсэлтийн лавлагааны параметрүүд
+        no-parameters: Лавлагааны параметрүүд байхгүй
+      request-headers:
+        title: Хүсэлтийн толгой
+        no-headers: Хүсэлтийн толгой байхгүй
+      request-body:
+        title: Хүсэлтийн
+        title-second-part: бие
+        no-request-body: '{method} хүсэлтийн бие байхгүй'
+      response-body:
+        title: Хариу бие
+        no-response-body: Хариу бие байхгүй
+    modals:
+      api-key-form:
+        api-name-aria-label: API түлхүүрийн нэр
+        api-expiration-aria-label: API түлхүүрийн дуусах огноо
+        name-placeholder: API түлхүүрийн хоч эсвэл орчны нэр оруулна уу
+        expiration-label: Дуусах хугацаа
+        expiration-help-text: Энэхүү API түлхүүрийн хүчинтэй хугацааг сонголтоор тогтооно
+          уу.
+        select-expiration-date: Хүчинтэй хугацааг сонгоно уу...
+        key-expires: Энэхүү түлхүүрийн хүчинтэй хугацаа дууссаны дараа та үүнийг ашиглан
+          ямар ч үйлдэл хийх боломжгүй болно.
+        enter-domain-placeholder: Домэйн оруулна уу
+        allowed-browser-label: Зөвшөөрөгдсөн хөтөчийн эх үүсвэрүүд
+        allowed-browser-help-text: Энэхүү API түлхүүрээс хөтчийн хүсэлтэнд CORS бодлогыг
+          тодорхойлох домэйнуудыг оруулна уу.
+        test-key: Туршилтын түлхүүр
+        testing-environments: Та туршилтын орчны түлхүүр үүсгэж байна, үүнийг туршилтын
+          орчинд ашиглана уу.
+        live-key: Амьд түлхүүр
+        production-environments: Та үйлдвэрлэлийн орчны түлхүүр үүсгэж байна, үүнийг
+          үйлдвэрлэлийн орчинд ашиглана уу.
+      listen-custom-channel:
+        name: Үйл явдлын сувгийн ID
+        name-help-text: Сонсохыг хүссэн socket сувгийн танигчийг оруулна уу
+      rename-api-key-form:
+        api-key-label: API түлхүүрийн нэр
+        api-key-placeholder: API түлхүүрийн хоч эсвэл орчны нэр оруулна уу
+      roll-api-key-form:
+        view-button-text: Тэмдэглэлийг үзэх
+        last-used: Сүүлд ашигласан
+        expiration: Хүчинтэй хугацаа
+        api-key-expiration-label: API түлхүүрийн хүчинтэй хугацаа
+        select-date: Хүчинтэй хугацааг сонгоно уу...
+        key-expires: Энэхүү түлхүүрийн хүчинтэй хугацаа дууссаны дараа та үүнийг ашиглан
+          ямар ч үйлдэл хийх боломжгүй болно.
+        additional-required: Нэмэлт баталгаажуулалт шаардлагатай
+        enter-password: Үргэлжлүүлэхийн тулд нууц үгээ оруулна уу.
+        user-email: Хэрэглэгчийн имэйл
+        user-password: Хэрэглэгчийн нууц үг
+        user-password-placeholder: Нууц үгээр хүсэлтийг баталгаажуулна уу
+      webhook-form:
+        endpoint-url: Төгсгөлийн URL
+        endpoint-url-help-text: Fleetbase үйл явдлын callback-г илгээх URL.
+        endpoint-url-placeholder: https://
+        description-label: Тайлбар
+        description-help-text: Вебхүүк төгсгөлийн тайлбарыг сонголтоор нэмнэ үү.
+        description-aria-label: Вебхүүк тайлбар
+        description-placeholder: Энэхүү вебхүүк төгсгөлийг юунд ашиглаж байгаагийн
+          сонголтын тайлбар.
+        api-credential-label: API баталгаажуулалт
+        api-credential-help-text: Вебхүүк төгсгөлийг тодорхой API түлхүүрээс callback
+          хүлээн авахыг хязгаарлана.
+        api-credential-message: Бүх API баталгаажуулалтаас хүлээн авах...
+        api-credential-infoblock: Та энэ вебхүүк төгсгөлийн callback-г эхлүүлэхэд
+          ашиглах тодорхой API баталгаажуулалтыг сонгож болно, эсвэл "Бүх API баталгаажуулалт"-ыг
+          сонгож вебхүүк төгсгөлийг ямар ч API баталгаажуулалт ашиглагдаж байгаагаас
+          үл хамааран callback хүлээн авах боломжтой.
+        version-help-text: Callback хүлээн авах тодорхой API хувилбарыг сонгоно уу.
+        version-message: API хувилбарыг сонгоно уу...
+        events-send-label: Илгээх үйл явдлууд
+        events-send-help-text: Callback хүлээн авах үйл явдлуудыг тодорхой заана уу.
+        select-events: Үйл явдлуудыг сонгоно уу...
+        event-search-label: Үйл явдлын хайлт
+        event-search-placeholder: Хайх...
+        no-selected: Үйл явдал сонгогдоогүй
+        dropdown: Дээрх доош унах цэсээр үйл явдлуудыг хайх, эсвэл
+        all-events: бүх үйл явдлыг хүлээн авах
+    webhook:
+      attempts:
+        copy-event-id: Үйл явдлын ID-г самбар руу хуулна
+        view-event: Үйл явдлыг үзэх
+        info-message: Үйл явдлын ID самбар руу хуулсан.
+        webhook-header: Вебхүүк оролдлогууд
+        webhook-message: Сүүлийн 15 хоногт таны төгсгөлд үйл явдлыг илгээх оролдлогууд
+        http-code: HTTP төлөвийн код
+        response-time: Хариу өгөх хугацаа
+        request-endpoint: Таны төгсгөлд хүсэлт
+        no-request-body: Хүсэлтийн бие байхгүй
+        response: Хариу
+        no-response-body: Хариуны бие байхгүй
+      details:
+        webhook-details: Webhook-ийн дэлгэрэнгүй
+        update-details: Дэлгэрэнгүйг шинэчлэх...
+        event-types: Үйл явдлын төрлүүд
+        help-text: Шинээр нэмэгдсэн үйл явдлын төрлүүдийн webhook-уудыг хүлээн авах
+          болно, зөвхөн тодорхой сонголт шаарддаггүй тохиолдолд. Бүх үйл явдлын төрлийг
+          сонсох нь ихэвчлэн шаардлагагүй бөгөөд таны серверүүдийн ачааллыг нэмэгдүүлж
+          болно.
+        all-events: Бүх үйл явдлууд
+        api-credential: API Баталгаажуулалт
+        help-text-event: Үйл явдлыг өдөөхөд ямар API Баталгаажуулалт ашиглагдсан ч
+          webhook дуудлагуудыг хүлээн авна.
+        api-credentials: Бүх API Баталгаажуулалтаас хүлээн авах
+      metrics:
+        date-created: Үүсгэсэн огноо
+    widget:
+      api-metrics:
+        title: Хянах
+        api-requests: API Хүсэлтүүд
+        api-error: API Алдааны Тараалт
+        webhooks: Webhook-ууд
+        webhooks-response: Webhook хариу өгөх хугацаа
+        success-label: амжилттай
+        error-label: алдаа
+        get-error: GET Алдаа
+        post-error: POST Алдаа
+        put-error: PUT Алдаа
+        delete-error: DELETE Алдаа
+        duration-ms: Үргэлжлэх хугацаа (мс)
+  api-keys:
+    index:
+      public-key: Олон нийтэд зориулсан түлхүүр
+      secret-key: Нууц түлхүүр
+      enviroment: Орчин
+      expiry: Хүчинтэй хугацаа дуусах
+      last-used: Сүүлд ашигласан
+      edit-key: Түлхүүрийг засах...
+      roll-key: Түлхүүрийг шинэчлэх...
+      view-logs: Хүсэлтийн бүртгэлийг үзэх...
+      delete-key: Түлхүүрийг устгах...
+      new-api-key-title: Шинэ API Түлхүүр
+      new-api-key-message: Шинэ API Баталгаажуулалт үүссэн.
+      edit-api-key-title: API Түлхүүрийг засах
+      edit-api-key-message: API Баталгаажуулалтын өөрчлөлтүүд хадгалагдсан.
+      rename-api-key-title: '{apiKeyName} API түлхүүрийн нэрийг өөрчлөх'
+      untitled: Гарчиггүй
+      rename-api-key-success-message: API баталгаажуулалтын нэрийг {apiKeyName} болгож
+        өөрчиллөө
+      delete-api-key-title: '{apiKeyName} API түлхүүрийг устгах'
+      delete-api-key-body: Та энэ API түлхүүрийг устгахдаа итгэлтэй байна уу? Энэ
+        API түлхүүртэй холбоотой бүх өгөгдөлд хандах боломжгүй болно. Энэ үйлдлийг
+        буцаах боломжгүй.
+      delete-api-key-success-message: API баталгаажуулалт {apiKeyName} устгагдлаа.
+      delete-accept-button-text: API Баталгаажуулалтыг устгах
+      roll-api-key: '{apiKeyName} API түлхүүрийг шинэчлэх'
+      roll-api-key-button-text: API Түлхүүрийг шинэчлэх
+      roll-api-key-success-message: API баталгаажуулалт {apiKeyName} амжилттай шинэчлэгдлээ.
+      roll-api-key-error-message: API баталгаажуулалтыг шинэчлэх боломжгүй байна.
+      export-api: API баталгаажуулалтыг экспортлох
+      export-api-accept-button-text: Татаж авах
+      export-api-error-message: API баталгаажуулалтын экспорт татаж авах боломжгүй
+        байна.
+      title: API Түлхүүрүүд
+      label: Туршилтын өгөгдлийг харах
+      help-text: Туршилтын өгөгдлийг харах тохиргоог асаах нь таны sandbox орчны бүх
+        туршилтын өгөгдлийг консолд харуулах боломжийг олгоно
+      select-api-key-aria-label: API түлхүүр сонгох
+      select-key: Тодорхой түлхүүр сонгох
+      test-data: Бүх туршилтын өгөгдөл...
+      delete-api: API баталгаажуулалтыг устгах
+  events:
+    index:
+      title: Үйл явдлууд
+  logs:
+    index:
+      api-credential: API Баталгаажуулалт
+      http-method: HTTP Арга
+      title: Тэмдэглэлүүд
+  sockets:
+    index:
+      link-text: Сувгийг үзэх
+      channel: Сувгийн нэр
+      listen-channel-title: Захиалгат сувгийг сонсох
+      listen-channel-button-text: Сонсох
+      title: Таны данснаас ирж буй үйл явдлуудыг хүлээн авч буй сувгууд
+      button-text: Захиалгат сувгийг сонсох
+    view:
+      socket-connection-error: Сокет холболтын алдаа!
+      socket-connected: Сокет холбогдсон байна
+      socket-subscribed: Сокет {modelName} сувгад захиалсан байна
+      output: Гаралт
+      awaiting-events: Үйл явдлуудыг хүлээж байна...
+  webhooks:
+    index:
+      view-logs: Тэмдэглэлүүдийг харах
+      edit-webhook: Webhook-г засах
+      delete-webhook: Webhook-г устгах
+      add-webhook: Webhook төгсгөл нэмэх
+      add-webhook-button-text: Баталгаажуулж үүсгэх
+      edit-webhook-endpoint: Webhook төгсгөлийг засах
+      edit-webhook-endpoint-button-text: Өөрчлөлтийг хадгалах
+      new-webhook-success-message: Шинэ Webhook амжилттай үүслээ.
+      delete-webhook-endpoint: Энэ Webhook төгсгөлийг устгах
+      delete-webhook-endpoint-body: Та энэ Webhook-г устгахдаа итгэлтэй байна уу?
+        Энэ Webhook-той холбоотой таны бүх өгөгдөл хандах боломжгүй болно. Мөн энэ
+        төгсгөл ирээдүйн үйл явдлуудыг хүлээн авахгүй болно. Энэ үйлдлийг буцаах боломжгүй.
+      delete-webhook-success-message: Webhook төгсгөл амжилттай устгагдлаа.
+      title: Webhooks
+      button-text: Шинэ төгсгөл нэмэх
+    view:
+      webhook-deleted-success-message: Webhook төгсгөл устгагдлаа.
+      disable-webhook-title: Webhook төгсгөлийг идэвхгүй болгох
+      disable-webhook-body: Энэ webhook төгсгөл түр хугацаагаар идэвхгүй болж, дахин
+        идэвхжтэл мэдэгдэл хүлээн авахгүй болно. Fleetbase идэвхгүй үед үүссэн мэдэгдлийг
+        дахин оролдохгүй.
+      disable-webhook-button-text: Webhook төгсгөлийг идэвхгүй болгох
+      disable-webhook-success-message: Webhook идэвхгүй боллоо.
+      enable-webhook-title: Webhook төгсгөлийг идэвхжүүлэх
+      enable-webhook-body: Энэ webhook идэвхгүй байгаа бөгөөд мэдэгдэл хүлээн авахгүй
+        байна. Энэ нь алдааны удаан хугацааны улмаас автоматаар идэвхгүй болсон байж
+        болно. Хэрэв та асуудлыг зассан бол эндээс webhook төгсгөлийг дахин идэвхжүүлж
+        болно. Fleetbase энэ хугацаанд үүссэн мэдэгдлийг дахин оролдохгүй бөгөөд хэрэв
+        дахин алдаа илэрвэл төгсгөлийг дахин идэвхгүй болгоно.
+      enable-webhook-button-text: Webhook төгсгөлийг идэвхжүүлэх
+      enable-webhook-success-message: Webhook идэвхжлээ.
+      update-endpoint-button-text: Төгсгөлийг шинэчлэх
+      update-endpoint-success-message: Webhook-ийн дэлгэрэнгүй мэдээллийг шинэчиллээ.
+      send-button-text: Тест webhook илгээх...
+      disable-button-text: Идэвхгүй болгох...
+      enable-button-text: Идэвхжүүлэх...
+      delete-button-text: Устгах...
+  application:
+    sidebar:
+      title: Хөгжүүлэгчдийн консол
+      items:
+        home: Хянах самбар
+        api-keys: API түлхүүрүүд
+        webhooks: Webhook-ууд
+        websockets: WebSocket-ууд
+        logs: Тэмдэглэлүүд
+        events: Үйл явдлууд

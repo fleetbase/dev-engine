@@ -1,0 +1,289 @@
+developers:
+  extension-name: Developers
+  common:
+    all: Tous
+    attempt: Tentative
+    back: Retour
+    bulk-action: Action groupée
+    clear: Effacer
+    code: Code
+    created: Créé
+    date: Date
+    description: Description
+    email: Email
+    event-id: ID de l'événement
+    event-type: Type d'événement
+    event: Événement
+    export: Exporter
+    failed: Échoué
+    id: ID
+    key: Clé
+    mode: Mode
+    name: Nom
+    new: Nouveau
+    password: Mot de passe
+    result: Résultat
+    source: Source
+    status: Statut
+    succeeded: Réussi
+    time: Heure
+    url: URL
+    version: Version
+    reload: Recharger
+    reload-data: Recharger les données
+  component:
+    api-event:
+      data:
+        title: Données de l'événement
+        no-data: Pas de données d'événement
+      details:
+        prefixTitle: Événement
+    api-request-log:
+      details:
+        prefixTitle: Requête
+        duration: Durée
+        ip-address: Adresse IP
+      query-params:
+        title: Paramètres de requête
+        no-parameters: Aucun paramètre de requête
+      request-headers:
+        title: En-têtes de la requête
+        no-headers: AUCUN en-tête de requête
+      request-body:
+        title: Corps de la
+        title-second-part: requête
+        no-request-body: Pas de corps de requête {method}
+      response-body:
+        title: Corps de la réponse
+        no-response-body: Pas de corps de réponse
+    modals:
+      api-key-form:
+        api-name-aria-label: Nom de la clé API
+        api-expiration-aria-label: Date d'expiration de la clé API
+        name-placeholder: Entrez un surnom ou un nom d'environnement pour la clé API
+        expiration-label: Expiration
+        expiration-help-text: Définissez éventuellement une date d'expiration pour
+          cette clé API.
+        select-expiration-date: Sélectionnez une date d'expiration...
+        key-expires: Une fois cette clé expirée, vous ne pourrez plus effectuer d'actions
+          avec.
+        enter-domain-placeholder: Entrez le domaine
+        allowed-browser-label: Origines de navigateur autorisées
+        allowed-browser-help-text: Saisissez les domaines qui définiront la politique
+          CORS pour les requêtes navigateur avec cette clé API.
+        test-key: Clé de test
+        testing-environments: Vous créez une clé pour un environnement de test, utilisez-la
+          pour les environnements de test.
+        live-key: Clé en production
+        production-environments: Vous créez une clé pour un environnement de production,
+          utilisez-la pour les environnements de production.
+      listen-custom-channel:
+        name: ID du canal d'événements
+        name-help-text: Saisissez l'identifiant du canal socket sur lequel vous souhaitez
+          écouter
+      rename-api-key-form:
+        api-key-label: Nom de la clé API
+        api-key-placeholder: Entrez un surnom ou un nom d'environnement pour la clé
+          API
+      roll-api-key-form:
+        view-button-text: Voir les journaux
+        last-used: Dernière utilisation
+        expiration: Expiration
+        api-key-expiration-label: Expiration de la clé API
+        select-date: Sélectionnez une date d'expiration...
+        key-expires: Une fois cette clé expirée, vous ne pourrez plus effectuer d'actions
+          avec.
+        additional-required: Authentification supplémentaire requise
+        enter-password: Pour continuer, veuillez entrer votre mot de passe.
+        user-email: Email de l'utilisateur
+        user-password: Mot de passe de l'utilisateur
+        user-password-placeholder: Authentifiez la requête avec votre mot de passe
+      webhook-form:
+        endpoint-url: URL du point de terminaison
+        endpoint-url-help-text: L'URL à laquelle Fleetbase doit envoyer les rappels
+          d'événements.
+        endpoint-url-placeholder: https://
+        description-label: Description
+        description-help-text: Ajoutez éventuellement une description pour le point
+          de terminaison webhook.
+        description-aria-label: Description du webhook
+        description-placeholder: Une description optionnelle de l'utilisation de ce
+          point de terminaison webhook.
+        api-credential-label: Identifiant API
+        api-credential-help-text: Restreindre le point de terminaison webhook pour
+          recevoir des rappels d'une clé API spécifique.
+        api-credential-message: Recevoir de tous les identifiants API...
+        api-credential-infoblock: Vous pouvez sélectionner un identifiant API spécifique
+          qui sera utilisé pour déclencher les rappels vers ce point de terminaison
+          webhook, ou vous pouvez sélectionner « Tous les identifiants API », et le
+          point de terminaison webhook recevra les rappels quel que soit l'identifiant
+          API utilisé.
+        version-help-text: Sélectionnez une version API spécifique pour recevoir les
+          rappels.
+        version-message: Sélectionnez une version API...
+        events-send-label: Événements à envoyer
+        events-send-help-text: Définissez explicitement les événements pour lesquels
+          recevoir des rappels.
+        select-events: Sélectionnez les événements...
+        event-search-label: Recherche d'événements
+        event-search-placeholder: Rechercher...
+        no-selected: Aucun événement sélectionné
+        dropdown: Recherchez des événements avec le menu déroulant ci-dessus, ou
+        all-events: recevez tous les événements
+    webhook:
+      attempts:
+        copy-event-id: Copier l'ID de l'événement dans le presse-papiers
+        view-event: Voir l'événement
+        info-message: ID de l'événement copié dans le presse-papiers.
+        webhook-header: Tentatives de webhook
+        webhook-message: Tentatives d'envoi d'un événement à votre point de terminaison
+          au cours des 15 derniers jours
+        http-code: Code de statut HTTP
+        response-time: Temps de réponse
+        request-endpoint: Requête vers votre point de terminaison
+        no-request-body: Pas de corps de requête
+        response: Réponse
+        no-response-body: Pas de corps de réponse
+      details:
+        webhook-details: Détails du webhook
+        update-details: Mettre à jour les détails...
+        event-types: Types d'événements
+        help-text: Vous recevrez des webhooks pour les nouveaux types d'événements
+          au fur et à mesure de leur ajout, sauf pour ceux qui nécessitent une sélection
+          explicite. Écouter tous les types d'événements n'est généralement pas nécessaire
+          et peut augmenter la charge sur vos serveurs.
+        all-events: Tous les événements
+        api-credential: Identifiant API
+        help-text-event: Vous recevrez des rappels de webhooks quel que soit l'identifiant
+          API utilisé pour déclencher l'événement.
+        api-credentials: Réception de tous les identifiants API
+      metrics:
+        date-created: Date de création
+    widget:
+      api-metrics:
+        title: Surveillance
+        api-requests: Requêtes API
+        api-error: Répartition des erreurs API
+        webhooks: Webhooks
+        webhooks-response: Temps de réponse des webhooks
+        success-label: succès
+        error-label: erreur
+        get-error: Erreur GET
+        post-error: Erreur POST
+        put-error: Erreur PUT
+        delete-error: Erreur DELETE
+        duration-ms: Durée (ms)
+  api-keys:
+    index:
+      public-key: Clé publique
+      secret-key: Clé secrète
+      enviroment: Environnement
+      expiry: Expiration
+      last-used: Dernière utilisation
+      edit-key: Modifier la clé...
+      roll-key: Renouveler la clé...
+      view-logs: Voir les journaux de requêtes...
+      delete-key: Supprimer la clé...
+      new-api-key-title: Nouvelle clé API
+      new-api-key-message: Nouveaux identifiants API créés.
+      edit-api-key-title: Modifier la clé API
+      edit-api-key-message: Modifications des identifiants API enregistrées.
+      rename-api-key-title: Renommer la clé API {apiKeyName}
+      untitled: Sans titre
+      rename-api-key-success-message: Identifiant API renommé en {apiKeyName}
+      delete-api-key-title: Supprimer la clé API {apiKeyName}
+      delete-api-key-body: Êtes-vous sûr de vouloir supprimer cette clé API ? Toutes
+        vos données associées à cette clé API deviendront inaccessibles. Cette action
+        est irréversible.
+      delete-api-key-success-message: Identifiant API {apiKeyName} supprimé.
+      delete-accept-button-text: Supprimer les identifiants API
+      roll-api-key: Renouveler la clé API {apiKeyName}
+      roll-api-key-button-text: Renouveler la clé API
+      roll-api-key-success-message: Identifiant API {apiKeyName} renouvelé.
+      roll-api-key-error-message: Impossible de renouveler les identifiants API.
+      export-api: Exporter les identifiants API
+      export-api-accept-button-text: Télécharger
+      export-api-error-message: Impossible de télécharger l'export des identifiants
+        API.
+      title: Clés API
+      label: Afficher les données de test
+      help-text: Activer l'affichage des données de test permettra à la console d'afficher
+        toutes les données de test de votre environnement sandbox
+      select-api-key-aria-label: Sélectionner une clé API
+      select-key: Sélectionner une clé spécifique
+      test-data: Toutes les données de test...
+      delete-api: Supprimer les identifiants API
+  events:
+    index:
+      title: Événements
+  logs:
+    index:
+      api-credential: Identifiant API
+      http-method: Méthode HTTP
+      title: Journaux
+  sockets:
+    index:
+      link-text: Regarder le canal
+      channel: Canal
+      listen-channel-title: Écouter un canal personnalisé
+      listen-channel-button-text: Écouter
+      title: Canaux recevant des événements de votre compte
+      button-text: Écouter un canal personnalisé
+    view:
+      socket-connection-error: Erreur de connexion socket !
+      socket-connected: Socket connecté
+      socket-subscribed: Socket abonné au canal {modelName}
+      output: Sortie
+      awaiting-events: En attente d'événements...
+  webhooks:
+    index:
+      view-logs: Voir les journaux
+      edit-webhook: Modifier le webhook
+      delete-webhook: Supprimer le webhook
+      add-webhook: Ajouter un point de terminaison webhook
+      add-webhook-button-text: Confirmer & Créer
+      edit-webhook-endpoint: Modifier le point de terminaison webhook
+      edit-webhook-endpoint-button-text: Enregistrer les modifications
+      new-webhook-success-message: Nouveau webhook créé.
+      delete-webhook-endpoint: Supprimer ce point de terminaison webhook
+      delete-webhook-endpoint-body: Êtes-vous sûr de vouloir supprimer ce webhook
+        ? Toutes vos données associées à ce webhook deviendront inaccessibles. Ce
+        point de terminaison cessera également de recevoir les événements futurs.
+        Cette action est irréversible.
+      delete-webhook-success-message: Point de terminaison webhook supprimé.
+      title: Webhooks
+      button-text: Ajouter un nouveau point de terminaison
+    view:
+      webhook-deleted-success-message: Point de terminaison webhook supprimé.
+      disable-webhook-title: Désactiver un point de terminaison webhook
+      disable-webhook-body: Ce point de terminaison webhook peut être temporairement
+        désactivé afin qu'il ne reçoive pas de notifications jusqu'à ce qu'il soit
+        réactivé. Fleetbase ne renverra pas les notifications générées pendant que
+        le point de terminaison est désactivé.
+      disable-webhook-button-text: Désactiver le point de terminaison webhook
+      disable-webhook-success-message: Webhook désactivé.
+      enable-webhook-title: Activer un point de terminaison webhook
+      enable-webhook-body: Ce webhook est désactivé et ne reçoit plus de notifications.
+        Cela a peut-être été fait automatiquement car nous avons détecté une période
+        prolongée d'échecs. Si vous avez corrigé le problème, vous pouvez réactiver
+        le point de terminaison webhook ici. Fleetbase ne renverra pas les notifications
+        générées pendant cette période, et si nous continuons à détecter des échecs
+        sur ce point de terminaison, nous le désactiverons à nouveau.
+      enable-webhook-button-text: Activer le point de terminaison webhook
+      enable-webhook-success-message: Webhook activé.
+      update-endpoint-button-text: Mettre à jour le point de terminaison
+      update-endpoint-success-message: Détails du webhook mis à jour.
+      send-button-text: Envoyer un webhook de test...
+      disable-button-text: Désactiver...
+      enable-button-text: Activer...
+      delete-button-text: Supprimer...
+  application:
+    sidebar:
+      title: Console des développeurs
+      items:
+        home: Tableau de bord
+        api-keys: Clés API
+        webhooks: Webhooks
+        websockets: WebSockets
+        logs: Journaux
+        events: Événements

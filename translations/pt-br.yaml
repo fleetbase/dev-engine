@@ -1,0 +1,283 @@
+developers:
+  extension-name: Developers
+  common:
+    all: Todos
+    attempt: Tentativa
+    back: Voltar
+    bulk-action: Ação em massa
+    clear: Limpar
+    code: Código
+    created: Criado
+    date: Data
+    description: Descrição
+    email: Email
+    event-id: ID do Evento
+    event-type: Tipo de Evento
+    event: Evento
+    export: Exportar
+    failed: Falhou
+    id: ID
+    key: Chave
+    mode: Modo
+    name: Nome
+    new: Novo
+    password: Senha
+    result: Resultado
+    source: Fonte
+    status: Status
+    succeeded: Bem-sucedido
+    time: Hora
+    url: URL
+    version: Versão
+    reload: Recarregar
+    reload-data: Recarregar dados
+  component:
+    api-event:
+      data:
+        title: Dados do evento
+        no-data: Sem dados do evento
+      details:
+        prefixTitle: Evento
+    api-request-log:
+      details:
+        prefixTitle: Requisição
+        duration: Duração
+        ip-address: Endereço IP
+      query-params:
+        title: Parâmetros de consulta da requisição
+        no-parameters: Sem parâmetros de consulta
+      request-headers:
+        title: Cabeçalhos da requisição
+        no-headers: Sem cabeçalhos na requisição
+      request-body:
+        title: Corpo da requisição
+        title-second-part: corpo
+        no-request-body: Sem corpo da requisição {method}
+      response-body:
+        title: Corpo da resposta
+        no-response-body: Sem corpo da resposta
+    modals:
+      api-key-form:
+        api-name-aria-label: Nome da Chave API
+        api-expiration-aria-label: Data de Expiração da Chave API
+        name-placeholder: Digite um apelido ou nome do ambiente para a Chave API
+        expiration-label: Expiração
+        expiration-help-text: Opcionalmente defina uma data de expiração para esta
+          chave de API.
+        select-expiration-date: Selecione uma data de expiração...
+        key-expires: Quando esta chave expirar, você não poderá realizar nenhuma ação
+          com ela.
+        enter-domain-placeholder: Digite o domínio
+        allowed-browser-label: Origens de Navegador Permitidas
+        allowed-browser-help-text: Insira os domínios que determinarão a política
+          CORS para solicitações do navegador a partir desta chave de API.
+        test-key: Chave de Teste
+        testing-environments: Você está criando uma chave para ambiente de teste,
+          use-a para ambientes de teste.
+        live-key: Chave Ativa
+        production-environments: Você está criando uma chave para ambiente de produção,
+          use-a para ambientes de produção.
+      listen-custom-channel:
+        name: ID do canal de eventos
+        name-help-text: Insira o identificador do canal socket que você deseja escutar
+      rename-api-key-form:
+        api-key-label: Nome da Chave de API
+        api-key-placeholder: Digite um apelido ou nome do ambiente para a Chave de
+          API
+      roll-api-key-form:
+        view-button-text: Ver logs
+        last-used: Último uso
+        expiration: Expiração
+        api-key-expiration-label: Expiração da Chave de API
+        select-date: Selecione uma data de expiração...
+        key-expires: Quando esta chave expirar, você não poderá realizar nenhuma ação
+          com ela.
+        additional-required: Autenticação adicional necessária
+        enter-password: Para continuar, por favor insira sua senha.
+        user-email: Email do Usuário
+        user-password: Senha do Usuário
+        user-password-placeholder: Autentique a solicitação usando sua senha
+      webhook-form:
+        endpoint-url: URL do Endpoint
+        endpoint-url-help-text: A URL para a qual o Fleetbase deve enviar os callbacks
+          de eventos.
+        endpoint-url-placeholder: https://
+        description-label: Descrição
+        description-help-text: Opcionalmente adicione uma descrição para o endpoint
+          do webhook.
+        description-aria-label: Descrição do Webhook
+        description-placeholder: Uma descrição opcional do uso deste endpoint de webhook.
+        api-credential-label: Credencial de API
+        api-credential-help-text: Restrinja o endpoint do webhook para receber callbacks
+          de uma chave de API específica.
+        api-credential-message: Receber de todas as Credenciais de API...
+        api-credential-infoblock: Você pode selecionar uma credencial de API específica
+          que será usada para acionar callbacks para este endpoint de webhook, ou
+          pode selecionar "Todas as Credenciais de API", e o endpoint do webhook receberá
+          callbacks independentemente da credencial de API usada.
+        version-help-text: Selecione uma versão específica da API para receber callbacks.
+        version-message: Selecione uma versão da API...
+        events-send-label: Eventos para enviar
+        events-send-help-text: Defina explicitamente quais eventos receber callbacks.
+        select-events: Selecione eventos...
+        event-search-label: Busca de Evento
+        event-search-placeholder: Pesquisar...
+        no-selected: Nenhum evento selecionado
+        dropdown: Pesquise eventos no dropdown acima, ou
+        all-events: receba todos os eventos
+    webhook:
+      attempts:
+        copy-event-id: Copiar ID do evento para a área de transferência
+        view-event: Ver Evento
+        info-message: ID do evento copiado para a área de transferência.
+        webhook-header: Tentativas de Webhook
+        webhook-message: Tentativas de enviar um evento para seu endpoint nos últimos
+          15 dias
+        http-code: Código de status HTTP
+        response-time: Tempo de resposta
+        request-endpoint: Requisição para seu endpoint
+        no-request-body: Sem corpo de requisição
+        response: Resposta
+        no-response-body: Sem corpo de resposta
+      details:
+        webhook-details: Detalhes do webhook
+        update-details: Atualizar detalhes...
+        event-types: Tipos de Evento
+        help-text: Você receberá webhooks para novos tipos de evento conforme forem
+          adicionados, exceto para aqueles que requerem seleção explícita. Ouvir todos
+          os tipos de evento geralmente não é necessário e pode aumentar a carga em
+          seus servidores.
+        all-events: Todos os Eventos
+        api-credential: Credencial da API
+        help-text-event: Você receberá callbacks de webhooks independentemente de
+          qual Credencial da API foi usada para acionar o evento.
+        api-credentials: Recebendo de todas as Credenciais da API
+      metrics:
+        date-created: Data de Criação
+    widget:
+      api-metrics:
+        title: Monitoramento
+        api-requests: Requisições API
+        api-error: Distribuição de Erros da API
+        webhooks: Webhooks
+        webhooks-response: Tempo de resposta dos webhooks
+        success-label: sucesso
+        error-label: erro
+        get-error: Erro GET
+        post-error: Erro POST
+        put-error: Erro PUT
+        delete-error: Erro DELETE
+        duration-ms: Duração (ms)
+  api-keys:
+    index:
+      public-key: Chave Pública
+      secret-key: Chave Secreta
+      enviroment: Ambiente
+      expiry: Expiração
+      last-used: Último Uso
+      edit-key: Editar chave...
+      roll-key: Renovar chave...
+      view-logs: Ver logs de requisição...
+      delete-key: Excluir chave...
+      new-api-key-title: Nova Chave API
+      new-api-key-message: Novas Credenciais da API criadas.
+      edit-api-key-title: Editar Chave API
+      edit-api-key-message: Alterações nas Credenciais da API salvas.
+      rename-api-key-title: Renomear chave API {apiKeyName}
+      untitled: Sem título
+      rename-api-key-success-message: Credencial da API renomeada para {apiKeyName}
+      delete-api-key-title: Excluir Chave API {apiKeyName}
+      delete-api-key-body: Tem certeza de que deseja excluir esta chave API? Todos
+        os seus dados associados a esta chave API ficarão inacessíveis. Esta ação
+        não pode ser desfeita.
+      delete-api-key-success-message: Credencial da API {apiKeyName} removida.
+      delete-accept-button-text: Excluir Credenciais da API
+      roll-api-key: Renovar Chave API {apiKeyName}
+      roll-api-key-button-text: Renovar Chave API
+      roll-api-key-success-message: Credencial API {apiKeyName} renovada.
+      roll-api-key-error-message: Não foi possível renovar as credenciais da API.
+      export-api: Exportar Credenciais da API
+      export-api-accept-button-text: Baixar
+      export-api-error-message: Não foi possível baixar a exportação das credenciais
+        da API.
+      title: Chaves da API
+      label: Visualizar dados de teste
+      help-text: Alternar a visualização de dados de teste permitirá que o console
+        exiba todos os dados de teste do seu ambiente sandbox
+      select-api-key-aria-label: Selecionar Chave da API
+      select-key: Selecionar chave específica
+      test-data: Todos os dados de teste...
+      delete-api: Excluir Credenciais da API
+  events:
+    index:
+      title: Eventos
+  logs:
+    index:
+      api-credential: Credencial da API
+      http-method: Método HTTP
+      title: Logs
+  sockets:
+    index:
+      link-text: Assistir Canal
+      channel: Canal
+      listen-channel-title: Ouvir em um canal personalizado
+      listen-channel-button-text: Ouvir
+      title: Canais recebendo eventos da sua conta
+      button-text: Ouvir em canal personalizado
+    view:
+      socket-connection-error: Erro na conexão do socket!
+      socket-connected: Socket está conectado
+      socket-subscribed: Socket inscrito no canal {modelName}
+      output: Saída
+      awaiting-events: Aguardando eventos...
+  webhooks:
+    index:
+      view-logs: Visualizar Logs
+      edit-webhook: Editar Webhook
+      delete-webhook: Excluir Webhook
+      add-webhook: Adicionar um endpoint de webhook
+      add-webhook-button-text: Confirmar e Criar
+      edit-webhook-endpoint: Editar endpoint do webhook
+      edit-webhook-endpoint-button-text: Salvar Alterações
+      new-webhook-success-message: Novo Webhook criado.
+      delete-webhook-endpoint: Excluir este Endpoint de Webhook
+      delete-webhook-endpoint-body: Tem certeza de que deseja excluir este Webhook?
+        Todos os seus dados associados a este Webhook se tornarão inacessíveis. Este
+        endpoint também deixará de receber eventos futuros. Esta ação não pode ser
+        desfeita.
+      delete-webhook-success-message: Endpoint do webhook removido.
+      title: Webhooks
+      button-text: Adicionar novo endpoint
+    view:
+      webhook-deleted-success-message: Endpoint do webhook excluído.
+      disable-webhook-title: Desativar um endpoint de webhook
+      disable-webhook-body: Este endpoint de webhook pode ser temporariamente desativado
+        para que não receba notificações até que seja ativado novamente. A Fleetbase
+        não tentará reenviar notificações geradas enquanto o endpoint estiver desativado.
+      disable-webhook-button-text: Desativar endpoint do webhook
+      disable-webhook-success-message: Webhook desativado.
+      enable-webhook-title: Ativar um endpoint de webhook
+      enable-webhook-body: Este webhook está desativado e não recebe mais notificações.
+        Isso pode ter sido feito automaticamente porque detectamos um período prolongado
+        de falhas. Se você corrigiu o problema, pode reativar o endpoint do webhook
+        aqui. A Fleetbase não tentará reenviar notificações geradas no período intermediário
+        e, se continuarmos a detectar falhas neste endpoint, desativaremos o endpoint
+        novamente.
+      enable-webhook-button-text: Ativar endpoint do webhook
+      enable-webhook-success-message: Webhook ativado.
+      update-endpoint-button-text: Atualizar endpoint
+      update-endpoint-success-message: Detalhes do webhook atualizados.
+      send-button-text: Enviar webhook de teste...
+      disable-button-text: Desativar...
+      enable-button-text: Ativar...
+      delete-button-text: Excluir...
+  application:
+    sidebar:
+      title: Console de Desenvolvedores
+      items:
+        home: Painel
+        api-keys: Chaves API
+        webhooks: Webhooks
+        websockets: WebSockets
+        logs: Logs
+        events: Eventos

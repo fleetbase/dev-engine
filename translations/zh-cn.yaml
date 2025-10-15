@@ -1,0 +1,253 @@
+developers:
+  extension-name: Developers
+  common:
+    all: 全部
+    attempt: 尝试
+    back: 返回
+    bulk-action: 批量操作
+    clear: 清除
+    code: 代码
+    created: 创建时间
+    date: 日期
+    description: 描述
+    email: 电子邮件
+    event-id: 事件ID
+    event-type: 事件类型
+    event: 事件
+    export: 导出
+    failed: 失败
+    id: ID
+    key: 密钥
+    mode: 模式
+    name: 名称
+    new: 新建
+    password: 密码
+    result: 结果
+    source: 来源
+    status: 状态
+    succeeded: 成功
+    time: 时间
+    url: 网址
+    version: 版本
+    reload: 重新加载
+    reload-data: 重新加载数据
+  component:
+    api-event:
+      data:
+        title: 事件数据
+        no-data: 无事件数据
+      details:
+        prefixTitle: 事件
+    api-request-log:
+      details:
+        prefixTitle: 请求
+        duration: 持续时间
+        ip-address: IP地址
+      query-params:
+        title: 请求查询参数
+        no-parameters: 无查询参数
+      request-headers:
+        title: 请求头
+        no-headers: 无请求头
+      request-body:
+        title: 请求
+        title-second-part: 体
+        no-request-body: 无{method}请求体
+      response-body:
+        title: 响应体
+        no-response-body: 无响应体
+    modals:
+      api-key-form:
+        api-name-aria-label: API密钥名称
+        api-expiration-aria-label: API密钥过期日期
+        name-placeholder: 输入API密钥的昵称或环境名称
+        expiration-label: 过期时间
+        expiration-help-text: 可选择为此 API 密钥设置过期日期。
+        select-expiration-date: 选择过期日期...
+        key-expires: 此密钥过期后，您将无法使用它执行任何操作。
+        enter-domain-placeholder: 输入域名
+        allowed-browser-label: 允许的浏览器来源
+        allowed-browser-help-text: 输入域名以确定此 API 密钥的浏览器请求的 CORS 策略。
+        test-key: 测试密钥
+        testing-environments: 您正在创建测试环境密钥，请在测试环境中使用。
+        live-key: 正式密钥
+        production-environments: 您正在创建正式环境密钥，请在生产环境中使用。
+      listen-custom-channel:
+        name: 事件频道 ID
+        name-help-text: 输入您想监听的 socket 频道标识符
+      rename-api-key-form:
+        api-key-label: API 密钥名称
+        api-key-placeholder: 输入 API 密钥的昵称或环境名称
+      roll-api-key-form:
+        view-button-text: 查看日志
+        last-used: 最后使用时间
+        expiration: 过期时间
+        api-key-expiration-label: API 密钥过期时间
+        select-date: 选择过期日期...
+        key-expires: 此密钥过期后，您将无法使用它执行任何操作。
+        additional-required: 需要额外身份验证
+        enter-password: 继续操作前，请输入您的密码。
+        user-email: 用户邮箱
+        user-password: 用户密码
+        user-password-placeholder: 使用您的密码验证请求
+      webhook-form:
+        endpoint-url: 端点 URL
+        endpoint-url-help-text: Fleetbase 应发送事件回调的 URL。
+        endpoint-url-placeholder: https://
+        description-label: 描述
+        description-help-text: 可选择为 webhook 端点添加描述。
+        description-aria-label: Webhook 描述
+        description-placeholder: 此 webhook 端点用途的可选描述。
+        api-credential-label: API 凭证
+        api-credential-help-text: 限制 webhook 端点仅接收来自特定 API 密钥的回调。
+        api-credential-message: 接收所有 API 凭证的回调...
+        api-credential-infoblock: 您可以选择特定的 API 凭证来触发此 webhook 端点的回调，或者选择“所有 API 凭证”，此
+          webhook 端点将接收所有 API 凭证的回调。
+        version-help-text: 选择接收回调的特定 API 版本。
+        version-message: 选择 API 版本...
+        events-send-label: 发送的事件
+        events-send-help-text: 明确设置接收回调的事件。
+        select-events: 选择事件...
+        event-search-label: 事件搜索
+        event-search-placeholder: 搜索...
+        no-selected: 未选择事件
+        dropdown: 使用上方下拉菜单搜索事件，或
+        all-events: 接收所有事件
+    webhook:
+      attempts:
+        copy-event-id: 复制事件 ID 到剪贴板
+        view-event: 查看事件
+        info-message: 事件 ID 已复制到剪贴板。
+        webhook-header: Webhook 尝试记录
+        webhook-message: 过去15天内向您的端点发送事件的尝试次数
+        http-code: HTTP状态码
+        response-time: 响应时间
+        request-endpoint: 请求您的端点
+        no-request-body: 无请求体
+        response: 响应
+        no-response-body: 无响应体
+      details:
+        webhook-details: Webhook详情
+        update-details: 更新详情...
+        event-types: 事件类型
+        help-text: 当新增事件类型时，您将收到相应的webhook，除非该事件类型需要明确选择。通常不需要监听所有事件类型，这可能会增加您的服务器负载。
+        all-events: 所有事件
+        api-credential: API凭证
+        help-text-event: 无论使用哪个API凭证触发事件，您都会收到webhook回调。
+        api-credentials: 接收所有API凭证的事件
+      metrics:
+        date-created: 创建日期
+    widget:
+      api-metrics:
+        title: 监控
+        api-requests: API请求
+        api-error: API错误分布
+        webhooks: Webhooks
+        webhooks-response: Webhooks响应时间
+        success-label: 成功
+        error-label: 错误
+        get-error: GET错误
+        post-error: POST错误
+        put-error: PUT错误
+        delete-error: DELETE错误
+        duration-ms: 持续时间（毫秒）
+  api-keys:
+    index:
+      public-key: 公钥
+      secret-key: 密钥
+      enviroment: 环境
+      expiry: 过期时间
+      last-used: 最后使用时间
+      edit-key: 编辑密钥...
+      roll-key: 更新密钥...
+      view-logs: 查看请求日志...
+      delete-key: 删除密钥...
+      new-api-key-title: 新建API密钥
+      new-api-key-message: 新API凭证已创建。
+      edit-api-key-title: 编辑API密钥
+      edit-api-key-message: API凭证更改已保存。
+      rename-api-key-title: 重命名 {apiKeyName} API密钥
+      untitled: 未命名
+      rename-api-key-success-message: API凭证已重命名为 {apiKeyName}
+      delete-api-key-title: 删除 {apiKeyName} API密钥
+      delete-api-key-body: 您确定要删除此API密钥吗？与此API密钥相关的所有数据将无法访问。此操作不可撤销。
+      delete-api-key-success-message: API凭证 {apiKeyName} 已移除。
+      delete-accept-button-text: 删除API凭证
+      roll-api-key: 更新 {apiKeyName} API密钥
+      roll-api-key-button-text: 更新API密钥
+      roll-api-key-success-message: API 凭证 {apiKeyName} 已更新。
+      roll-api-key-error-message: 无法更新 API 凭证。
+      export-api: 导出 API 凭证
+      export-api-accept-button-text: 下载
+      export-api-error-message: 无法下载 API 凭证导出文件。
+      title: API 密钥
+      label: 查看测试数据
+      help-text: 切换查看测试数据将使控制台显示您沙箱环境中的所有测试数据
+      select-api-key-aria-label: 选择 API 密钥
+      select-key: 选择特定密钥
+      test-data: 所有测试数据...
+      delete-api: 删除 API 凭证
+  events:
+    index:
+      title: 事件
+  logs:
+    index:
+      api-credential: API 凭证
+      http-method: HTTP 方法
+      title: 日志
+  sockets:
+    index:
+      link-text: 监视频道
+      channel: 频道
+      listen-channel-title: 监听自定义频道
+      listen-channel-button-text: 监听
+      title: 接收您账户事件的频道
+      button-text: 监听自定义频道
+    view:
+      socket-connection-error: Socket 连接错误！
+      socket-connected: Socket 已连接
+      socket-subscribed: Socket 已订阅频道 {modelName}
+      output: 输出
+      awaiting-events: 等待事件中...
+  webhooks:
+    index:
+      view-logs: 查看日志
+      edit-webhook: 编辑 Webhook
+      delete-webhook: 删除 Webhook
+      add-webhook: 添加一个 webhook 端点
+      add-webhook-button-text: 确认并创建
+      edit-webhook-endpoint: 编辑 webhook 端点
+      edit-webhook-endpoint-button-text: 保存更改
+      new-webhook-success-message: 新 Webhook 已创建。
+      delete-webhook-endpoint: 删除此 Webhook 端点
+      delete-webhook-endpoint-body: 您确定要删除此 Webhook 吗？与此 Webhook 相关的所有数据将无法访问。此端点也将停止接收未来事件。此操作无法撤销。
+      delete-webhook-success-message: Webhook 端点已移除。
+      title: Webhooks
+      button-text: 添加新端点
+    view:
+      webhook-deleted-success-message: Webhook 端点已删除。
+      disable-webhook-title: 禁用 webhook 端点
+      disable-webhook-body: 此 webhook 端点可以暂时禁用，以便它不会接收通知，直到再次启用。Fleetbase 不会重试在端点禁用期间生成的任何通知。
+      disable-webhook-button-text: 禁用 webhook 端点
+      disable-webhook-success-message: Webhook 已禁用。
+      enable-webhook-title: 启用 webhook 端点
+      enable-webhook-body: 此 webhook 已被禁用，不再接收通知。这可能是因为我们检测到长时间的失败自动执行的。如果您已解决问题，可以在此重新启用
+        webhook 端点。Fleetbase 不会重试在此期间生成的任何通知，如果我们继续检测到此端点的失败，将再次禁用该端点。
+      enable-webhook-button-text: 启用 webhook 端点
+      enable-webhook-success-message: Webhook 已启用。
+      update-endpoint-button-text: 更新端点
+      update-endpoint-success-message: Webhook 详情已更新。
+      send-button-text: 发送测试 webhook...
+      disable-button-text: 禁用...
+      enable-button-text: 启用...
+      delete-button-text: 删除...
+  application:
+    sidebar:
+      title: 开发者控制台
+      items:
+        home: 仪表盘
+        api-keys: API 密钥
+        webhooks: Webhook
+        websockets: WebSocket
+        logs: 日志
+        events: 事件
