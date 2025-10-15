@@ -1,10 +1,10 @@
-<Layout::Section::Header @title={{@model.name}}>
+<Layout::Section::Header @title={{@model.name}} @leftSubheaderClass="flex-1">
     <Button @icon="long-arrow-left" @iconPrefix="fas" @text={{t "developers.common.back"}} @onClick={{this.goBack}} />
 </Layout::Section::Header>
 
 <Layout::Section::Body>
     <div class="h-screen overflow-y-scroll pb-40">
-        <div class="space-y-6 py-6 max-w-6xl mx-auto">
+        <div class="py-6 max-w-4xl mx-auto">
             <ContentPanel
                 @titleStatusRight="Channel"
                 @titleStatusRightClass="info-status-badge"
@@ -12,7 +12,8 @@
                 @title={{@model.name}}
                 @open={{true}}
                 @pad={{false}}
-                @panelBodyClass="bg-black"
+                @panelBodyClass="bg-black p-0i"
+                @wrapperClass="bordered-classic"
             >
                 <div id="output" class="font-mono rounded-b-md max-h-full p-6 overflow-y-scroll bg-black shadow-inner dark:shadow-none">
                     <div class="flex items-center justify-between mb-4">

@@ -12,11 +12,12 @@
 </Layout::Section::Header>
 
 <Layout::Section::Body>
-    <div class="h-screen overflow-y-scroll pb-40">
-        <div class="space-y-6 py-6 max-w-6xl mx-auto">
+    <div class="h-screen overflow-y-scroll">
+        <div class="space-y-2 mx-auto">
             <Webhook::Metrics @webhook={{@model}} />
             <Webhook::Details @webhook={{@model}} @onClickUpdateWebhook={{this.updateWebhookDetails}} @permission="developers update webhook" />
             <Webhook::Attempts @webhook={{@model}} />
         </div>
+        <Spacer @height="200px" />
     </div>
 </Layout::Section::Body>

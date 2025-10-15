@@ -1,6 +1,6 @@
 {
     "name": "@fleetbase/dev-engine",
-    "version": "0.2.9",
+    "version": "0.2.10",
     "description": "Fleetbase Developers extension provides a module for managing developer resources such as API keys, webhooks, sockets, events and logs.",
     "fleetbase": {
         "route": "developers"
