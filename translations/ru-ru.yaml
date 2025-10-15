@@ -1,0 +1,280 @@
+developers:
+  extension-name: Developers
+  common:
+    all: Все
+    attempt: Попытка
+    back: Назад
+    bulk-action: Массовое действие
+    clear: Очистить
+    code: Код
+    created: Создано
+    date: Дата
+    description: Описание
+    email: Электронная почта
+    event-id: ID события
+    event-type: Тип события
+    event: Событие
+    export: Экспорт
+    failed: Неудачно
+    id: ID
+    key: Ключ
+    mode: Режим
+    name: Имя
+    new: Новый
+    password: Пароль
+    result: Результат
+    source: Источник
+    status: Статус
+    succeeded: Успешно
+    time: Время
+    url: URL
+    version: Версия
+    reload: Перезагрузить
+    reload-data: Перезагрузить данные
+  component:
+    api-event:
+      data:
+        title: Данные события
+        no-data: Данные события отсутствуют
+      details:
+        prefixTitle: Событие
+    api-request-log:
+      details:
+        prefixTitle: Запрос
+        duration: Длительность
+        ip-address: IP-адрес
+      query-params:
+        title: Параметры запроса
+        no-parameters: Параметры запроса отсутствуют
+      request-headers:
+        title: Заголовки запроса
+        no-headers: Заголовки запроса отсутствуют
+      request-body:
+        title: Тело
+        title-second-part: запроса
+        no-request-body: Тело {method} запроса отсутствует
+      response-body:
+        title: Тело ответа
+        no-response-body: Тело ответа отсутствует
+    modals:
+      api-key-form:
+        api-name-aria-label: Имя API ключа
+        api-expiration-aria-label: Дата истечения API ключа
+        name-placeholder: Введите псевдоним или имя окружения для API ключа
+        expiration-label: Срок действия
+        expiration-help-text: При желании установите дату истечения срока действия
+          этого API-ключа.
+        select-expiration-date: Выберите дату истечения срока...
+        key-expires: После истечения срока действия этого ключа вы не сможете выполнять
+          с ним никаких действий.
+        enter-domain-placeholder: Введите домен
+        allowed-browser-label: Разрешённые источники браузера
+        allowed-browser-help-text: Введите домены, которые будут определять политику
+          CORS для браузерных запросов с этим API-ключом.
+        test-key: Тестовый ключ
+        testing-environments: Вы создаёте ключ для тестовой среды, используйте его
+          для тестовых окружений.
+        live-key: Рабочий ключ
+        production-environments: Вы создаёте ключ для рабочей среды, используйте его
+          для производственных окружений.
+      listen-custom-channel:
+        name: ID канала событий
+        name-help-text: Введите идентификатор сокет-канала, на который хотите подписаться
+      rename-api-key-form:
+        api-key-label: Имя API-ключа
+        api-key-placeholder: Введите псевдоним или имя окружения для API-ключа
+      roll-api-key-form:
+        view-button-text: Просмотреть логи
+        last-used: Последнее использование
+        expiration: Срок действия
+        api-key-expiration-label: Срок действия API-ключа
+        select-date: Выберите дату истечения срока...
+        key-expires: После истечения срока действия этого ключа вы не сможете выполнять
+          с ним никаких действий.
+        additional-required: Требуется дополнительная аутентификация
+        enter-password: Для продолжения введите ваш пароль.
+        user-email: Электронная почта пользователя
+        user-password: Пароль пользователя
+        user-password-placeholder: Подтвердите запрос, используя ваш пароль
+      webhook-form:
+        endpoint-url: URL конечной точки
+        endpoint-url-help-text: URL, на который Fleetbase должен отправлять обратные
+          вызовы событий.
+        endpoint-url-placeholder: https://
+        description-label: Описание
+        description-help-text: При желании добавьте описание для конечной точки webhook.
+        description-aria-label: Описание webhook
+        description-placeholder: Необязательное описание того, для чего используется
+          эта конечная точка webhook.
+        api-credential-label: API-учётные данные
+        api-credential-help-text: Ограничьте конечную точку webhook для получения
+          обратных вызовов только от определённого API-ключа.
+        api-credential-message: Принимать от всех API-учётных данных...
+        api-credential-infoblock: Вы можете выбрать конкретные API-учётные данные,
+          которые будут использоваться для вызова обратных вызовов на эту конечную
+          точку webhook, или выбрать «Все API-учётные данные», и конечная точка webhook
+          будет получать обратные вызовы независимо от используемых API-учётных данных.
+        version-help-text: Выберите конкретную версию API для получения обратных вызовов.
+        version-message: Выберите версию API...
+        events-send-label: События для отправки
+        events-send-help-text: Явно укажите, для каких событий получать обратные вызовы.
+        select-events: Выберите события...
+        event-search-label: Поиск событий
+        event-search-placeholder: Поиск...
+        no-selected: События не выбраны
+        dropdown: Ищите события с помощью выпадающего списка выше или
+        all-events: получайте все события
+    webhook:
+      attempts:
+        copy-event-id: Скопировать ID события в буфер обмена
+        view-event: Просмотреть событие
+        info-message: ID события скопирован в буфер обмена.
+        webhook-header: Попытки webhook
+        webhook-message: Попытки отправить событие на ваш конечный пункт за последние
+          15 дней
+        http-code: HTTP статус код
+        response-time: Время ответа
+        request-endpoint: Запрос к вашему конечному пункту
+        no-request-body: Отсутствует тело запроса
+        response: Ответ
+        no-response-body: Отсутствует тело ответа
+      details:
+        webhook-details: Детали вебхука
+        update-details: Обновить детали...
+        event-types: Типы событий
+        help-text: Вы будете получать вебхуки для новых типов событий по мере их добавления,
+          за исключением тех, которые требуют явного выбора. Обычно прослушивание
+          всех типов событий не требуется и может увеличить нагрузку на ваши серверы.
+        all-events: Все события
+        api-credential: API учетные данные
+        help-text-event: Вы будете получать обратные вызовы вебхуков независимо от
+          того, какие API учетные данные используются для вызова события.
+        api-credentials: Получение от всех API учетных данных
+      metrics:
+        date-created: Дата создания
+    widget:
+      api-metrics:
+        title: Мониторинг
+        api-requests: API запросы
+        api-error: Распределение ошибок API
+        webhooks: Вебхуки
+        webhooks-response: Время ответа вебхуков
+        success-label: успешно
+        error-label: ошибка
+        get-error: Ошибка GET
+        post-error: Ошибка POST
+        put-error: Ошибка PUT
+        delete-error: Ошибка DELETE
+        duration-ms: Длительность (мс)
+  api-keys:
+    index:
+      public-key: Публичный ключ
+      secret-key: Секретный ключ
+      enviroment: Окружение
+      expiry: Срок действия
+      last-used: Последнее использование
+      edit-key: Редактировать ключ...
+      roll-key: Обновить ключ...
+      view-logs: Просмотр журналов запросов...
+      delete-key: Удалить ключ...
+      new-api-key-title: Новый API ключ
+      new-api-key-message: Новые API учетные данные созданы.
+      edit-api-key-title: Редактировать API ключ
+      edit-api-key-message: Изменения API учетных данных сохранены.
+      rename-api-key-title: Переименовать API ключ {apiKeyName}
+      untitled: Без названия
+      rename-api-key-success-message: API учетные данные переименованы в {apiKeyName}
+      delete-api-key-title: Удалить API ключ {apiKeyName}
+      delete-api-key-body: Вы уверены, что хотите удалить этот API ключ? Все ваши
+        данные, связанные с этим API ключом, станут недоступны. Это действие нельзя
+        отменить.
+      delete-api-key-success-message: API учетные данные {apiKeyName} удалены.
+      delete-accept-button-text: Удалить API учетные данные
+      roll-api-key: Обновить API ключ {apiKeyName}
+      roll-api-key-button-text: Обновить API ключ
+      roll-api-key-success-message: API-ключ {apiKeyName} обновлен.
+      roll-api-key-error-message: Не удалось обновить API-учетные данные.
+      export-api: Экспортировать API-учетные данные
+      export-api-accept-button-text: Скачать
+      export-api-error-message: Не удалось скачать экспорт API-учетных данных.
+      title: API ключи
+      label: Просмотр тестовых данных
+      help-text: Переключение просмотра тестовых данных позволит консоли отображать
+        все тестовые данные из вашей песочницы
+      select-api-key-aria-label: Выбрать API ключ
+      select-key: Выбрать конкретный ключ
+      test-data: Все тестовые данные...
+      delete-api: Удалить API-учетные данные
+  events:
+    index:
+      title: События
+  logs:
+    index:
+      api-credential: API учетные данные
+      http-method: HTTP метод
+      title: Логи
+  sockets:
+    index:
+      link-text: Просмотр канала
+      channel: Канал
+      listen-channel-title: Прослушивание пользовательского канала
+      listen-channel-button-text: Прослушать
+      title: Каналы, получающие события с вашего аккаунта
+      button-text: Прослушать пользовательский канал
+    view:
+      socket-connection-error: Ошибка подключения сокета!
+      socket-connected: Сокет подключен
+      socket-subscribed: Сокет подписан на канал {modelName}
+      output: Вывод
+      awaiting-events: Ожидание событий...
+  webhooks:
+    index:
+      view-logs: Просмотреть логи
+      edit-webhook: Редактировать вебхук
+      delete-webhook: Удалить вебхук
+      add-webhook: Добавить конечную точку вебхука
+      add-webhook-button-text: Подтвердить и создать
+      edit-webhook-endpoint: Редактировать конечную точку вебхука
+      edit-webhook-endpoint-button-text: Сохранить изменения
+      new-webhook-success-message: Новый вебхук создан.
+      delete-webhook-endpoint: Удалить эту конечную точку вебхука
+      delete-webhook-endpoint-body: Вы уверены, что хотите удалить этот вебхук? Все
+        ваши данные, связанные с этим вебхуком, станут недоступны. Эта конечная точка
+        также перестанет получать будущие события. Это действие нельзя отменить.
+      delete-webhook-success-message: Конечная точка вебхука удалена.
+      title: Вебхуки
+      button-text: Добавить новую конечную точку
+    view:
+      webhook-deleted-success-message: Конечная точка вебхука удалена.
+      disable-webhook-title: Отключить конечную точку вебхука
+      disable-webhook-body: Эта конечная точка вебхука может быть временно отключена,
+        чтобы она не получала уведомления, пока не будет снова включена. Fleetbase
+        не будет повторно отправлять уведомления, созданные во время отключения конечной
+        точки.
+      disable-webhook-button-text: Отключить конечную точку вебхука
+      disable-webhook-success-message: Вебхук отключен.
+      enable-webhook-title: Включить конечную точку вебхука
+      enable-webhook-body: Этот вебхук отключен и больше не получает уведомления.
+        Это могло произойти автоматически, если мы обнаружили длительный период сбоев.
+        Если вы исправили проблему, вы можете снова включить конечную точку вебхука
+        здесь. Fleetbase не будет повторно отправлять уведомления, созданные за этот
+        период, и если мы продолжим обнаруживать сбои на этой конечной точке, мы снова
+        ее отключим.
+      enable-webhook-button-text: Включить конечную точку вебхука
+      enable-webhook-success-message: Вебхук включен.
+      update-endpoint-button-text: Обновить конечную точку
+      update-endpoint-success-message: Данные вебхука обновлены.
+      send-button-text: Отправить тестовый вебхук...
+      disable-button-text: Отключить...
+      enable-button-text: Включить...
+      delete-button-text: Удалить...
+  application:
+    sidebar:
+      title: Консоль разработчика
+      items:
+        home: Панель управления
+        api-keys: API ключи
+        webhooks: Вебхуки
+        websockets: Вебсокеты
+        logs: Логи
+        events: События
