@@ -76,14 +76,14 @@ export default class WebhookEndpointModel extends Model {
         if (!isValidDate(this.updated_at)) {
             return null;
         }
-        return formatDate(this.updated_at, 'PPP p');
+        return formatDate(this.updated_at, 'yyyy-MM-dd HH:mm');
     }
 
     @computed('updated_at') get updatedAtShort() {
         if (!isValidDate(this.updated_at)) {
             return null;
         }
-        return formatDate(this.updated_at, 'PP');
+        return formatDate(this.updated_at, 'MMM dd, yyyy HH:mm');
     }
 
     @computed('created_at') get createdAgo() {
@@ -97,13 +97,13 @@ export default class WebhookEndpointModel extends Model {
         if (!isValidDate(this.created_at)) {
             return null;
         }
-        return formatDate(this.created_at, 'PPP p');
+        return formatDate(this.created_at, 'yyyy-MM-dd HH:mm');
     }
 
     @computed('created_at') get createdAtShort() {
         if (!isValidDate(this.created_at)) {
             return null;
         }
-        return formatDate(this.created_at, 'PP');
+        return formatDate(this.created_at, 'MMM dd, yyyy HH:mm');
     }
 }

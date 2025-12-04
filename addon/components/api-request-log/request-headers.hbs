@@ -1,4 +1,4 @@
-<ContentPanel @title={{t "developers.component.api-request-log.request-headers.title"}} @panelTitleClass="text-sm" @open={{true}} @pad={{true}} @panelBodyClass="bg-white dark:bg-gray-800">
+<ContentPanel @title={{t "developers.component.api-request-log.request-headers.title"}} @open={{true}} @wrapperClass="bordered-top" @panelBodyWrapperClass="p-0i">
     {{#if @apiRequest.request_headers}}
         <CodeBlock @code={{or (json-stringify @apiRequest.request_headers) ""}} @language="json" class="line-numbers" />
     {{else}}

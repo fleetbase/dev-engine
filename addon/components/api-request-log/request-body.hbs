@@ -1,9 +1,8 @@
 <ContentPanel
     @title={{concat (t "developers.component.api-request-log.request-body.title") @apiRequest.method (t "developers.component.api-request-log.request-body.title-second-part")}}
-    @panelTitleClass="text-sm"
     @open={{true}}
-    @pad={{true}}
-    @panelBodyClass="bg-white dark:bg-gray-800"
+    @wrapperClass="bordered-top"
+    @panelBodyWrapperClass="p-0i"
 >
     {{#if @apiRequest.request_body}}
         <CodeBlock @code={{or (json-stringify @apiRequest.request_body) ""}} @language="json" class="line-numbers" />

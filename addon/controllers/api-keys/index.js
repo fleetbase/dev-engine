@@ -104,19 +104,18 @@ export default class ApiKeysIndexController extends Controller {
      */
     @tracked columns = [
         {
+            sticky: true,
             label: this.intl.t('developers.common.name'),
             valuePath: 'name',
             cellComponent: 'table/cell/anchor',
             permission: 'developers view api-key',
             action: this.editApiKey,
             resizable: true,
-            width: '10%',
             sortable: false,
         },
         {
             label: this.intl.t('developers.api-keys.index.public-key'),
             valuePath: 'key',
-            width: '18%',
             sortable: false,
             resizable: true,
             cellComponent: 'click-to-copy',
@@ -124,18 +123,18 @@ export default class ApiKeysIndexController extends Controller {
         {
             label: this.intl.t('developers.api-keys.index.secret-key'),
             valuePath: 'secret',
-            width: '18%',
             sortable: false,
             resizable: true,
+            width: 100,
             cellComponent: 'click-to-reveal',
             cellComponentArgs: {
                 clickToCopy: true,
+                wrapperClass: 'w-72'
             },
         },
         {
             label: this.intl.t('developers.api-keys.index.enviroment'),
             valuePath: 'environment',
-            width: '10%',
             sortable: false,
             resizable: true,
             cellComponent: 'table/cell/status',
@@ -144,7 +143,6 @@ export default class ApiKeysIndexController extends Controller {
             label: this.intl.t('developers.api-keys.index.expiry'),
             valuePath: 'expiresAt',
             sortable: false,
-            width: '8%',
             tooltip: true,
             resizable: true,
             cellClassNames: 'overflow-visible',
@@ -153,7 +151,6 @@ export default class ApiKeysIndexController extends Controller {
             label: this.intl.t('developers.api-keys.index.last-used'),
             valuePath: 'lastUsed',
             sortable: false,
-            width: '14%',
             tooltip: true,
             resizable: true,
             cellClassNames: 'overflow-visible',
@@ -162,7 +159,6 @@ export default class ApiKeysIndexController extends Controller {
             label: this.intl.t('developers.common.created'),
             valuePath: 'createdAt',
             sortable: false,
-            width: '14%',
             tooltip: true,
             resizable: true,
             cellClassNames: 'overflow-visible',
@@ -176,8 +172,9 @@ export default class ApiKeysIndexController extends Controller {
             ddMenuLabel: 'API Key Actions',
             cellClassNames: 'overflow-visible',
             wrapperClass: 'flex items-center justify-end mx-2',
-            width: '10%',
             align: 'right',
+            sticky: 'right',
+            width: 60,
             actions: [
                 {
                     label: this.intl.t('developers.api-keys.index.edit-key'),

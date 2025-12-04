@@ -1,4 +1,4 @@
-<ContentPanel @title={{t "developers.component.api-request-log.query-params.title"}} @panelTitleClass="text-sm" @open={{true}} @pad={{true}} @panelBodyClass="bg-white dark:bg-gray-800">
+<ContentPanel @title={{t "developers.component.api-request-log.query-params.title"}} @open={{true}} @wrapperClass="bordered-top" @panelBodyWrapperClass="p-0i">
     {{#if @apiRequest.query_params}}
         <CodeBlock @code={{or (json-stringify @apiRequest.query_params) ""}} @language="json" class="line-numbers" />
     {{else}}
