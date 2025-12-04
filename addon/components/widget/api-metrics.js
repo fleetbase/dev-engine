@@ -283,10 +283,10 @@ export default class WidgetApiMetricsComponent extends Component {
                         {
                             label: this.intl.t('developers.component.widget.api-metrics.duration-ms'),
                             data,
-                            backgroundColor: 'rgba(168, 85, 247, 0.15)',
+                            backgroundColor: 'rgba(168, 85, 247, 0.2)',
                             borderColor: 'rgb(168, 85, 247)',
                             borderWidth: 3,
-                            fill: true,
+                            fill: 'origin',
                             tension: 0.4,
                             pointRadius: showPoints ? 3 : 0,
                             pointBackgroundColor: 'rgb(168, 85, 247)',
