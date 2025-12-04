@@ -1,266 +1,340 @@
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 import { inject as service } from '@ember/service';
-import { action, computed } from '@ember/object';
-import { startOfDay, sub } from 'date-fns';
-import makeDataset from '@fleetbase/ember-core/utils/make-dataset';
+import { action } from '@ember/object';
+import { startOfDay, sub, format } from 'date-fns';
 
 export default class WidgetApiMetricsComponent extends Component {
     @service store;
     @service intl;
+    
     @tracked chartDateEnd = new Date();
     @tracked chartDateStart = startOfDay(sub(new Date(), { days: 7 }));
-    @tracked chartOptions = {
-        responsive: true,
-        maintainAspectRatio: false,
-        transitions: {
-            show: {
-                animations: {
-                    x: {
-                        from: 0,
-                    },
-                    y: {
-                        from: 0,
-                    },
-                },
-            },
-            hide: {
-                animations: {
-                    x: {
-                        to: 0,
-                    },
-                    y: {
-                        to: 0,
-                    },
-                },
-            },
-        },
-        layout: {
-            padding: 10,
-        },
-        plugins: {
-            legend: {
-                labels: {
-                    color: '#fff',
-                },
-            },
-        },
-        scales: {
-            x: {
-                type: 'time',
-                time: {
-                    unit: 'day',
-                    displayFormats: {
-                        day: 'MMM d',
-                    },
-                    tooltipFormat: 'MMM d, yyyy',
-                },
-                ticks: {
-                    major: {
-                        enabled: true,
-                    },
-                },
-            },
-            y: {
-                beginAtZero: true,
-            },
-        },
-    };
 
-    @computed('chartDateStart', 'chartDateEnd') get chartLabels() {
-        return [this.chartDateStart.toLocaleString(), this.chartDateEnd.toLocaleString()];
+    /**
+     * Create time-series data from records grouped by hour
+     */
+    createTimeSeriesData(records, filterFn = () => true) {
+        const filtered = records.filter(filterFn);
+        const grouped = {};
+
+        // Group by hour
+        filtered.forEach((record) => {
+            const timestamp = new Date(record.created_at);
+            const hourKey = format(timestamp, 'yyyy-MM-dd HH:00:00');
+            
+            if (!grouped[hourKey]) {
+                grouped[hourKey] = 0;
+            }
+            grouped[hourKey]++;
+        });
+
+        // Convert to Chart.js format
+        return Object.keys(grouped)
+            .sort()
+            .map((key) => ({
+                x: new Date(key),
+                y: grouped[key],
+            }));
     }
 
     /**
-     * Transform makeDataset output from { t, y } to { x, y } format for Chart.js
+     * API Requests Chart - Success vs Errors
      */
-    transformDataset(dataset) {
-        return dataset.map(point => ({
-            x: point.t,  // Rename 't' to 'x'
-            y: point.y
-        }));
-    }
-
     @action apiRequestData() {
         return new Promise((resolve) => {
-            const datasets = [];
-
-            return this.store
+            this.store
                 .query('api-request-log', {
                     columns: ['uuid', 'status_code', 'created_at'],
                     after: this.chartDateStart.toISOString(),
                 })
                 .then((apiRequestLogs) => {
-                    // Convert string status_code to number before comparison
-                    const successResponses = makeDataset(apiRequestLogs, (req) => {
+                    const records = apiRequestLogs.toArray();
+
+                    const successData = this.createTimeSeriesData(records, (req) => {
                         const statusCode = parseInt(req.status_code, 10);
                         return statusCode >= 200 && statusCode < 300;
                     });
-                    
-                    const errorResponses = makeDataset(apiRequestLogs, (req) => {
+
+                    const errorData = this.createTimeSeriesData(records, (req) => {
                         const statusCode = parseInt(req.status_code, 10);
-                        return statusCode < 200 || statusCode >= 300;
+                        return statusCode >= 400;
                     });
 
-                    datasets.pushObject({
-                        label: this.intl.t('developers.component.widget.api-metrics.success-label'),
-                        data: this.transformDataset(successResponses),  // Transform here!
-                        backgroundColor: 'rgba(16, 185, 129, 0.2)',
-                        borderColor: 'rgba(16, 185, 129, 1)',
-                        borderWidth: 2,
-                        fill: true,
-                    });
-
-                    datasets.pushObject({
-                        label: this.intl.t('developers.component.widget.api-metrics.error-label'),
-                        data: this.transformDataset(errorResponses),  // Transform here!
-                        backgroundColor: 'rgba(239, 68, 68, 0.2)',
-                        borderColor: 'rgba(239, 68, 68, 1)',
-                        borderWidth: 2,
-                        fill: true,
-                    });
-
-                    return resolve(datasets);
+                    resolve([
+                        {
+                            label: this.intl.t('developers.component.widget.api-metrics.success-label'),
+                            data: successData,
+                            backgroundColor: 'rgba(16, 185, 129, 0.15)',
+                            borderColor: 'rgb(16, 185, 129)',
+                            borderWidth: 3,
+                            fill: true,
+                            tension: 0.4,
+                            pointRadius: 0,
+                            pointHoverRadius: 6,
+                            pointHoverBackgroundColor: 'rgb(16, 185, 129)',
+                            pointHoverBorderColor: '#fff',
+                            pointHoverBorderWidth: 2,
+                        },
+                        {
+                            label: this.intl.t('developers.component.widget.api-metrics.error-label'),
+                            data: errorData,
+                            backgroundColor: 'rgba(239, 68, 68, 0.15)',
+                            borderColor: 'rgb(239, 68, 68)',
+                            borderWidth: 3,
+                            fill: true,
+                            tension: 0.4,
+                            pointRadius: 0,
+                            pointHoverRadius: 6,
+                            pointHoverBackgroundColor: 'rgb(239, 68, 68)',
+                            pointHoverBorderColor: '#fff',
+                            pointHoverBorderWidth: 2,
+                        },
+                    ]);
                 })
-                .catch(() => {
-                    resolve(datasets);
-                });
+                .catch(() => resolve([]));
         });
     }
 
+    /**
+     * API Error Distribution - POST, PUT, DELETE errors only
+     */
     @action apiErrorDistributionData() {
         return new Promise((resolve) => {
-            const datasets = [];
-
-            return this.store
+            this.store
                 .query('api-request-log', {
                     columns: ['uuid', 'status_code', 'method', 'created_at'],
                     status_code: '!200',
                     after: this.chartDateStart.toISOString(),
                 })
                 .then((apiRequestLogs) => {
-                    const getErrorResponses = makeDataset(apiRequestLogs, (req) => req.method === 'GET');
-                    const postErrorResponses = makeDataset(apiRequestLogs, (req) => req.method === 'POST');
-                    const putErrorResponses = makeDataset(apiRequestLogs, (req) => req.method === 'PUT');
-                    const deleteErrorResponses = makeDataset(apiRequestLogs, (req) => req.method === 'DELETE');
+                    const records = apiRequestLogs.toArray();
 
-                    datasets.pushObject({
-                        label: this.intl.t('developers.component.widget.api-metrics.get-error'),
-                        data: this.transformDataset(getErrorResponses),
-                        backgroundColor: '#F87171',
-                        borderColor: '#F87171',
-                        borderWidth: 2,
-                    });
+                    const postErrors = this.createTimeSeriesData(records, (req) => req.method === 'POST');
+                    const putErrors = this.createTimeSeriesData(records, (req) => req.method === 'PUT');
+                    const deleteErrors = this.createTimeSeriesData(records, (req) => req.method === 'DELETE');
 
-                    datasets.pushObject({
-                        label: this.intl.t('developers.component.widget.api-metrics.post-error'),
-                        data: this.transformDataset(postErrorResponses),
-                        backgroundColor: '#EF4444',
-                        borderColor: '#EF4444',
-                        borderWidth: 2,
-                    });
-
-                    datasets.pushObject({
-                        label: this.intl.t('developers.component.widget.api-metrics.put-error'),
-                        data: this.transformDataset(putErrorResponses),
-                        backgroundColor: '#DC2626',
-                        borderColor: '#DC2626',
-                        borderWidth: 2,
-                    });
-
-                    datasets.pushObject({
-                        label: this.intl.t('developers.component.widget.api-metrics.delete-error'),
-                        data: this.transformDataset(deleteErrorResponses),
-                        backgroundColor: '#B91C1C',
-                        borderColor: '#B91C1C',
-                        borderWidth: 2,
-                    });
-
-                    return resolve(datasets);
+                    resolve([
+                        {
+                            label: this.intl.t('developers.component.widget.api-metrics.post-error'),
+                            data: postErrors,
+                            backgroundColor: 'rgba(239, 68, 68, 0.15)',
+                            borderColor: 'rgb(239, 68, 68)',
+                            borderWidth: 3,
+                            fill: true,
+                            tension: 0.4,
+                            pointRadius: 0,
+                            pointHoverRadius: 6,
+                            pointHoverBackgroundColor: 'rgb(239, 68, 68)',
+                            pointHoverBorderColor: '#fff',
+                            pointHoverBorderWidth: 2,
+                        },
+                        {
+                            label: this.intl.t('developers.component.widget.api-metrics.put-error'),
+                            data: putErrors,
+                            backgroundColor: 'rgba(220, 38, 38, 0.15)',
+                            borderColor: 'rgb(220, 38, 38)',
+                            borderWidth: 3,
+                            fill: true,
+                            tension: 0.4,
+                            pointRadius: 0,
+                            pointHoverRadius: 6,
+                            pointHoverBackgroundColor: 'rgb(220, 38, 38)',
+                            pointHoverBorderColor: '#fff',
+                            pointHoverBorderWidth: 2,
+                        },
+                        {
+                            label: this.intl.t('developers.component.widget.api-metrics.delete-error'),
+                            data: deleteErrors,
+                            backgroundColor: 'rgba(185, 28, 28, 0.15)',
+                            borderColor: 'rgb(185, 28, 28)',
+                            borderWidth: 3,
+                            fill: true,
+                            tension: 0.4,
+                            pointRadius: 0,
+                            pointHoverRadius: 6,
+                            pointHoverBackgroundColor: 'rgb(185, 28, 28)',
+                            pointHoverBorderColor: '#fff',
+                            pointHoverBorderWidth: 2,
+                        },
+                    ]);
                 })
-                .catch(() => {
-                    resolve(datasets);
-                });
+                .catch(() => resolve([]));
         });
     }
 
+    /**
+     * Webhook Requests - Success vs Errors
+     */
     @action webhookRequestData() {
         return new Promise((resolve) => {
-            const datasets = [];
-
-            return this.store
+            this.store
                 .query('webhook-request-log', {
                     columns: ['uuid', 'status_code', 'created_at'],
                     after: this.chartDateStart.toISOString(),
                 })
                 .then((webhookRequestLogs) => {
-                    // Convert string status_code to number before comparison
-                    const successResponses = makeDataset(webhookRequestLogs, (req) => {
+                    const records = webhookRequestLogs.toArray();
+
+                    const successData = this.createTimeSeriesData(records, (req) => {
                         const statusCode = parseInt(req.status_code, 10);
                         return statusCode >= 200 && statusCode < 300;
                     });
-                    
-                    const errorResponses = makeDataset(webhookRequestLogs, (req) => {
+
+                    const errorData = this.createTimeSeriesData(records, (req) => {
                         const statusCode = parseInt(req.status_code, 10);
-                        return statusCode < 200 || statusCode >= 300;
+                        return statusCode >= 400;
                     });
 
-                    datasets.pushObject({
-                        label: this.intl.t('developers.component.widget.api-metrics.success-label'),
-                        data: this.transformDataset(successResponses),
-                        backgroundColor: 'rgba(16, 185, 129, 0.2)',
-                        borderColor: 'rgba(16, 185, 129, 1)',
-                        borderWidth: 2,
-                        fill: true,
-                    });
-
-                    datasets.pushObject({
-                        label: this.intl.t('developers.component.widget.api-metrics.error-label'),
-                        data: this.transformDataset(errorResponses),
-                        backgroundColor: 'rgba(239, 68, 68, 0.2)',
-                        borderColor: 'rgba(239, 68, 68, 1)',
-                        borderWidth: 2,
-                        fill: true,
-                    });
-
-                    return resolve(datasets);
+                    resolve([
+                        {
+                            label: this.intl.t('developers.component.widget.api-metrics.success-label'),
+                            data: successData,
+                            backgroundColor: 'rgba(59, 130, 246, 0.15)',
+                            borderColor: 'rgb(59, 130, 246)',
+                            borderWidth: 3,
+                            fill: true,
+                            tension: 0.4,
+                            pointRadius: 0,
+                            pointHoverRadius: 6,
+                            pointHoverBackgroundColor: 'rgb(59, 130, 246)',
+                            pointHoverBorderColor: '#fff',
+                            pointHoverBorderWidth: 2,
+                        },
+                        {
+                            label: this.intl.t('developers.component.widget.api-metrics.error-label'),
+                            data: errorData,
+                            backgroundColor: 'rgba(239, 68, 68, 0.15)',
+                            borderColor: 'rgb(239, 68, 68)',
+                            borderWidth: 3,
+                            fill: true,
+                            tension: 0.4,
+                            pointRadius: 0,
+                            pointHoverRadius: 6,
+                            pointHoverBackgroundColor: 'rgb(239, 68, 68)',
+                            pointHoverBorderColor: '#fff',
+                            pointHoverBorderWidth: 2,
+                        },
+                    ]);
                 })
-                .catch(() => {
-                    resolve(datasets);
-                });
+                .catch(() => resolve([]));
         });
     }
 
+    /**
+     * Webhook Response Time
+     */
     @action webhookRequestTimingData() {
         return new Promise((resolve) => {
-            const datasets = [];
-
-            return this.store
+            this.store
                 .query('webhook-request-log', {
-                    columns: ['uuid', 'status_code', 'created_at', 'duration'],
+                    columns: ['uuid', 'created_at', 'duration'],
                     after: this.chartDateStart.toISOString(),
                 })
                 .then((webhookRequestLogs) => {
-                    // For timing data, we already create the correct format
-                    const data = webhookRequestLogs.map((req) => ({
-                        x: new Date(req.created_at),  // Use 'x' not 't'
-                        y: req.duration,
+                    const data = webhookRequestLogs.toArray().map((req) => ({
+                        x: new Date(req.created_at),
+                        y: req.duration || 0,
                     }));
 
-                    datasets.pushObject({
-                        label: this.intl.t('developers.component.widget.api-metrics.duration-ms'),
-                        data,
-                        backgroundColor: 'rgba(16, 185, 129, 0.2)',
-                        borderColor: 'rgba(16, 185, 129, 1)',
-                        borderWidth: 2,
-                        fill: true,
-                    });
-
-                    return resolve(datasets);
+                    resolve([
+                        {
+                            label: this.intl.t('developers.component.widget.api-metrics.duration-ms'),
+                            data,
+                            backgroundColor: 'rgba(168, 85, 247, 0.15)',
+                            borderColor: 'rgb(168, 85, 247)',
+                            borderWidth: 3,
+                            fill: true,
+                            tension: 0.4,
+                            pointRadius: 2,
+                            pointHoverRadius: 6,
+                            pointBackgroundColor: 'rgb(168, 85, 247)',
+                            pointHoverBackgroundColor: 'rgb(168, 85, 247)',
+                            pointHoverBorderColor: '#fff',
+                            pointHoverBorderWidth: 2,
+                        },
+                    ]);
                 })
-                .catch(() => {
-                    resolve(datasets);
-                });
+                .catch(() => resolve([]));
         });
+    }
+
+    /**
+     * Shared chart options for all charts
+     */
+    get chartOptions() {
+        return {
+            responsive: true,
+            maintainAspectRatio: false,
+            interaction: {
+                mode: 'index',
+                intersect: false,
+            },
+            plugins: {
+                legend: {
+                    display: true,
+                    position: 'top',
+                    labels: {
+                        color: '#9CA3AF',
+                        usePointStyle: true,
+                        padding: 15,
+                        font: {
+                            size: 12,
+                            weight: '500',
+                        },
+                    },
+                },
+                tooltip: {
+                    backgroundColor: 'rgba(17, 24, 39, 0.95)',
+                    titleColor: '#F9FAFB',
+                    bodyColor: '#E5E7EB',
+                    borderColor: '#374151',
+                    borderWidth: 1,
+                    padding: 12,
+                    displayColors: true,
+                    callbacks: {
+                        title: (context) => {
+                            return format(new Date(context[0].parsed.x), 'MMM d, yyyy h:mm a');
+                        },
+                    },
+                },
+            },
+            scales: {
+                x: {
+                    type: 'time',
+                    time: {
+                        unit: 'hour',
+                        displayFormats: {
+                            hour: 'MMM d, ha',
+                        },
+                        tooltipFormat: 'MMM d, yyyy h:mm a',
+                    },
+                    grid: {
+                        display: false,
+                        drawBorder: false,
+                    },
+                    ticks: {
+                        color: '#6B7280',
+                        maxRotation: 0,
+                        autoSkipPadding: 20,
+                    },
+                },
+                y: {
+                    beginAtZero: true,
+                    grid: {
+                        color: 'rgba(107, 114, 128, 0.1)',
+                        drawBorder: false,
+                    },
+                    ticks: {
+                        color: '#6B7280',
+                        precision: 0,
+                    },
+                },
+            },
+            animation: {
+                duration: 750,
+                easing: 'easeInOutQuart',
+            },
+        };
     }
 }
