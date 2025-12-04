@@ -250,10 +250,18 @@ export default class WidgetApiMetricsComponent extends Component {
                     after: this.chartDateStart.toISOString(),
                 })
                 .then((webhookRequestLogs) => {
-                    const data = webhookRequestLogs.toArray().map((req) => ({
-                        x: new Date(req.created_at),
-                        y: (req.duration || 0) * 1000, // Convert seconds to milliseconds
-                    }));
+                    const records = webhookRequestLogs.toArray();
+                    const data = records.map((req) => {
+                        // Duration is in seconds, convert to milliseconds
+                        const durationMs = parseFloat(req.duration || 0) * 1000;
+                        return {
+                            x: new Date(req.created_at),
+                            y: durationMs,
+                        };
+                    });
+
+                    // Show points if we have sparse data
+                    const showPoints = records.length < 50;
 
                     resolve([
                         {
@@ -264,9 +272,11 @@ export default class WidgetApiMetricsComponent extends Component {
                             borderWidth: 3,
                             fill: true,
                             tension: 0.4,
-                            pointRadius: 2,
-                            pointHoverRadius: 6,
+                            pointRadius: showPoints ? 3 : 0,
                             pointBackgroundColor: 'rgb(168, 85, 247)',
+                            pointBorderColor: 'rgb(168, 85, 247)',
+                            pointBorderWidth: showPoints ? 2 : 0,
+                            pointHoverRadius: 6,
                             pointHoverBackgroundColor: 'rgb(168, 85, 247)',
                             pointHoverBorderColor: '#fff',
                             pointHoverBorderWidth: 2,
@@ -296,6 +306,7 @@ export default class WidgetApiMetricsComponent extends Component {
                         color: '#9CA3AF',
                         usePointStyle: true,
                         pointStyleWidth: 8,
+                        boxHeight: 8,
                         padding: 15,
                         font: {
                             size: 12,
@@ -314,6 +325,13 @@ export default class WidgetApiMetricsComponent extends Component {
                     callbacks: {
                         title: (context) => {
                             return format(new Date(context[0].parsed.x), 'MMM d, yyyy h:mm a');
+                        },
+                        label: (context) => {
+                            const value = context.parsed.y;
+                            const label = context.dataset.label || '';
+                            // Format small values with decimals, large values as whole numbers
+                            const formattedValue = value < 10 ? value.toFixed(3) : Math.round(value);
+                            return `${label}: ${formattedValue}`;
                         },
                     },
                 },
@@ -346,7 +364,10 @@ export default class WidgetApiMetricsComponent extends Component {
                     },
                     ticks: {
                         color: '#6B7280',
-                        precision: 0,
+                        callback: function(value) {
+                            // Show decimals for small values (< 10), whole numbers for larger
+                            return value < 10 ? value.toFixed(2) : Math.round(value);
+                        },
                     },
                 },
             },
