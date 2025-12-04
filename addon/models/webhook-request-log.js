@@ -19,6 +19,7 @@ export default class WebhookRequestLogModel extends Model {
     @attr('string') reason_phrase;
     @attr('string') url;
     @attr('number') attempt;
+    @attr('number') duration;
     @attr('raw') response;
     @attr('raw') headers;
     @attr('raw') meta;
