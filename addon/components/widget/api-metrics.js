@@ -251,14 +251,30 @@ export default class WidgetApiMetricsComponent extends Component {
                 })
                 .then((webhookRequestLogs) => {
                     const records = webhookRequestLogs.toArray();
+                    
+                    // Debug: Check first record
+                    if (records.length > 0) {
+                        console.log('[webhook-timing] First record:', {
+                            duration: records[0].duration,
+                            type: typeof records[0].duration,
+                            parsed: parseFloat(records[0].duration || 0),
+                            ms: parseFloat(records[0].duration || 0) * 1000
+                        });
+                    }
+                    
                     const data = records.map((req) => {
-                        // Duration is in seconds, convert to milliseconds
-                        const durationMs = parseFloat(req.duration || 0) * 1000;
+                        // Duration might be a string, ensure it's parsed as float
+                        const duration = req.duration;
+                        const durationFloat = typeof duration === 'string' ? parseFloat(duration) : (duration || 0);
+                        const durationMs = durationFloat * 1000;
+                        
                         return {
                             x: new Date(req.created_at),
                             y: durationMs,
                         };
                     });
+                    
+                    console.log('[webhook-timing] Data points:', data.length, 'Sample:', data[0]);
 
                     // Show points if we have sparse data
                     const showPoints = records.length < 50;
@@ -305,7 +321,7 @@ export default class WidgetApiMetricsComponent extends Component {
                     labels: {
                         color: '#9CA3AF',
                         usePointStyle: true,
-                        pointStyleWidth: 8,
+                        boxWidth: 8,
                         boxHeight: 8,
                         padding: 15,
                         font: {
