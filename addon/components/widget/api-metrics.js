@@ -11,6 +11,8 @@ export default class WidgetApiMetricsComponent extends Component {
     @tracked chartDateEnd = new Date();
     @tracked chartDateStart = startOfDay(sub(new Date(), { days: 7 }));
     @tracked chartOptions = {
+        responsive: true,
+        maintainAspectRatio: false,
         transitions: {
             show: {
                 animations: {
@@ -47,11 +49,11 @@ export default class WidgetApiMetricsComponent extends Component {
             x: {
                 type: 'time',
                 time: {
-                    unit: 'hour',
+                    unit: 'day',
                     displayFormats: {
-                        minute: 'HH:mm',
+                        day: 'MMM d',
                     },
-                    tooltipFormat: 'HH:mm',
+                    tooltipFormat: 'MMM d, yyyy',
                 },
                 ticks: {
                     major: {
@@ -59,11 +61,24 @@ export default class WidgetApiMetricsComponent extends Component {
                     },
                 },
             },
+            y: {
+                beginAtZero: true,
+            },
         },
     };
 
     @computed('chartDateStart', 'chartDateEnd') get chartLabels() {
         return [this.chartDateStart.toLocaleString(), this.chartDateEnd.toLocaleString()];
+    }
+
+    /**
+     * Transform makeDataset output from { t, y } to { x, y } format for Chart.js
+     */
+    transformDataset(dataset) {
+        return dataset.map(point => ({
+            x: point.t,  // Rename 't' to 'x'
+            y: point.y
+        }));
     }
 
     @action apiRequestData() {
@@ -76,23 +91,33 @@ export default class WidgetApiMetricsComponent extends Component {
                     after: this.chartDateStart.toISOString(),
                 })
                 .then((apiRequestLogs) => {
-                    const successResponses = makeDataset(apiRequestLogs, (req) => req.status_code.startsWith(2));
-                    const errorResponses = makeDataset(apiRequestLogs, (req) => !req.status_code.startsWith(2));
+                    // Convert string status_code to number before comparison
+                    const successResponses = makeDataset(apiRequestLogs, (req) => {
+                        const statusCode = parseInt(req.status_code, 10);
+                        return statusCode >= 200 && statusCode < 300;
+                    });
+                    
+                    const errorResponses = makeDataset(apiRequestLogs, (req) => {
+                        const statusCode = parseInt(req.status_code, 10);
+                        return statusCode < 200 || statusCode >= 300;
+                    });
 
                     datasets.pushObject({
                         label: this.intl.t('developers.component.widget.api-metrics.success-label'),
-                        data: successResponses,
-                        backgroundColor: ['rgba(16, 185, 129, 0.2)'],
-                        borderColor: ['rgba(16, 185, 129, 0.2)'],
-                        borderWidth: 1,
+                        data: this.transformDataset(successResponses),  // Transform here!
+                        backgroundColor: 'rgba(16, 185, 129, 0.2)',
+                        borderColor: 'rgba(16, 185, 129, 1)',
+                        borderWidth: 2,
+                        fill: true,
                     });
 
                     datasets.pushObject({
                         label: this.intl.t('developers.component.widget.api-metrics.error-label'),
-                        data: errorResponses,
-                        backgroundColor: ['rgba(239, 68, 68, 0.2)'],
-                        borderColor: ['rgba(239, 68, 68, 0.2)'],
-                        borderWidth: 1,
+                        data: this.transformDataset(errorResponses),  // Transform here!
+                        backgroundColor: 'rgba(239, 68, 68, 0.2)',
+                        borderColor: 'rgba(239, 68, 68, 1)',
+                        borderWidth: 2,
+                        fill: true,
                     });
 
                     return resolve(datasets);
@@ -121,34 +146,34 @@ export default class WidgetApiMetricsComponent extends Component {
 
                     datasets.pushObject({
                         label: this.intl.t('developers.component.widget.api-metrics.get-error'),
-                        data: getErrorResponses,
-                        backgroundColor: ['#F87171'],
-                        borderColor: ['#F87171'],
-                        borderWidth: 1,
+                        data: this.transformDataset(getErrorResponses),
+                        backgroundColor: '#F87171',
+                        borderColor: '#F87171',
+                        borderWidth: 2,
                     });
 
                     datasets.pushObject({
                         label: this.intl.t('developers.component.widget.api-metrics.post-error'),
-                        data: postErrorResponses,
-                        backgroundColor: ['#EF4444'],
-                        borderColor: ['#EF4444'],
-                        borderWidth: 1,
+                        data: this.transformDataset(postErrorResponses),
+                        backgroundColor: '#EF4444',
+                        borderColor: '#EF4444',
+                        borderWidth: 2,
                     });
 
                     datasets.pushObject({
                         label: this.intl.t('developers.component.widget.api-metrics.put-error'),
-                        data: putErrorResponses,
-                        backgroundColor: ['#DC2626'],
-                        borderColor: ['#DC2626'],
-                        borderWidth: 1,
+                        data: this.transformDataset(putErrorResponses),
+                        backgroundColor: '#DC2626',
+                        borderColor: '#DC2626',
+                        borderWidth: 2,
                     });
 
                     datasets.pushObject({
                         label: this.intl.t('developers.component.widget.api-metrics.delete-error'),
-                        data: deleteErrorResponses,
-                        backgroundColor: ['#B91C1C'],
-                        borderColor: ['#B91C1C'],
-                        borderWidth: 1,
+                        data: this.transformDataset(deleteErrorResponses),
+                        backgroundColor: '#B91C1C',
+                        borderColor: '#B91C1C',
+                        borderWidth: 2,
                     });
 
                     return resolve(datasets);
@@ -169,23 +194,33 @@ export default class WidgetApiMetricsComponent extends Component {
                     after: this.chartDateStart.toISOString(),
                 })
                 .then((webhookRequestLogs) => {
-                    const successResponses = makeDataset(webhookRequestLogs, (req) => req.status_code.startsWith(2));
-                    const errorResponses = makeDataset(webhookRequestLogs, (req) => !req.status_code.startsWith(2));
+                    // Convert string status_code to number before comparison
+                    const successResponses = makeDataset(webhookRequestLogs, (req) => {
+                        const statusCode = parseInt(req.status_code, 10);
+                        return statusCode >= 200 && statusCode < 300;
+                    });
+                    
+                    const errorResponses = makeDataset(webhookRequestLogs, (req) => {
+                        const statusCode = parseInt(req.status_code, 10);
+                        return statusCode < 200 || statusCode >= 300;
+                    });
 
                     datasets.pushObject({
                         label: this.intl.t('developers.component.widget.api-metrics.success-label'),
-                        data: successResponses,
-                        backgroundColor: ['rgba(16, 185, 129, 0.2)'],
-                        borderColor: ['rgba(16, 185, 129, 0.2)'],
-                        borderWidth: 1,
+                        data: this.transformDataset(successResponses),
+                        backgroundColor: 'rgba(16, 185, 129, 0.2)',
+                        borderColor: 'rgba(16, 185, 129, 1)',
+                        borderWidth: 2,
+                        fill: true,
                     });
 
                     datasets.pushObject({
                         label: this.intl.t('developers.component.widget.api-metrics.error-label'),
-                        data: errorResponses,
-                        backgroundColor: ['rgba(239, 68, 68, 0.2)'],
-                        borderColor: ['rgba(239, 68, 68, 0.2)'],
-                        borderWidth: 1,
+                        data: this.transformDataset(errorResponses),
+                        backgroundColor: 'rgba(239, 68, 68, 0.2)',
+                        borderColor: 'rgba(239, 68, 68, 1)',
+                        borderWidth: 2,
+                        fill: true,
                     });
 
                     return resolve(datasets);
@@ -206,18 +241,19 @@ export default class WidgetApiMetricsComponent extends Component {
                     after: this.chartDateStart.toISOString(),
                 })
                 .then((webhookRequestLogs) => {
+                    // For timing data, we already create the correct format
                     const data = webhookRequestLogs.map((req) => ({
-                        t: new Date(req.created_at),
+                        x: new Date(req.created_at),  // Use 'x' not 't'
                         y: req.duration,
-                        x: 1,
                     }));
 
                     datasets.pushObject({
                         label: this.intl.t('developers.component.widget.api-metrics.duration-ms'),
                         data,
-                        backgroundColor: ['rgba(16, 185, 129, 0.2)'],
-                        borderColor: ['rgba(16, 185, 129, 0.2)'],
-                        borderWidth: 1,
+                        backgroundColor: 'rgba(16, 185, 129, 0.2)',
+                        borderColor: 'rgba(16, 185, 129, 1)',
+                        borderWidth: 2,
+                        fill: true,
                     });
 
                     return resolve(datasets);
