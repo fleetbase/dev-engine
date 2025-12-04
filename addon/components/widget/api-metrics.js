@@ -13,12 +13,21 @@ export default class WidgetApiMetricsComponent extends Component {
 
     /**
      * Create time-series data from records grouped by hour
+     * For sparse data (< 10 records), show individual points instead of grouping
      */
     createTimeSeriesData(records, filterFn = () => true) {
         const filtered = records.filter(filterFn);
-        const grouped = {};
+        
+        // If we have very few records, don't group - show each one
+        if (filtered.length < 10) {
+            return filtered.map((record) => ({
+                x: new Date(record.created_at),
+                y: 1,
+            }));
+        }
 
-        // Group by hour
+        // For larger datasets, group by hour
+        const grouped = {};
         filtered.forEach((record) => {
             const timestamp = new Date(record.created_at);
             const hourKey = format(timestamp, 'yyyy-MM-dd HH:00:00');
@@ -61,6 +70,9 @@ export default class WidgetApiMetricsComponent extends Component {
                         return statusCode >= 400;
                     });
 
+                    // Show points if we have sparse data
+                    const showPoints = records.length < 10;
+
                     resolve([
                         {
                             label: this.intl.t('developers.component.widget.api-metrics.success-label'),
@@ -70,8 +82,9 @@ export default class WidgetApiMetricsComponent extends Component {
                             borderWidth: 3,
                             fill: true,
                             tension: 0.4,
-                            pointRadius: 0,
+                            pointRadius: showPoints ? 4 : 0,
                             pointHoverRadius: 6,
+                            pointBackgroundColor: 'rgb(16, 185, 129)',
                             pointHoverBackgroundColor: 'rgb(16, 185, 129)',
                             pointHoverBorderColor: '#fff',
                             pointHoverBorderWidth: 2,
@@ -84,8 +97,9 @@ export default class WidgetApiMetricsComponent extends Component {
                             borderWidth: 3,
                             fill: true,
                             tension: 0.4,
-                            pointRadius: 0,
+                            pointRadius: showPoints ? 4 : 0,
                             pointHoverRadius: 6,
+                            pointBackgroundColor: 'rgb(239, 68, 68)',
                             pointHoverBackgroundColor: 'rgb(239, 68, 68)',
                             pointHoverBorderColor: '#fff',
                             pointHoverBorderWidth: 2,
@@ -234,7 +248,7 @@ export default class WidgetApiMetricsComponent extends Component {
                 .then((webhookRequestLogs) => {
                     const data = webhookRequestLogs.toArray().map((req) => ({
                         x: new Date(req.created_at),
-                        y: req.duration || 0,
+                        y: (req.duration || 0) * 1000, // Convert seconds to milliseconds
                     }));
 
                     resolve([
@@ -277,6 +291,7 @@ export default class WidgetApiMetricsComponent extends Component {
                     labels: {
                         color: '#9CA3AF',
                         usePointStyle: true,
+                        pointStyleWidth: 8,
                         padding: 15,
                         font: {
                             size: 12,

@@ -4,7 +4,7 @@
             <h4 class="mb-4 text-sm font-semibold text-gray-700 dark:text-gray-200">
                 {{t "developers.component.widget.api-metrics.api-requests"}}
             </h4>
-            <div class="h-64">
+            <div class="h-96">
                 <Chart @type="line" @datasets={{this.apiRequestData}} @options={{this.chartOptions}} />
             </div>
         </div>
@@ -13,7 +13,7 @@
             <h4 class="mb-4 text-sm font-semibold text-gray-700 dark:text-gray-200">
                 {{t "developers.component.widget.api-metrics.api-error"}}
             </h4>
-            <div class="h-64">
+            <div class="h-96">
                 <Chart @type="line" @datasets={{this.apiErrorDistributionData}} @options={{this.chartOptions}} />
             </div>
         </div>
@@ -22,7 +22,7 @@
             <h4 class="mb-4 text-sm font-semibold text-gray-700 dark:text-gray-200">
                 {{t "developers.component.widget.api-metrics.webhooks"}}
             </h4>
-            <div class="h-64">
+            <div class="h-96">
                 <Chart @type="line" @datasets={{this.webhookRequestData}} @options={{this.chartOptions}} />
             </div>
         </div>
@@ -31,7 +31,7 @@
             <h4 class="mb-4 text-sm font-semibold text-gray-700 dark:text-gray-200">
                 {{t "developers.component.widget.api-metrics.webhooks-response"}}
             </h4>
-            <div class="h-64">
+            <div class="h-96">
                 <Chart @type="line" @datasets={{this.webhookRequestTimingData}} @options={{this.chartOptions}} />
             </div>
         </div>
