@@ -129,7 +129,7 @@ export default class ApiKeysIndexController extends Controller {
             cellComponent: 'click-to-reveal',
             cellComponentArgs: {
                 clickToCopy: true,
-                wrapperClass: 'w-72'
+                wrapperClass: 'w-72',
             },
         },
         {

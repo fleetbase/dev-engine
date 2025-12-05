@@ -7,7 +7,7 @@ import { startOfDay, sub, format } from 'date-fns';
 export default class WidgetApiMetricsComponent extends Component {
     @service store;
     @service intl;
-    
+
     @tracked chartDateEnd = new Date();
     @tracked chartDateStart = startOfDay(sub(new Date(), { days: 7 }));
 
@@ -17,7 +17,7 @@ export default class WidgetApiMetricsComponent extends Component {
      */
     createTimeSeriesData(records, filterFn = () => true) {
         const filtered = records.filter(filterFn);
-        
+
         // If we have very few records, don't group - show each one
         if (filtered.length < 10) {
             return filtered.map((record) => ({
@@ -31,7 +31,7 @@ export default class WidgetApiMetricsComponent extends Component {
         filtered.forEach((record) => {
             const timestamp = new Date(record.created_at);
             const hourKey = format(timestamp, 'yyyy-MM-dd HH:00:00');
-            
+
             if (!grouped[hourKey]) {
                 grouped[hourKey] = 0;
             }
@@ -251,29 +251,29 @@ export default class WidgetApiMetricsComponent extends Component {
                 })
                 .then((webhookRequestLogs) => {
                     const records = webhookRequestLogs.toArray();
-                    
+
                     // Debug: Check first record
                     if (records.length > 0) {
                         console.log('[webhook-timing] First record:', {
                             duration: records[0].duration,
                             type: typeof records[0].duration,
                             parsed: parseFloat(records[0].duration || 0),
-                            ms: parseFloat(records[0].duration || 0) * 1000
+                            ms: parseFloat(records[0].duration || 0) * 1000,
                         });
                     }
-                    
+
                     const data = records.map((req) => {
                         // Duration might be a string, ensure it's parsed as float
                         const duration = req.duration;
-                        const durationFloat = typeof duration === 'string' ? parseFloat(duration) : (duration || 0);
+                        const durationFloat = typeof duration === 'string' ? parseFloat(duration) : duration || 0;
                         const durationMs = durationFloat * 1000;
-                        
+
                         return {
                             x: new Date(req.created_at),
                             y: durationMs,
                         };
                     });
-                    
+
                     console.log('[webhook-timing] Data points:', data.length, 'Sample:', data[0]);
 
                     // Show points if we have sparse data
@@ -380,7 +380,7 @@ export default class WidgetApiMetricsComponent extends Component {
                     },
                     ticks: {
                         color: '#6B7280',
-                        callback: function(value) {
+                        callback: function (value) {
                             // Show decimals for small values (< 10), whole numbers for larger
                             return value < 10 ? value.toFixed(2) : Math.round(value);
                         },

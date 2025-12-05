@@ -2,8 +2,8 @@ import { Widget, ExtensionComponent } from '@fleetbase/ember-core/contracts';
 
 export default {
     setupExtension(app, universe) {
-        const menuService = universe.getService('universe/menu-service');
-        const widgetService = universe.getService('universe/widget-service');
+        const menuService = universe.getService('menu');
+        const widgetService = universe.getService('widget');
 
         // Register in header menu
         menuService.registerHeaderMenuItem('Developers', 'console.developers', { icon: 'code', priority: 2 });
