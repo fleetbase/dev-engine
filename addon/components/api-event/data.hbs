@@ -1,4 +1,4 @@
-<ContentPanel @title={{t "developers.component.api-event.data.title"}} @open={{true}} @pad={{true}} @panelTitleClass="text-sm" @panelBodyClass="bg-white dark:bg-gray-800">
+<ContentPanel @title={{t "developers.component.api-event.data.title"}} @open={{true}} @wrapperClass="bordered-top" @panelBodyWrapperClass="p-0i">
     {{#if @apiEvent.data}}
         <CodeBlock @code={{or @apiEvent.dataJson ""}} @language="json" class="line-numbers" />
     {{else}}

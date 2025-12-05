@@ -77,15 +77,14 @@ export default class EventsIndexController extends BaseController {
      */
     @tracked columns = [
         {
+            sticky: true,
             label: this.intl.t('developers.common.event'),
             valuePath: 'description',
-            width: '40%',
             sortable: false,
         },
         {
             label: this.intl.t('developers.common.code'),
             valuePath: 'event',
-            width: '20%',
             sortable: false,
             filterable: true,
             filterComponent: 'filter/select',
@@ -95,7 +94,6 @@ export default class EventsIndexController extends BaseController {
             label: this.intl.t('developers.common.id'),
             valuePath: 'public_id',
             cellComponent: 'click-to-copy',
-            width: '20%',
             align: 'right',
             sortable: false,
         },
@@ -105,7 +103,6 @@ export default class EventsIndexController extends BaseController {
             filterParam: 'created_at',
             sortParam: 'created_at',
             sortable: false,
-            width: '20%',
             align: 'right',
             filterable: true,
             filterComponent: 'filter/date',

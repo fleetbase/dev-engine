@@ -3,10 +3,11 @@
 </Layout::Section::Header>
 
 <Layout::Section::Body>
-    <div class="h-screen overflow-y-scroll pb-40">
-        <div class="space-y-6 py-6 max-w-6xl mx-auto">
+    <div class="h-screen overflow-y-scroll">
+        <div class="max-w-6xl mx-auto">
             <ApiEvent::Details @apiEvent={{@model}} />
             <ApiEvent::Data @apiEvent={{@model}} />
         </div>
+        <Spacer @height="200px" />
     </div>
 </Layout::Section::Body>

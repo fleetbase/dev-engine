@@ -49,14 +49,14 @@ export default class ApiCredentialModel extends Model {
         if (!isValidDate(this.updated_at)) {
             return null;
         }
-        return formatDate(this.updated_at, 'PPP p');
+        return formatDate(this.updated_at, 'yyyy-MM-dd HH:mm');
     }
 
     @computed('updated_at') get updatedAtShort() {
         if (!isValidDate(this.updated_at)) {
             return null;
         }
-        return formatDate(this.updated_at, 'PP');
+        return formatDate(this.updated_at, 'MMM dd, yyyy HH:mm');
     }
 
     @computed('created_at') get createdAgo() {
@@ -70,14 +70,14 @@ export default class ApiCredentialModel extends Model {
         if (!isValidDate(this.created_at)) {
             return null;
         }
-        return formatDate(this.created_at, 'PPP p');
+        return formatDate(this.created_at, 'yyyy-MM-dd HH:mm');
     }
 
     @computed('created_at') get createdAtShort() {
         if (!isValidDate(this.created_at)) {
             return null;
         }
-        return formatDate(this.created_at, 'PP');
+        return formatDate(this.created_at, 'MMM dd, yyyy HH:mm');
     }
 
     @computed('last_used_at') get lastUsed() {
@@ -85,7 +85,7 @@ export default class ApiCredentialModel extends Model {
             return 'Never used';
         }
 
-        return formatDate(this.last_used_at, 'PPP p');
+        return formatDate(this.last_used_at, 'yyyy-MM-dd HH:mm');
     }
 
     @computed('expires_at') get expiresAt() {
@@ -93,6 +93,6 @@ export default class ApiCredentialModel extends Model {
             return 'Never';
         }
 
-        return formatDate(this.expires_at, 'PPP p');
+        return formatDate(this.expires_at, 'yyyy-MM-dd HH:mm');
     }
 }
