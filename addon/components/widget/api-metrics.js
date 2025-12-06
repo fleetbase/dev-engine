@@ -252,16 +252,6 @@ export default class WidgetApiMetricsComponent extends Component {
                 .then((webhookRequestLogs) => {
                     const records = webhookRequestLogs.toArray();
 
-                    // Debug: Check first record
-                    if (records.length > 0) {
-                        console.log('[webhook-timing] First record:', {
-                            duration: records[0].duration,
-                            type: typeof records[0].duration,
-                            parsed: parseFloat(records[0].duration || 0),
-                            ms: parseFloat(records[0].duration || 0) * 1000,
-                        });
-                    }
-
                     const data = records.map((req) => {
                         // Duration might be a string, ensure it's parsed as float
                         const duration = req.duration;
@@ -273,8 +263,6 @@ export default class WidgetApiMetricsComponent extends Component {
                             y: durationMs,
                         };
                     });
-
-                    console.log('[webhook-timing] Data points:', data.length, 'Sample:', data[0]);
 
                     // Show points if we have sparse data
                     const showPoints = records.length < 50;

@@ -44,3 +44,9 @@
 body[data-theme='dark'] .webhook-attempts-date-filter-container > .date-filter-label {
     color: #9ca3af;
 }
+
+.ui-chart {
+    position: relative;
+    height: 100%;
+    width: 100%;
+}

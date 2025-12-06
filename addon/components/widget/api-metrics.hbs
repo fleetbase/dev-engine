@@ -1,37 +1,37 @@
 <ContentPanel @title={{t "developers.component.widget.api-metrics.title"}} @open={{or @open true}} @wrapperClass="bordered-classic" @panelBodyClass="p-0i">
     <div class="grid grid-cols-1 md:grid-cols-2 gap-px bg-gray-200 dark:bg-gray-800">
-        <div class="bg-white dark:bg-gray-900 p-5">
+        <div class="bg-white dark:bg-gray-900 p-2">
             <h4 class="mb-4 text-sm font-semibold text-gray-700 dark:text-gray-200">
                 {{t "developers.component.widget.api-metrics.api-requests"}}
             </h4>
-            <div class="h-96">
+            <div class="relative" style={{html-safe "position: relative; height: 18rem; width: 100%;"}}>
                 <Chart @type="line" @datasets={{this.apiRequestData}} @options={{this.chartOptions}} />
             </div>
         </div>
         
-        <div class="bg-white dark:bg-gray-900 p-5">
+        <div class="bg-white dark:bg-gray-900 p-2">
             <h4 class="mb-4 text-sm font-semibold text-gray-700 dark:text-gray-200">
                 {{t "developers.component.widget.api-metrics.api-error"}}
             </h4>
-            <div class="h-96">
+            <div class="relative" style={{html-safe "position: relative; height: 18rem; width: 100%;"}}>
                 <Chart @type="line" @datasets={{this.apiErrorDistributionData}} @options={{this.chartOptions}} />
             </div>
         </div>
         
-        <div class="bg-white dark:bg-gray-900 p-5">
+        <div class="bg-white dark:bg-gray-900 p-2">
             <h4 class="mb-4 text-sm font-semibold text-gray-700 dark:text-gray-200">
                 {{t "developers.component.widget.api-metrics.webhooks"}}
             </h4>
-            <div class="h-96">
+            <div class="relative" style={{html-safe "position: relative; height: 18rem; width: 100%;"}}>
                 <Chart @type="line" @datasets={{this.webhookRequestData}} @options={{this.chartOptions}} />
             </div>
         </div>
         
-        <div class="bg-white dark:bg-gray-900 p-5">
+        <div class="bg-white dark:bg-gray-900 p-2">
             <h4 class="mb-4 text-sm font-semibold text-gray-700 dark:text-gray-200">
                 {{t "developers.component.widget.api-metrics.webhooks-response"}}
             </h4>
-            <div class="h-96">
+            <div class="relative" style={{html-safe "position: relative; height: 18rem; width: 100%;"}}>
                 <Chart @type="line" @datasets={{this.webhookRequestTimingData}} @options={{this.chartOptions}} />
             </div>
         </div>
