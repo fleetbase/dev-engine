@@ -12,11 +12,11 @@ importers:
         specifier: ^7.23.2
         version: 7.28.5
       '@fleetbase/ember-core':
-        specifier: ^0.3.8
-        version: 0.3.8(@ember/string@3.1.1)(@ember/test-helpers@3.3.1(@babel/core@7.28.5)(ember-source@5.4.1(@babel/core@7.28.5)(@glimmer/component@1.1.2(@babel/core@7.28.5))(rsvp@4.8.5)(webpack@5.103.0))(webpack@5.103.0))(ember-resolver@11.0.1(ember-source@5.4.1(@babel/core@7.28.5)(@glimmer/component@1.1.2(@babel/core@7.28.5))(rsvp@4.8.5)(webpack@5.103.0)))(ember-source@5.4.1(@babel/core@7.28.5)(@glimmer/component@1.1.2(@babel/core@7.28.5))(rsvp@4.8.5)(webpack@5.103.0))(eslint@8.57.1)(webpack@5.103.0)
+        specifier: ^0.3.17
+        version: 0.3.17(@ember/string@3.1.1)(@ember/test-helpers@3.3.1(@babel/core@7.28.5)(ember-source@5.4.1(@babel/core@7.28.5)(@glimmer/component@1.1.2(@babel/core@7.28.5))(rsvp@4.8.5)(webpack@5.103.0))(webpack@5.103.0))(ember-resolver@11.0.1(ember-source@5.4.1(@babel/core@7.28.5)(@glimmer/component@1.1.2(@babel/core@7.28.5))(rsvp@4.8.5)(webpack@5.103.0)))(ember-source@5.4.1(@babel/core@7.28.5)(@glimmer/component@1.1.2(@babel/core@7.28.5))(rsvp@4.8.5)(webpack@5.103.0))(eslint@8.57.1)(webpack@5.103.0)
       '@fleetbase/ember-ui':
-        specifier: ^0.3.14
-        version: 0.3.14(@ember/test-helpers@3.3.1(@babel/core@7.28.5)(ember-source@5.4.1(@babel/core@7.28.5)(@glimmer/component@1.1.2(@babel/core@7.28.5))(rsvp@4.8.5)(webpack@5.103.0))(webpack@5.103.0))(@glimmer/component@1.1.2(@babel/core@7.28.5))(@glimmer/tracking@1.1.2)(ember-resolver@11.0.1(ember-source@5.4.1(@babel/core@7.28.5)(@glimmer/component@1.1.2(@babel/core@7.28.5))(rsvp@4.8.5)(webpack@5.103.0)))(ember-source@5.4.1(@babel/core@7.28.5)(@glimmer/component@1.1.2(@babel/core@7.28.5))(rsvp@4.8.5)(webpack@5.103.0))(postcss@8.5.6)(rollup@2.79.2)(tracked-built-ins@3.4.0(@babel/core@7.28.5))(webpack@5.103.0)
+        specifier: ^0.3.25
+        version: 0.3.25(@ember/test-helpers@3.3.1(@babel/core@7.28.5)(ember-source@5.4.1(@babel/core@7.28.5)(@glimmer/component@1.1.2(@babel/core@7.28.5))(rsvp@4.8.5)(webpack@5.103.0))(webpack@5.103.0))(@glimmer/component@1.1.2(@babel/core@7.28.5))(@glimmer/tracking@1.1.2)(ember-resolver@11.0.1(ember-source@5.4.1(@babel/core@7.28.5)(@glimmer/component@1.1.2(@babel/core@7.28.5))(rsvp@4.8.5)(webpack@5.103.0)))(ember-source@5.4.1(@babel/core@7.28.5)(@glimmer/component@1.1.2(@babel/core@7.28.5))(rsvp@4.8.5)(webpack@5.103.0))(postcss@8.5.6)(rollup@2.79.2)(tracked-built-ins@3.4.0(@babel/core@7.28.5))(webpack@5.103.0)
       '@fortawesome/ember-fontawesome':
         specifier: ^2.0.0
         version: 2.0.0(ember-source@5.4.1(@babel/core@7.28.5)(@glimmer/component@1.1.2(@babel/core@7.28.5))(rsvp@4.8.5)(webpack@5.103.0))(rollup@2.79.2)(webpack@5.103.0)
@@ -255,6 +255,10 @@ packages:
     resolution: {integrity: sha512-1gn1Up5YXka3YYAHGKpbideQ5Yjf1tDa9qYcgysz+cNCXukyLl6DjPXhD3VRwSb8c0J9tA4b2+rHEZtc6R0tlw==}
     engines: {node: '>=6.9.0'}
 
+  '@babel/helper-plugin-utils@7.28.6':
+    resolution: {integrity: sha512-S9gzZ/bz83GRysI7gAD4wPT/AI3uCnY+9xn+Mx/KPs2JwHJIz1W8PZkg2cqyt3RNOBM8ejcXhV6y8Og7ly/Dug==}
+    engines: {node: '>=6.9.0'}
+
   '@babel/helper-remap-async-to-generator@7.27.1':
     resolution: {integrity: sha512-7fiA521aVw8lSPeI4ZOD3vRFkoqkJcS+z4hFo82bFSH/2tNd6eJ5qCVMS5OzDmZh/kaHQeBaeyxK6wljcPtveA==}
     engines: {node: '>=6.9.0'}
@@ -361,6 +365,12 @@ packages:
 
   '@babel/plugin-syntax-decorators@7.27.1':
     resolution: {integrity: sha512-YMq8Z87Lhl8EGkmb0MwYkt36QnxC+fzCgrl66ereamPlYToRpIk5nUjKUY3QKLWq8mwUB1BgbeXcTJhZOCDg5A==}
+    engines: {node: '>=6.9.0'}
+    peerDependencies:
+      '@babel/core': ^7.0.0-0
+
+  '@babel/plugin-syntax-decorators@7.28.6':
+    resolution: {integrity: sha512-71EYI0ONURHJBL4rSFXnITXqXrrY8q4P0q006DPfN+Rk+ASM+++IBXem/ruokgBZR8YNEWZ8R6B+rCb8VcUTqA==}
     engines: {node: '>=6.9.0'}
     peerDependencies:
       '@babel/core': ^7.0.0-0
@@ -1239,12 +1249,12 @@ packages:
     peerDependencies:
       ember-source: '>= 4.0.0'
 
-  '@fleetbase/ember-core@0.3.8':
-    resolution: {integrity: sha512-lakUs/gG8k4GbJprXlrz1KIZDr5254qjVfhXU5kcaKyS9VBzgsNsWKXIA8+821lcwufGIlioE12D4+qEb4GZNA==}
+  '@fleetbase/ember-core@0.3.17':
+    resolution: {integrity: sha512-fFyorS6Ir/lW2u1y/d46U/0PoIhz4JKSVJZJddveIPK3v/0shpHRRsI4gnW+EtIzE3Dgq6Z7p6pQvrPBpPw/YQ==}
     engines: {node: '>= 18'}
 
-  '@fleetbase/ember-ui@0.3.14':
-    resolution: {integrity: sha512-w0IcDsANw3Vmi/ha1a6fHexIV2beb3wupB9j3dNs43lvQp6D+zoAtMrW9q6DD6ICNCbxikmD0AMUIbjO5gJYDg==}
+  '@fleetbase/ember-ui@0.3.25':
+    resolution: {integrity: sha512-CM0dXMlFe3VyIGFgmbRDEK+e/Y79Ezu4T57geJF2cHr+/1f3oLvhLqPaZIs1J1TTSgcvCl3E+owcYWw2mWxLlg==}
     engines: {node: '>= 18'}
 
   '@fleetbase/intl-lint@0.0.1':
@@ -1459,6 +1469,9 @@ packages:
   '@inquirer/figures@1.0.15':
     resolution: {integrity: sha512-t2IEY+unGHOzAaVM5Xx6DEWKeXlDDcNPeDyUpsRc6CUhBfU3VQOEl+Vssh7VNp1dR8MdUJBWhuObjXCsVpjN5g==}
     engines: {node: '>=18'}
+
+  '@interactjs/types@1.10.27':
+    resolution: {integrity: sha512-BUdv0cvs4H5ODuwft2Xp4eL8Vmi3LcihK42z0Ft/FbVJZoRioBsxH+LlsBdK4tAie7PqlKGy+1oyOncu1nQ6eA==}
 
   '@isaacs/cliui@8.0.2':
     resolution: {integrity: sha512-O8jcjabXaleOG9DQ0+ARXWZBTfnP4WNAqzuiJK7ll44AmxGKv/J2M4TPjxjY3znBCfvBXFzucm1twdyFybFqEA==}
@@ -3464,6 +3477,9 @@ packages:
   decorator-transforms@2.3.0:
     resolution: {integrity: sha512-jo8c1ss9yFPudHuYYcrJ9jpkDZIoi+lOGvt+Uyp9B+dz32i50icRMx9Bfa8hEt7TnX1FyKWKkjV+cUdT/ep2kA==}
 
+  decorator-transforms@2.3.1:
+    resolution: {integrity: sha512-PDOk74Zqqy0946Lx4ckXxbgG6uhPScOICtrxL/pXmfznxchqNee0TaJISClGJQe6FeT8ohGqsOgdjfahm4FwEw==}
+
   deep-extend@0.6.0:
     resolution: {integrity: sha512-LOHxIOaPYdHlJRtCQfDIVZtfw/ufM8+rVj649RIHzcm/vGwQRXFt6OPqIFWsm2XEMrNIEtWR64sY1LEKD2vAOA==}
     engines: {node: '>=4.0.0'}
@@ -5165,6 +5181,9 @@ packages:
   inquirer@9.3.8:
     resolution: {integrity: sha512-pFGGdaHrmRKMh4WoDDSowddgjT1Vkl90atobmTeSmcPGdYiwikch/m/Ef5wRaiamHejtw0cUUMMerzDUXCci2w==}
     engines: {node: '>=18'}
+
+  interactjs@1.10.27:
+    resolution: {integrity: sha512-y/8RcCftGAF24gSp76X2JS3XpHiUvDQyhF8i7ujemBz77hwiHDuJzftHx7thY8cxGogwGiPJ+o97kWB6eAXnsA==}
 
   internal-slot@1.1.0:
     resolution: {integrity: sha512-4gd7VpWNQNB4UKKCFFVcp1AVv+FMOgs9NKzjHKusc8jTMhd5eL1NqQqOpE0KzMds804/yHlglp3uxgluOqAPLw==}
@@ -8508,6 +8527,8 @@ snapshots:
 
   '@babel/helper-plugin-utils@7.27.1': {}
 
+  '@babel/helper-plugin-utils@7.28.6': {}
+
   '@babel/helper-remap-async-to-generator@7.27.1(@babel/core@7.28.5)':
     dependencies:
       '@babel/core': 7.28.5
@@ -8634,6 +8655,11 @@ snapshots:
     dependencies:
       '@babel/core': 7.28.5
       '@babel/helper-plugin-utils': 7.27.1
+
+  '@babel/plugin-syntax-decorators@7.28.6(@babel/core@7.28.5)':
+    dependencies:
+      '@babel/core': 7.28.5
+      '@babel/helper-plugin-utils': 7.28.6
 
   '@babel/plugin-syntax-import-assertions@7.27.1(@babel/core@7.28.5)':
     dependencies:
@@ -9769,7 +9795,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  '@fleetbase/ember-core@0.3.8(@ember/string@3.1.1)(@ember/test-helpers@3.3.1(@babel/core@7.28.5)(ember-source@5.4.1(@babel/core@7.28.5)(@glimmer/component@1.1.2(@babel/core@7.28.5))(rsvp@4.8.5)(webpack@5.103.0))(webpack@5.103.0))(ember-resolver@11.0.1(ember-source@5.4.1(@babel/core@7.28.5)(@glimmer/component@1.1.2(@babel/core@7.28.5))(rsvp@4.8.5)(webpack@5.103.0)))(ember-source@5.4.1(@babel/core@7.28.5)(@glimmer/component@1.1.2(@babel/core@7.28.5))(rsvp@4.8.5)(webpack@5.103.0))(eslint@8.57.1)(webpack@5.103.0)':
+  '@fleetbase/ember-core@0.3.17(@ember/string@3.1.1)(@ember/test-helpers@3.3.1(@babel/core@7.28.5)(ember-source@5.4.1(@babel/core@7.28.5)(@glimmer/component@1.1.2(@babel/core@7.28.5))(rsvp@4.8.5)(webpack@5.103.0))(webpack@5.103.0))(ember-resolver@11.0.1(ember-source@5.4.1(@babel/core@7.28.5)(@glimmer/component@1.1.2(@babel/core@7.28.5))(rsvp@4.8.5)(webpack@5.103.0)))(ember-source@5.4.1(@babel/core@7.28.5)(@glimmer/component@1.1.2(@babel/core@7.28.5))(rsvp@4.8.5)(webpack@5.103.0))(eslint@8.57.1)(webpack@5.103.0)':
     dependencies:
       '@babel/core': 7.28.5
       compress-json: 3.4.0
@@ -9802,7 +9828,7 @@ snapshots:
       - utf-8-validate
       - webpack
 
-  '@fleetbase/ember-ui@0.3.14(@ember/test-helpers@3.3.1(@babel/core@7.28.5)(ember-source@5.4.1(@babel/core@7.28.5)(@glimmer/component@1.1.2(@babel/core@7.28.5))(rsvp@4.8.5)(webpack@5.103.0))(webpack@5.103.0))(@glimmer/component@1.1.2(@babel/core@7.28.5))(@glimmer/tracking@1.1.2)(ember-resolver@11.0.1(ember-source@5.4.1(@babel/core@7.28.5)(@glimmer/component@1.1.2(@babel/core@7.28.5))(rsvp@4.8.5)(webpack@5.103.0)))(ember-source@5.4.1(@babel/core@7.28.5)(@glimmer/component@1.1.2(@babel/core@7.28.5))(rsvp@4.8.5)(webpack@5.103.0))(postcss@8.5.6)(rollup@2.79.2)(tracked-built-ins@3.4.0(@babel/core@7.28.5))(webpack@5.103.0)':
+  '@fleetbase/ember-ui@0.3.25(@ember/test-helpers@3.3.1(@babel/core@7.28.5)(ember-source@5.4.1(@babel/core@7.28.5)(@glimmer/component@1.1.2(@babel/core@7.28.5))(rsvp@4.8.5)(webpack@5.103.0))(webpack@5.103.0))(@glimmer/component@1.1.2(@babel/core@7.28.5))(@glimmer/tracking@1.1.2)(ember-resolver@11.0.1(ember-source@5.4.1(@babel/core@7.28.5)(@glimmer/component@1.1.2(@babel/core@7.28.5))(rsvp@4.8.5)(webpack@5.103.0)))(ember-source@5.4.1(@babel/core@7.28.5)(@glimmer/component@1.1.2(@babel/core@7.28.5))(rsvp@4.8.5)(webpack@5.103.0))(postcss@8.5.6)(rollup@2.79.2)(tracked-built-ins@3.4.0(@babel/core@7.28.5))(webpack@5.103.0)':
     dependencies:
       '@babel/core': 7.28.5
       '@ember/render-modifiers': 2.1.0(@babel/core@7.28.5)(ember-source@5.4.1(@babel/core@7.28.5)(@glimmer/component@1.1.2(@babel/core@7.28.5))(rsvp@4.8.5)(webpack@5.103.0))
@@ -9876,6 +9902,7 @@ snapshots:
       ember-wormhole: 0.6.1
       gridstack: 7.3.0
       imask: 6.6.3
+      interactjs: 1.10.27
       intl-tel-input: 22.0.2
       leaflet: 1.9.4
       postcss-at-rules-variables: 0.3.0(postcss@8.5.6)
@@ -10253,6 +10280,8 @@ snapshots:
       '@types/node': 24.10.1
 
   '@inquirer/figures@1.0.15': {}
+
+  '@interactjs/types@1.10.27': {}
 
   '@isaacs/cliui@8.0.2':
     dependencies:
@@ -12756,6 +12785,13 @@ snapshots:
   decorator-transforms@2.3.0(@babel/core@7.28.5):
     dependencies:
       '@babel/plugin-syntax-decorators': 7.27.1(@babel/core@7.28.5)
+      babel-import-util: 3.0.1
+    transitivePeerDependencies:
+      - '@babel/core'
+
+  decorator-transforms@2.3.1(@babel/core@7.28.5):
+    dependencies:
+      '@babel/plugin-syntax-decorators': 7.28.6(@babel/core@7.28.5)
       babel-import-util: 3.0.1
     transitivePeerDependencies:
       - '@babel/core'
@@ -15695,6 +15731,10 @@ snapshots:
       yoctocolors-cjs: 2.1.3
     transitivePeerDependencies:
       - '@types/node'
+
+  interactjs@1.10.27:
+    dependencies:
+      '@interactjs/types': 1.10.27
 
   internal-slot@1.1.0:
     dependencies:
@@ -18823,7 +18863,7 @@ snapshots:
   tracked-built-ins@3.4.0(@babel/core@7.28.5):
     dependencies:
       '@embroider/addon-shim': 1.10.2
-      decorator-transforms: 2.3.0(@babel/core@7.28.5)
+      decorator-transforms: 2.3.1(@babel/core@7.28.5)
       ember-tracked-storage-polyfill: 1.0.0
     transitivePeerDependencies:
       - '@babel/core'
