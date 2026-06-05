@@ -1,0 +1,22 @@
+<div class="developers-dashboard-widget developers-chart-widget flex h-full flex-col rounded-md border bg-white shadow-sm dark:bg-gray-800" ...attributes>
+    <div class="developers-widget-header">
+        <div class="min-w-0">
+            <div class="developers-widget-title">{{@title}}</div>
+            <div class="developers-widget-subtitle">{{@subtitle}}</div>
+        </div>
+        <button type="button" class="developers-widget-icon-button" {{on "click" this.refresh}} title={{t "developers.common.reload"}}>
+            <FaIcon @icon="rotate" class={{if this.load.isRunning "animate-spin"}} />
+        </button>
+    </div>
+    <div class="developers-chart-body">
+        {{#if this.load.isRunning}}
+            <div class="flex h-full w-full items-center justify-center"><Spinner /></div>
+        {{else if this.error}}
+            <div class="flex h-full w-full items-center justify-center text-xs text-rose-500">{{this.error}}</div>
+        {{else}}
+            <div class="developers-chart-frame">
+                <Chart @type={{or @type "line"}} @labels={{this.labels}} @datasets={{this.datasets}} @options={{this.chartOptions}} />
+            </div>
+        {{/if}}
+    </div>
+</div>
