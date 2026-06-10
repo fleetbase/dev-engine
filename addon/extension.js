@@ -20,7 +20,7 @@ export default {
                 {
                     title: 'Webhooks',
                     description: 'Configure webhook endpoints to receive real-time event notifications.',
-                    icon: 'webhook',
+                    icon: 'globe',
                     route: 'console.developers.webhooks',
                 },
                 {
@@ -211,13 +211,13 @@ export default {
 
         widgetService.registerDashboard('developers');
         widgetService.registerWidgets('developers', widgets);
-        widgetService.registerWidgets('dashboard', [
-            getWidgetById('developers-kpi-api-error-rate'),
-            getWidgetById('developers-kpi-api-latency'),
-            getWidgetById('developers-kpi-webhook-success'),
-            getWidgetById('developers-api-traffic', (widget) => {
-                widget.withGridOptions({ w: 6, h: 7, minW: 5, minH: 6 });
-            }),
-        ]);
+        // widgetService.registerWidgets('dashboard', [
+        //     getWidgetById('developers-kpi-api-error-rate'),
+        //     getWidgetById('developers-kpi-api-latency'),
+        //     getWidgetById('developers-kpi-webhook-success'),
+        //     getWidgetById('developers-api-traffic', (widget) => {
+        //         widget.withGridOptions({ w: 6, h: 7, minW: 5, minH: 6 });
+        //     }),
+        // ]);
     },
 };
