@@ -1,0 +1,30 @@
+<div class="developers-dashboard-widget flex h-full flex-col overflow-hidden rounded-md border bg-white shadow-sm dark:bg-gray-800" ...attributes>
+    <div class="developers-widget-header">
+        <div class="min-w-0">
+            <div class="developers-widget-title">{{t "developers.component.widget.dashboard.developer-activity.title"}}</div>
+            <div class="developers-widget-subtitle">{{t "developers.component.widget.dashboard.developer-activity.subtitle"}}</div>
+        </div>
+        <button type="button" class="developers-widget-icon-button" {{on "click" this.refresh}} title={{t "developers.common.reload"}}>
+            <FaIcon @icon="rotate" class={{if this.load.isRunning "animate-spin"}} />
+        </button>
+    </div>
+    <div class="developers-widget-scroll-body">
+        {{#if this.load.isRunning}}
+            <div class="developers-empty-state"><Spinner /></div>
+        {{else if this.error}}
+            <div class="developers-empty-state text-rose-500">{{this.error}}</div>
+        {{else if this.items.length}}
+            {{#each this.items as |item|}}
+                <div class="developers-activity-row">
+                    <div class="developers-activity-icon"><FaIcon @icon={{this.iconFor item.type}} /></div>
+                    <div class="min-w-0">
+                        <div class="developers-list-title">{{item.label}}</div>
+                        <div class="developers-list-subtitle">{{item.type}} / {{item.status}}</div>
+                    </div>
+                </div>
+            {{/each}}
+        {{else}}
+            <div class="developers-empty-state">{{t "developers.component.widget.dashboard.empty"}}</div>
+        {{/if}}
+    </div>
+</div>

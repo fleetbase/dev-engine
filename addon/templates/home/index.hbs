@@ -1,3 +1,14 @@
-<Layout::Section::Body class="mx-auto max-w-6xl p-8 h-full overflow-y-scroll">
-    <Widget::ApiMetrics />
+<Layout::Section::Body class="overflow-y-scroll h-full">
+    <Dashboard
+        @defaultDashboardId="developers"
+        @defaultDashboardName={{t "developers.component.widget.dashboard.name"}}
+        @extension="developers"
+        @leftHeaderWrapperClass="developers-dashboard-title"
+        @rightHeaderWrapperClass="developers-dashboard-actions"
+        @createWrapperClass="developers-dashboard-create-wrapper"
+        @stickyHeader={{true}}
+        class="developers-dashboard-page"
+    />
+    <Spacer @height="300px" />
+    {{outlet}}
 </Layout::Section::Body>

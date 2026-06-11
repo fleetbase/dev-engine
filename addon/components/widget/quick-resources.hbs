@@ -1,0 +1,17 @@
+<div class="developers-dashboard-widget flex h-full flex-col overflow-hidden rounded-md border bg-white shadow-sm dark:bg-gray-800" ...attributes>
+    <div class="developers-widget-header">
+        <div class="min-w-0">
+            <div class="developers-widget-title">{{t "developers.component.widget.dashboard.quick-resources.title"}}</div>
+            <div class="developers-widget-subtitle">{{t "developers.component.widget.dashboard.quick-resources.subtitle"}}</div>
+        </div>
+    </div>
+    <div class="developers-widget-scroll-body">
+        {{#each this.resources as |resource|}}
+            <LinkTo @route={{resource.route}} class="developers-resource-link">
+                <span class="developers-activity-icon"><FaIcon @icon={{resource.icon}} /></span>
+                <span class="min-w-0 truncate">{{resource.label}}</span>
+                <FaIcon @icon="arrow-right" class="ml-auto text-[10px] text-gray-400" />
+            </LinkTo>
+        {{/each}}
+    </div>
+</div>
