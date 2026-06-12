@@ -28,7 +28,7 @@ export default class ApiKeysIndexController extends Controller {
      *
      * @var {Array}
      */
-    queryParams = ['page', 'limit', 'sort'];
+    queryParams = ['page', 'limit', 'sort', 'query', 'view_api_key'];
 
     /**
      * Expiration options for api keys
@@ -71,6 +71,13 @@ export default class ApiKeysIndexController extends Controller {
      * @var {String}
      */
     @tracked query;
+
+    /**
+     * Deep-linked API key to open in the edit modal.
+     *
+     * @var {String}
+     */
+    @tracked view_api_key;
 
     /**
      * Checks if console environment is in live mode
@@ -508,5 +515,33 @@ export default class ApiKeysIndexController extends Controller {
      */
     @action reload() {
         return this.hostRouter.refresh();
+    }
+
+    @action async openDeepLinkedApiKey() {
+        const apiKeyId = this.view_api_key;
+
+        if (!apiKeyId) {
+            return;
+        }
+
+        try {
+            const apiKey = this.store.peekRecord('api-credential', apiKeyId) ?? (await this.store.findRecord('api-credential', apiKeyId));
+            this.editApiKey(apiKey, {
+                onDecline: this.clearDeepLinkedApiKey,
+                onFinish: this.clearDeepLinkedApiKey,
+            });
+        } catch (_) {
+            this.notifications.warning('Unable to open the selected API key.');
+            this.clearDeepLinkedApiKey();
+        }
+    }
+
+    @action clearDeepLinkedApiKey() {
+        if (!this.view_api_key) {
+            return;
+        }
+
+        this.view_api_key = null;
+        this.hostRouter.transitionTo({ queryParams: { view_api_key: null } });
     }
 }

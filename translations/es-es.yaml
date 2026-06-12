@@ -160,6 +160,39 @@ developers:
       metrics:
         date-created: Fecha de creación
     widget:
+      dashboard:
+        name: Developers Dashboard
+        period: 30d
+        empty: No data available
+        kpi:
+          api-requests: API Requests
+          api-error-rate: API Error Rate
+          api-latency: Avg API Latency
+          webhook-success: Webhook Success
+          active-api-keys: Active API Keys
+          active-webhooks: Active Webhooks
+          webhook-failures: Webhook Failures
+          events-emitted: Events Emitted
+        api-traffic:
+          title: API Traffic
+          subtitle: Request volume, successes, and errors
+        webhook-delivery:
+          title: Webhook Delivery Health
+          subtitle: Delivery volume, retries, and failures
+        endpoint-health:
+          title: Endpoint Health
+          subtitle: Recent webhook endpoint reliability
+        event-stream:
+          title: Event Stream
+          subtitle: Top event types and sources
+          types: Event types
+          sources: Sources
+        developer-activity:
+          title: Developer Activity
+          subtitle: Recent logs, webhooks, and events
+        quick-resources:
+          title: Quick Resources
+          subtitle: Jump into developer tools
       api-metrics:
         title: Monitorización
         api-requests: Solicitudes API
