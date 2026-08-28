@@ -59,6 +59,7 @@
     "devDependencies": {
         "@babel/eslint-parser": "^7.22.15",
         "@babel/plugin-proposal-decorators": "^7.23.2",
+        "@ember/legacy-built-in-components": "^0.4.2",
         "@ember/optional-features": "^2.0.0",
         "@ember/test-helpers": "^3.2.0",
         "@embroider/test-setup": "^3.0.2",
@@ -91,6 +92,7 @@
         "eslint-plugin-prettier": "^5.0.1",
         "eslint-plugin-qunit": "^8.0.1",
         "loader.js": "^4.7.0",
+        "prismjs": "^1.29.0",
         "prettier": "^3.0.3",
         "qunit": "^2.20.0",
         "qunit-dom": "^2.0.0",
