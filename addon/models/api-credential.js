@@ -17,7 +17,7 @@ export default class ApiCredentialModel extends Model {
 
     /** @dates */
     @attr('date') last_used_at;
-    @attr('date') expires_at;
+    @attr('expiration') expires_at;
     @attr('date') deleted_at;
     @attr('date') created_at;
     @attr('date') updated_at;
