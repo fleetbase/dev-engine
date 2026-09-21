@@ -1,10 +1,9 @@
-> v0.2.15 ~ "API key expiry actually persists"
+> v0.2.16 ~ "API key and webhook dialogs open from anywhere"
 
 ---
 ## Highlights
 
-- **API key expiration works again.** Selecting an expiry in the developers console (`immediately`, `in 1 hour`, `in 24 hours`, …) silently saved `NULL` — Ember Data's `date` transform discarded the relative expiration strings before they reached the API. A new `expiration` transform passes them through for the server to resolve, so `expires_at` is persisted for every option. Pair with fleetbase/core-api#246 for `immediately` to revoke a key reliably at the boundary instant. ([#43](https://github.com/fleetbase/dev-engine/pull/43))
-- **The engine's test suite is runnable.** `ember test` previously crashed before executing a single test; the engine now eager-loads for its own test runs (hosts still get the lazy engine), and regression tests cover the expiration serialization path.
+- **API key and webhook dialogs are reusable services.** New `api-key-actions` and `webhook-actions` services hold the create, edit and delete dialogs that lived in the index controllers, so other engines can open them — Fleetbase AI uses this to open **New API Key** and **New Webhook** from its confirmation cards. The Developers pages delegate to the same services, so they behave as before. ([#46](https://github.com/fleetbase/dev-engine/pull/46))
 
 ---
 ## Need help?
