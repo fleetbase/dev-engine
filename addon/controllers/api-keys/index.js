@@ -11,6 +11,7 @@ import { format as formatDate } from 'date-fns';
 import getWithDefault from '@fleetbase/ember-core/utils/get-with-default';
 
 export default class ApiKeysIndexController extends Controller {
+    @service apiKeyActions;
     @service currentUser;
     @service intl;
     @service modalsManager;
@@ -261,83 +262,13 @@ export default class ApiKeysIndexController extends Controller {
         this.currentUser.setOption('testKey', value);
     }
 
-    /**
-     * Toggles modal to create a new API key
-     *
-     * @void
-     */
-    @action createApiKey() {
-        const formPermission = 'developers create api-key';
-        const apiKey = this.store.createRecord('api-credential', {
-            test_mode: this.testMode,
-        });
-
-        this.editApiKey(apiKey, {
-            title: this.intl.t('developers.api-keys.index.new-api-key-title'),
-            acceptButtonIcon: 'check',
-            acceptButtonIconPrefix: 'fas',
-            acceptButtonDisabled: this.abilities.cannot(formPermission),
-            acceptButtonHelpText: this.abilities.cannot(formPermission) ? this.intl.t('common.unauthorized') : null,
-            successMessage: this.intl.t('developers.api-keys.index.new-api-key-message'),
-            formPermission,
-            apiKey,
-            confirm: async (modal) => {
-                modal.startLoading();
-
-                if (this.abilities.cannot(formPermission)) {
-                    return this.notifications.warning(this.intl.t('common.permissions-required-for-changes'));
-                }
-
-                try {
-                    await apiKey.save();
-                    this.notifications.success(modal.getOption('successMessage'));
-                    return this.hostRouter.refresh();
-                } catch (error) {
-                    this.notifications.serverError(error);
-                    modal.stopLoading();
-                }
-            },
-        });
+    // Creating and editing keys lives in the api-key-actions service so other engines can open these dialogs too.
+    @action createApiKey(...args) {
+        return this.apiKeyActions.createApiKey(...args);
     }
 
-    /**
-     * Toggles modal to create a new API key
-     *
-     * @void
-     */
-    @action editApiKey(apiKey, options = {}) {
-        const formPermission = 'developers update api-key';
-        this.modalsManager.show('modals/api-key-form', {
-            title: this.intl.t('developers.api-keys.index.edit-api-key-title'),
-            acceptButtonIcon: 'save',
-            acceptButtonDisabled: this.abilities.cannot(formPermission),
-            acceptButtonHelpText: this.abilities.cannot(formPermission) ? this.intl.t('common.unauthorized') : null,
-            successMessage: this.intl.t('developers.api-keys.index.edit-api-key-message'),
-            expirationOptions: this.expirationOptions,
-            testMode: this.currentUser.getOption('sandbox') || false,
-            apiKey,
-            formPermission,
-            setExpiration: ({ target }) => {
-                apiKey.expires_at = target.value || null;
-            },
-            confirm: async (modal) => {
-                modal.startLoading();
-
-                if (this.abilities.cannot(formPermission)) {
-                    return this.notifications.warning(this.intl.t('common.permissions-required-for-changes'));
-                }
-
-                try {
-                    await apiKey.save();
-                    this.notifications.success(modal.getOption('successMessage'));
-                    return this.hostRouter.refresh();
-                } catch (error) {
-                    this.notifications.serverError(error);
-                    modal.stopLoading();
-                }
-            },
-            ...options,
-        });
+    @action editApiKey(...args) {
+        return this.apiKeyActions.editApiKey(...args);
     }
 
     /**

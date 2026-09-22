@@ -10,6 +10,7 @@ import fromStore from '@fleetbase/ember-core/decorators/legacy-from-store';
 import fetchFrom from '@fleetbase/ember-core/decorators/legacy-fetch-from';
 
 export default class WebhooksIndexController extends BaseController {
+    @service webhookActions;
     @service currentUser;
     @service intl;
     @service modalsManager;
@@ -177,154 +178,17 @@ export default class WebhooksIndexController extends BaseController {
         this.query = value;
     }
 
-    /**
-     * Toggles modal to create a new API key
-     *
-     * @void
-     */
-    @action createWebhook() {
-        const formPermission = 'developers create webhook';
-        const webhook = this.store.createRecord('webhook-endpoint', {
-            events: [],
-            mode: this.currentUser.getOption('sandbox') ? 'test' : 'live',
-        });
-
-        this.editWebhook(webhook, {
-            title: this.intl.t('developers.webhooks.index.add-webhook'),
-            acceptButtonText: this.intl.t('developers.webhooks.index.add-webhook-button-text'),
-            acceptButtonIcon: 'check',
-            acceptButtonIconPrefix: 'fas',
-            acceptButtonDisabled: this.abilities.cannot(formPermission),
-            acceptButtonHelpText: this.abilities.cannot(formPermission) ? this.intl.t('common.unauthorized') : null,
-            formPermission,
-            webhook,
-            confirm: async (modal) => {
-                modal.startLoading();
-
-                if (this.abilities.cannot(formPermission)) {
-                    return this.notifications.warning(this.intl.t('common.permissions-required-for-changes'));
-                }
-
-                try {
-                    await webhook.save();
-                    this.notifications.success(this.intl.t('developers.webhooks.index.new-webhook-success-message'));
-                    return this.hostRouter.refresh();
-                } catch (error) {
-                    this.notifications.serverError(error);
-                    modal.stopLoading();
-                }
-            },
-        });
+    // Webhook dialogs live in the webhook-actions service so other engines can open them too.
+    @action createWebhook(...args) {
+        return this.webhookActions.createWebhook(...args);
     }
 
-    /**
-     * Triggers dialog to edit webhook
-     *
-     * @param {WebhookEndpointModel} webhook
-     * @param {Object} options
-     * @void
-     */
-    @action async editWebhook(webhook, options = {}) {
-        await this.apiCredentials;
-
-        const formPermission = 'developers update webhook';
-        this.modalsManager.show('modals/webhook-form', {
-            title: this.intl.t('developers.webhooks.index.edit-webhook-endpoint'),
-            acceptButtonText: this.intl.t('developers.webhooks.index.edit-webhook-endpoint-button-text'),
-            acceptButtonIcon: 'save',
-            acceptButtonDisabled: this.abilities.cannot(formPermission),
-            acceptButtonHelpText: this.abilities.cannot(formPermission) ? this.intl.t('common.unauthorized') : null,
-            formPermission,
-            declineButtonIcon: 'times',
-            declineButtonIconPrefix: 'fas',
-            eventOptions: this.groupedApiEvents,
-            versionOptions: this.apiVersions,
-            apiCredentialOptions: this.apiCredentials,
-            webhook,
-            setVersion: ({ target }) => {
-                webhook.version = target.value || null;
-            },
-            setApiCredential: ({ target }) => {
-                webhook.api_credential_uuid = target.value || null;
-            },
-            searchEvents: (query) => {
-                if (typeof query !== 'string') {
-                    return;
-                }
-                const resources = Object.keys(this.groupedApiEvents);
-                const filteredEvents = {};
-                resources.forEach((eventResource) => {
-                    filteredEvents[eventResource] = this.groupedApiEvents[eventResource].filter((event) => {
-                        return event.toLowerCase().includes(query.toLowerCase());
-                    });
-                    // if 0 events remove from filter
-                    if (filteredEvents[eventResource].length === 0) {
-                        delete filteredEvents[eventResource];
-                    }
-                });
-                this.modalsManager.setOption('eventOptions', filteredEvents);
-            },
-            addEvent: (event) => {
-                if (webhook.events.includes(event)) {
-                    return;
-                }
-
-                webhook.events.pushObject(event);
-            },
-            removeEvent: (event) => {
-                webhook.events.removeObject(event);
-            },
-            clearEvents: () => {
-                webhook.events.clear();
-            },
-            receiveAllEvents: () => {
-                webhook.events.pushObjects(this.webhookEvents);
-            },
-            confirm: async (modal) => {
-                modal.startLoading();
-
-                if (this.abilities.cannot(formPermission)) {
-                    return this.notifications.warning(this.intl.t('common.permissions-required-for-changes'));
-                }
-
-                try {
-                    await webhook.save();
-                    this.notifications.success(this.intl.t('developers.webhooks.index.new-webhook-success-message'));
-                    return this.hostRouter.refresh();
-                } catch (error) {
-                    this.notifications.serverError(error);
-                    modal.stopLoading();
-                }
-            },
-            ...options,
-        });
+    @action editWebhook(...args) {
+        return this.webhookActions.editWebhook(...args);
     }
 
-    /**
-     * Toggles dialog to delete webhook
-     *
-     * @param {WebhookEndpointModel} webhook
-     * @param {Object} options
-     * @void
-     */
-    @action deleteWebhook(webhook, options = {}) {
-        this.modalsManager.confirm({
-            title: this.intl.t('developers.webhooks.index.delete-webhook-endpoint'),
-            body: this.intl.t('developers.webhooks.index.delete-webhook-endpoint-body'),
-            confirm: async (modal) => {
-                modal.startLoading();
-
-                try {
-                    await webhook.destroyRecord();
-                    this.notifications.success(this.intl.t('developers.webhooks.index.delete-webhook-success-message'));
-                    return this.hostRouter.refresh();
-                } catch (error) {
-                    this.notifications.serverError(error);
-                    modal.stopLoading();
-                }
-            },
-            ...options,
-        });
+    @action deleteWebhook(...args) {
+        return this.webhookActions.deleteWebhook(...args);
     }
 
     /**
