@@ -1,0 +1,285 @@
+developers:
+  extension-name: Розробникам
+  common:
+    all: Усі
+    attempt: Спроба
+    back: Назад
+    bulk-action: Масова дія
+    clear: Очистити
+    code: Код
+    created: Створено
+    date: Дата
+    description: Опис
+    email: Електронна пошта
+    event-id: ID події
+    event-type: Тип події
+    event: Подія
+    export: Експорт
+    failed: Помилка
+    id: ID
+    key: Ключ
+    mode: Режим
+    name: Назва
+    new: Новий
+    password: Пароль
+    result: Результат
+    source: Джерело
+    status: Статус
+    succeeded: Успішно
+    time: Час
+    url: URL
+    version: Версія
+    reload: Перезавантажити
+    reload-data: Оновити дані
+
+  component:
+    api-event: 
+      data: 
+        title: Дані події
+        no-data: Немає даних події
+      details:
+        prefixTitle: Подія
+    api-request-log:
+      details:        
+        prefixTitle: Запит
+        duration: Тривалість
+        ip-address: IP-адреса
+      query-params:
+        title: Параметри запиту (query)
+        no-parameters: Немає параметрів запиту
+      request-headers: 
+        title: Заголовки запиту
+        no-headers: Немає заголовків запиту
+      request-body:
+        title: Запит
+        title-second-part: тіло
+        no-request-body: Немає тіла {method} запиту
+      response-body:
+        title: Тіло відповіді
+        no-response-body: Немає тіла відповіді
+    modals:
+      api-key-form:
+        api-name-aria-label: Назва ключа API
+        api-expiration-aria-label: Дата закінчення терміну дії ключа API
+        name-placeholder: Введіть псевдонім або назву середовища для ключа API
+        expiration-label: Термін дії
+        expiration-help-text: Додатково встановити дату закінчення терміну дії для цього ключа API.
+        select-expiration-date: Виберіть дату закінчення терміну...
+        key-expires: Після закінчення терміну дії ключа ви не зможете виконувати з ним жодних дій.
+        enter-domain-placeholder: Введіть домен
+        allowed-browser-label: Дозволені джерела браузера (CORS)
+        allowed-browser-help-text: Введіть домени, які визначатимуть політику CORS для браузерних запитів з цього ключа API.
+        test-key: Тестовий ключ
+        testing-environments: Ви створюєте ключ для тестового середовища, використовуйте його для тестових оточень.
+        live-key: Бойовий ключ
+        production-environments: Ви створюєте ключ для робочого середовища, використовуйте його для продакшену.
+      listen-custom-channel:
+        name: ID каналу подій
+        name-help-text: Введіть ідентифікатор сокет-каналу, який ви хочете прослуховувати
+      rename-api-key-form:
+        api-key-label: Назва ключа API
+        api-key-placeholder: Введіть псевдонім або назву середовища для ключа API
+      roll-api-key-form:
+        view-button-text: Переглянути логи
+        last-used: Востаннє використано
+        expiration: Термін дії
+        api-key-expiration-label: Термін дії ключа API
+        select-date: Виберіть дату закінчення терміну...
+        key-expires: Після закінчення терміну дії ключа ви не зможете виконувати з ним жодних дій.
+        additional-required: Потрібна додаткова автентифікація
+        enter-password: Щоб продовжити, будь ласка, введіть свій пароль.
+        user-email: Email користувача
+        user-password: Пароль користувача
+        user-password-placeholder: Підтвердьте запит за допомогою пароля
+      webhook-form:
+        endpoint-url: URL-адреса кінцевої точки (Endpoint URL)
+        endpoint-url-help-text: URL, на який Fleetbase має надсилати зворотні виклики (callbacks) подій.
+        endpoint-url-placeholder: https://
+        description-label: Опис
+        description-help-text: Необов'язково додайте опис для кінцевої точки вебхука.
+        description-aria-label: Опис вебхука
+        description-placeholder: Додатковий опис того, для чого використовується ця кінцева точка вебхука.
+        api-credential-label: Ключ API (API Credential)
+        api-credential-help-text: Обмежити кінцеву точку вебхука отриманням викликів лише від конкретного ключа API.
+        api-credential-message: Отримувати від усіх ключів API...
+        api-credential-infoblock: Ви можете вибрати конкретний ключ API, який використовуватиметься для запуску викликів на цю кінцеву точку, або вибрати "Усі ключі API", і вебхук отримуватиме виклики незалежно від використовуваного ключа API.
+        version-help-text: Виберіть конкретну версію API для отримання зворотних викликів.
+        version-message: Виберіть версію API...
+        events-send-label: Події для надсилання
+        events-send-help-text: Явно вкажіть, для яких подій отримувати зворотні виклики.
+        select-events: Виберіть події...
+        event-search-label: Пошук подій
+        event-search-placeholder: Пошук...
+        no-selected: Не вибрано жодної події
+        dropdown: Шукайте події за допомогою випадаючого списку вище, або
+        all-events: отримувати всі події
+    webhook:
+      attempts: 
+        copy-event-id: Копіювати ID події в буфер обміну
+        view-event: Переглянути подію
+        info-message: ID події скопійовано в буфер обміну.
+        webhook-header: Спроби вебхука
+        webhook-message: Спроби надіслати подію на вашу кінцеву точку за останні 15 днів
+        http-code: Код статусу HTTP
+        response-time: Час відповіді
+        request-endpoint: Запит до вашої кінцевої точки
+        no-request-body: Немає тіла запиту
+        response: Відповідь
+        no-response-body: Немає тіла відповіді
+      details:
+        webhook-details: Деталі вебхука
+        update-details: Оновити деталі...
+        event-types: Типи подій
+        help-text: Ви отримуватимете вебхуки для нових типів подій у міру їх додавання, за винятком тих, які вимагають явного вибору. Прослуховування всіх типів подій зазвичай не потрібне і може збільшити навантаження на ваші сервери.
+        all-events: Усі події
+        api-credential: Ключ API
+        help-text-event: Ви отримуватимете виклики вебхуків незалежно від того, який ключ API використовується для активації події.
+        api-credentials: Отримання від усіх ключів API
+      metrics:
+        date-created: Дата створення
+    widget:
+      dashboard:
+        name: Панель розробника
+        period: 30д
+        empty: Немає доступних даних
+        kpi:
+          api-requests: Запити API
+          api-error-rate: Рівень помилок API
+          api-latency: Ср. затримка API
+          webhook-success: Успішність вебхуків
+          active-api-keys: Активні ключі API
+          active-webhooks: Активні вебхуки
+          webhook-failures: Збої вебхуків
+          events-emitted: Відправлено подій
+        api-traffic:
+          title: Трафік API
+          subtitle: Обсяг запитів, успіхи та помилки
+        webhook-delivery:
+          title: Стан доставки вебхуків
+          subtitle: Обсяг доставки, повторні спроби та збої
+        endpoint-health:
+          title: Стан кінцевих точок
+          subtitle: Надійність кінцевих точок вебхуків за останній час
+        event-stream:
+          title: Потік подій
+          subtitle: Популярні типи подій та джерела
+          types: Типи подій
+          sources: Джерела
+        developer-activity:
+          title: Активність розробника
+          subtitle: Останні логи, вебхуки та події
+        quick-resources:
+          title: Швидкі ресурси
+          subtitle: Швидкий перехід до інструментів розробника
+      api-metrics:  
+        title: Моніторинг
+        api-requests: Запити API
+        api-error: Розподіл помилок API
+        webhooks: Вебхуки
+        webhooks-response: Час відповіді вебхуків
+        success-label: успішно
+        error-label: помилка
+        get-error: Помилка GET
+        post-error: Помилка POST
+        put-error: Помилка PUT
+        delete-error: Помилка DELETE
+        duration-ms: Тривалість (мс)
+  api-keys:
+    index:
+      public-key: Публічний ключ
+      secret-key: Секретний ключ
+      enviroment: Середовище
+      expiry: Завершення терміну
+      last-used: Останнє використання
+      edit-key: Редагувати ключ...
+      roll-key: Оновити (roll) ключ...
+      view-logs: Переглянути логи запитів...
+      delete-key: Видалити ключ...
+      new-api-key-title: Новий ключ API
+      new-api-key-message: Нові ключі API створено.
+      edit-api-key-title: Редагувати ключ API
+      edit-api-key-message: Зміни ключа API збережено.
+      rename-api-key-title: Перейменувати ключ API {apiKeyName}
+      untitled: Без назви
+      rename-api-key-success-message: Ключ API перейменовано на {apiKeyName}
+      delete-api-key-title: Видалити ключ API {apiKeyName}
+      delete-api-key-body: Ви впевнені, що хочете видалити цей ключ API? Усі ваші дані, пов'язані з цим ключем API, стануть недоступними. Цю дію неможливо скасувати.
+      delete-api-key-success-message: Ключ API {apiKeyName} видалено.
+      delete-accept-button-text: Видалити ключ API
+      roll-api-key: Перевипустити (roll) ключ API {apiKeyName}
+      roll-api-key-button-text: Перевипустити ключ API
+      roll-api-key-success-message: Ключ API {apiKeyName} успішно перевипущено.
+      roll-api-key-error-message: Не вдалося перевипустити ключ API.
+      export-api: Експортувати ключі API
+      export-api-accept-button-text: Завантажити
+      export-api-error-message: Не вдалося завантажити експорт ключів API.
+      title: Ключі API
+      label: Перегляд тестових даних
+      help-text: Увімкнення перегляду тестових даних дозволить консолі відображати всі тестові дані з вашого пісочничного середовища (sandbox)
+      select-api-key-aria-label: Вибрати ключ API
+      select-key: Вибрати конкретний ключ
+      test-data: Усі тестові дані...
+      delete-api: Видалити ключі API
+  events:
+    index:
+      title: Події
+  logs:
+    index:
+      api-credential: Ключ API
+      http-method: Метод HTTP
+      title: Логи
+  sockets:
+    index:
+      link-text: Відстежувати канал
+      channel: Канал
+      listen-channel-title: Прослуховувати власний канал
+      listen-channel-button-text: Прослуховувати
+      title: Канали, що отримують події з вашого облікового запису
+      button-text: Прослуховувати власний канал
+    view:
+      socket-connection-error: Помилка підключення до сокета!
+      socket-connected: Сокет підключено
+      socket-subscribed: Сокет підписано на канал {modelName}
+      output: Вивід
+      awaiting-events: Очікування подій...
+  webhooks:
+    index:
+      view-logs: Переглянути логи
+      edit-webhook: Редагувати вебхук
+      delete-webhook: Видалити вебхук
+      add-webhook: Додати кінцеву точку вебхука
+      add-webhook-button-text: Підтвердити та створити
+      edit-webhook-endpoint: Редагувати кінцеву точку вебхука
+      edit-webhook-endpoint-button-text: Зберегти зміни
+      new-webhook-success-message: Новий вебхук створено.
+      delete-webhook-endpoint: Видалити цю кінцеву точку вебхука
+      delete-webhook-endpoint-body: Ви впевнені, що хочете видалити цей вебхук? Усі ваші дані, пов'язані з цим вебхуком, стануть недоступними. Ця кінцева точка також припинить отримувати майбутні події. Цю дію неможливо скасувати.
+      delete-webhook-success-message: Кінцеву точку вебхука видалено.
+      title: Вебхуки
+      button-text: Додати нову кінцеву точку
+    view:
+      webhook-deleted-success-message: Кінцеву точку вебхука видалено.
+      disable-webhook-title: Вимкнути кінцеву точку вебхука
+      disable-webhook-body: Цю кінцеву точку вебхука можна тимчасово вимкнути, щоб вона не отримувала сповіщення, доки її знову не буде ввімкнено. Fleetbase не повторюватиме спроби надсилання сповіщень, згенерованих під час вимкнення кінцевої точки.
+      disable-webhook-button-text: Вимкнути кінцеву точку вебхука
+      disable-webhook-success-message: Вебхук вимкнено.
+      enable-webhook-title: Увімкнути кінцеву точку вебхука
+      enable-webhook-body: Цей вебхук вимкнено, і він більше не отримує сповіщень. Це могло статися автоматично через тривалий період помилок. Якщо ви усунули проблему, ви можете повторно ввімкнути кінцеву точку вебхука тут. Fleetbase не повторюватиме спроби надсилання сповіщень, які були згенеровані у проміжок часу, і якщо ми продовжимо фіксувати помилки на цій кінцевій точці, ми вимкнемо її знову.
+      enable-webhook-button-text: Увімкнути кінцеву точку вебхука
+      enable-webhook-success-message: Вебхук увімкнено.
+      update-endpoint-button-text: Оновити кінцеву точку
+      update-endpoint-success-message: Деталі вебхука оновлено.
+      send-button-text: Надіслати тестовий вебхук...
+      disable-button-text: Вимкнути...
+      enable-button-text: Увімкнути...
+      delete-button-text: Видалити...
+  application:
+    sidebar:
+      title: Консоль розробника
+      items:
+        home: Панель керування
+        api-keys: Ключі API
+        webhooks: Вебхуки
+        websockets: WebSockets
+        logs: Логи
+        events: Події
