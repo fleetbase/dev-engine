@@ -219,5 +219,9 @@ export default {
         //         widget.withGridOptions({ w: 6, h: 7, minW: 5, minH: 6 });
         //     }),
         // ]);
+
+        // Declare the registries extensions can add table columns, actions and
+        // buttons to, e.g. `developers:table:api-key:columns` or `developers:details:webhook:actions`.
+        universe.getService('universe/resource-view-service')?.declare('developers', ['api-key', 'event', 'log', 'socket', 'webhook']);
     },
 };

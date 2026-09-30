@@ -9,7 +9,7 @@ export default class ApiKeyActionsService extends ResourceActionService {
 
     constructor() {
         super(...arguments);
-        this.initialize('api-credential', { permissionPrefix: 'developers', mountPrefix: 'console.developers' });
+        this.initialize('api-credential', { permissionPrefix: 'developers', mountPrefix: 'console.developers', registryResource: 'api-key' });
     }
 
     transition = {

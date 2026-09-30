@@ -1,8 +1,13 @@
-<Layout::Section::Header @title={{t "developers.sockets.index.title"}}>
-    <Button @icon="refresh" @onClick={{this.reload}} @helpText={{t "developers.common.reload-data"}} class="mr-2" />
-    <Button @icon="headphones" @type="magic" @iconPrefix="fas" @text={{t "developers.sockets.index.button-text"}} @onClick={{this.listenOnCustomChannel}} @permission="developers view socket" />
-</Layout::Section::Header>
-
-<Layout::Section::Body>
-    <Table @rows={{this.channels}} @columns={{this.columns}} @onSetup={{fn (mut this.table)}} />
-</Layout::Section::Body>
+<Layout::Resource::Tabular
+    @registry="developers:table:socket"
+    @title={{t "developers.sockets.index.title"}}
+    @onReload={{this.reload}}
+    @data={{this.channels}}
+    @columns={{this.columns}}
+    @selectable={{false}}
+    @canSelectAll={{false}}
+    @pagination={{false}}
+    @setupTable={{fn (mut this.table)}}
+    @actionButtons={{this.actionButtons}}
+    @controller={{this}}
+/>
