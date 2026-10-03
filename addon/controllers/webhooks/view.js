@@ -50,7 +50,7 @@ export default class WebhooksViewController extends BaseController {
     }
 
     /**
-     * Header buttons. Extensions add to them through `developers:details:webhook`.
+     * Header buttons. Extensions add to them through `developers:webhook:details`.
      *
      * @var {Array}
      */

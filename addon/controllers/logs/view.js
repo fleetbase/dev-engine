@@ -6,7 +6,7 @@ export default class LogsViewController extends BaseController {
     @service intl;
 
     /**
-     * Header buttons. Extensions add to them through `developers:details:log`.
+     * Header buttons. Extensions add to them through `developers:log:details`.
      *
      * @var {Array}
      */

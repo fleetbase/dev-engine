@@ -221,7 +221,7 @@ export default {
         // ]);
 
         // Declare the registries extensions can add table columns, actions and
-        // buttons to, e.g. `developers:table:api-key:columns` or `developers:details:webhook:actions`.
+        // buttons to, e.g. `developers:api-key:table:columns` or `developers:webhook:details:actions`.
         universe.getService('universe/resource-view-service')?.declare('developers', ['api-key', 'event', 'log', 'socket', 'webhook']);
     },
 };

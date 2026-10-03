@@ -14,7 +14,7 @@ export default class SocketsIndexController extends BaseController {
     @service abilities;
 
     /**
-     * Header buttons. Extensions add to them through `developers:table:socket:actions`.
+     * Header buttons. Extensions add to them through `developers:socket:table:actions`.
      *
      * @var {Array}
      */

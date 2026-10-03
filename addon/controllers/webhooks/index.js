@@ -88,7 +88,7 @@ export default class WebhooksIndexController extends BaseController {
     @fromStore('api-credential', { limit: -1 }) apiCredentials;
 
     /**
-     * Header buttons. Extensions add to them through `developers:table:webhook:actions`.
+     * Header buttons. Extensions add to them through `developers:webhook:table:actions`.
      *
      * @var {Array}
      */

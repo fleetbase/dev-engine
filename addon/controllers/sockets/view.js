@@ -10,7 +10,7 @@ export default class SocketsViewController extends BaseController {
     @service socket;
 
     /**
-     * Header buttons. Extensions add to them through `developers:details:socket`.
+     * Header buttons. Extensions add to them through `developers:socket:details`.
      *
      * @var {Array}
      */

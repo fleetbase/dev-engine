@@ -33,7 +33,7 @@ export default class BaseController extends Controller {
 
     /**
      * The query params an index controller declares, plus the filter params of
-     * columns extensions registered under `developers:table:<resource>`.
+     * columns extensions registered under `developers:<resource>:table`.
      *
      * @param {String} resource e.g. 'event'
      * @param {Array} baseQueryParams
@@ -45,7 +45,7 @@ export default class BaseController extends Controller {
 
     /**
      * A details page's header buttons, with what extensions registered under
-     * `developers:details:<resource>` merged in.
+     * `developers:<resource>:details` merged in.
      *
      * @param {String} resource e.g. 'webhook'
      * @param {Object} record The record the page shows
@@ -53,6 +53,6 @@ export default class BaseController extends Controller {
      * @returns {Array}
      */
     detailsActionButtons(resource, record, buttons = []) {
-        return mergeHeaderButtons(lookupResourceView(getOwner(this)), `developers:details:${resource}`, buttons, { resource: record, controller: this }, { withMenu: true });
+        return mergeHeaderButtons(lookupResourceView(getOwner(this)), `developers:${resource}:details`, buttons, { resource: record, controller: this }, { withMenu: true });
     }
 }

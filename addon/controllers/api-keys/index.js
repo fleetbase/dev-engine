@@ -106,7 +106,7 @@ export default class ApiKeysIndexController extends Controller {
     }
 
     /**
-     * Header buttons. Extensions add to them through `developers:table:api-key:actions`.
+     * Header buttons. Extensions add to them through `developers:api-key:table:actions`.
      *
      * @var {Array}
      */
@@ -133,7 +133,7 @@ export default class ApiKeysIndexController extends Controller {
     }
 
     /**
-     * Bulk actions for the selected rows. Extensions add to them through `developers:table:api-key:bulk-actions`.
+     * Bulk actions for the selected rows. Extensions add to them through `developers:api-key:table:bulk-actions`.
      *
      * @var {Array}
      */

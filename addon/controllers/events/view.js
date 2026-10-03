@@ -6,7 +6,7 @@ export default class EventsViewController extends BaseController {
     @service intl;
 
     /**
-     * Header buttons. Extensions add to them through `developers:details:event`.
+     * Header buttons. Extensions add to them through `developers:event:details`.
      *
      * @var {Array}
      */
