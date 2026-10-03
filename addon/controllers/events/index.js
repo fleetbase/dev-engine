@@ -26,7 +26,7 @@ export default class EventsIndexController extends BaseController {
      *
      * @var {Array}
      */
-    queryParams = ['query', 'page', 'limit', 'sort', 'event', 'created_at'];
+    queryParams = this.registeredQueryParams('event', ['query', 'page', 'limit', 'sort', 'event', 'created_at']);
 
     /**
      * The current page of data being viewed
@@ -77,12 +77,14 @@ export default class EventsIndexController extends BaseController {
      */
     @tracked columns = [
         {
+            id: 'description',
             sticky: true,
             label: this.intl.t('developers.common.event'),
             valuePath: 'description',
             sortable: false,
         },
         {
+            id: 'event',
             label: this.intl.t('developers.common.code'),
             valuePath: 'event',
             sortable: false,
@@ -91,6 +93,7 @@ export default class EventsIndexController extends BaseController {
             filterOptions: this.webhookEvents,
         },
         {
+            id: 'public-id',
             label: this.intl.t('developers.common.id'),
             valuePath: 'public_id',
             cellComponent: 'click-to-copy',
@@ -98,6 +101,7 @@ export default class EventsIndexController extends BaseController {
             sortable: false,
         },
         {
+            id: 'created-at',
             label: this.intl.t('developers.common.date'),
             valuePath: 'createdAt',
             filterParam: 'created_at',

@@ -34,7 +34,7 @@ export default class LogsIndexController extends BaseController {
      *
      * @var {Array}
      */
-    queryParams = ['query', 'page', 'limit', 'sort', 'version', 'key', 'method', 'created_at'];
+    queryParams = this.registeredQueryParams('log', ['query', 'page', 'limit', 'sort', 'version', 'key', 'method', 'created_at']);
 
     /**
      * The current page of data being viewed
@@ -100,12 +100,14 @@ export default class LogsIndexController extends BaseController {
     @computed('apiCredentials.@each.id', 'apiVersions.[]') get columns() {
         return [
             {
+                id: 'description',
                 sticky: true,
                 label: this.intl.t('developers.common.description'),
                 valuePath: 'description',
                 sortable: false,
             },
             {
+                id: 'status',
                 label: this.intl.t('developers.common.status'),
                 valuePath: 'status',
                 sortable: false,
@@ -113,6 +115,7 @@ export default class LogsIndexController extends BaseController {
                 cellClassNames: 'uppercase',
             },
             {
+                id: 'public-id',
                 label: this.intl.t('developers.common.id'),
                 valuePath: 'public_id',
                 cellComponent: 'click-to-copy',
@@ -120,6 +123,7 @@ export default class LogsIndexController extends BaseController {
                 sortable: false,
             },
             {
+                id: 'api-credential-name',
                 label: this.intl.t('developers.logs.index.api-credential'),
                 valuePath: 'api_credential_name',
                 cellComponent: 'click-to-copy',
@@ -132,6 +136,7 @@ export default class LogsIndexController extends BaseController {
                 filterOptions: this.apiCredentials,
             },
             {
+                id: 'method',
                 label: this.intl.t('developers.logs.index.http-method'),
                 valuePath: 'method',
                 filterable: true,
@@ -139,6 +144,7 @@ export default class LogsIndexController extends BaseController {
                 filterOptions: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'],
             },
             {
+                id: 'version',
                 label: this.intl.t('developers.common.version'),
                 valuePath: 'version',
                 filterable: true,
@@ -146,6 +152,7 @@ export default class LogsIndexController extends BaseController {
                 filterOptions: this.apiVersions,
             },
             {
+                id: 'created-at',
                 label: this.intl.t('developers.common.date'),
                 valuePath: 'createdAt',
                 filterParam: 'created_at',

@@ -1,13 +1,24 @@
-import Controller from '@ember/controller';
+import BaseController from '../base-controller';
 import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
 import { format } from 'date-fns';
 
-export default class SocketsViewController extends Controller {
+export default class SocketsViewController extends BaseController {
     @service hostRouter;
     @service intl;
     @service socket;
+
+    /**
+     * Header buttons. Extensions add to them through `developers:details:socket`.
+     *
+     * @var {Array}
+     */
+    get actionButtons() {
+        return this.detailsActionButtons('socket', this.model, [
+            { id: 'back', icon: 'long-arrow-left', iconPrefix: 'fas', text: this.intl.t('developers.common.back'), onClick: this.goBack },
+        ]);
+    }
 
     /**
      * Incoming events logged from socket

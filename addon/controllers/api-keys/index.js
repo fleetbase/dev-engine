@@ -29,7 +29,7 @@ export default class ApiKeysIndexController extends Controller {
      *
      * @var {Array}
      */
-    queryParams = ['page', 'limit', 'sort', 'query', 'view_api_key'];
+    queryParams = this.apiKeyActions.queryParamsFor(['page', 'limit', 'sort', 'query', 'view_api_key']);
 
     /**
      * Expiration options for api keys
@@ -106,12 +106,57 @@ export default class ApiKeysIndexController extends Controller {
     }
 
     /**
+     * Header buttons. Extensions add to them through `developers:table:api-key:actions`.
+     *
+     * @var {Array}
+     */
+    get actionButtons() {
+        return [
+            {
+                id: 'create',
+                type: 'primary',
+                icon: 'plus',
+                iconPrefix: 'fas',
+                text: this.intl.t('developers.common.new'),
+                onClick: this.createApiKey,
+                permission: 'developers create api-key',
+            },
+            {
+                id: 'export',
+                icon: 'long-arrow-up',
+                iconClass: 'rotate-icon-45',
+                text: this.intl.t('developers.common.export'),
+                onClick: this.exportApiKeys,
+                permission: 'developers export api-key',
+            },
+        ];
+    }
+
+    /**
+     * Bulk actions for the selected rows. Extensions add to them through `developers:table:api-key:bulk-actions`.
+     *
+     * @var {Array}
+     */
+    get bulkActions() {
+        return [
+            {
+                id: 'bulk-delete',
+                label: this.intl.t('developers.api-keys.index.delete-api'),
+                class: 'text-red-500',
+                fn: this.bulkDeleteApiCredentials,
+                permission: 'developers delete api-key',
+            },
+        ];
+    }
+
+    /**
      * Columns for table component.
      *
      * @var {Array}
      */
     @tracked columns = [
         {
+            id: 'name',
             sticky: true,
             label: this.intl.t('developers.common.name'),
             valuePath: 'name',
@@ -122,6 +167,7 @@ export default class ApiKeysIndexController extends Controller {
             sortable: false,
         },
         {
+            id: 'key',
             label: this.intl.t('developers.api-keys.index.public-key'),
             valuePath: 'key',
             sortable: false,
@@ -129,6 +175,7 @@ export default class ApiKeysIndexController extends Controller {
             cellComponent: 'click-to-copy',
         },
         {
+            id: 'secret',
             label: this.intl.t('developers.api-keys.index.secret-key'),
             valuePath: 'secret',
             sortable: false,
@@ -141,6 +188,7 @@ export default class ApiKeysIndexController extends Controller {
             },
         },
         {
+            id: 'environment',
             label: this.intl.t('developers.api-keys.index.enviroment'),
             valuePath: 'environment',
             sortable: false,
@@ -148,6 +196,7 @@ export default class ApiKeysIndexController extends Controller {
             cellComponent: 'table/cell/status',
         },
         {
+            id: 'expires-at',
             label: this.intl.t('developers.api-keys.index.expiry'),
             valuePath: 'expiresAt',
             sortable: false,
@@ -156,6 +205,7 @@ export default class ApiKeysIndexController extends Controller {
             cellClassNames: 'overflow-visible',
         },
         {
+            id: 'last-used',
             label: this.intl.t('developers.api-keys.index.last-used'),
             valuePath: 'lastUsed',
             sortable: false,
@@ -164,6 +214,7 @@ export default class ApiKeysIndexController extends Controller {
             cellClassNames: 'overflow-visible',
         },
         {
+            id: 'created-at',
             label: this.intl.t('developers.common.created'),
             valuePath: 'createdAt',
             sortable: false,
@@ -172,6 +223,7 @@ export default class ApiKeysIndexController extends Controller {
             cellClassNames: 'overflow-visible',
         },
         {
+            id: 'row-actions',
             label: '',
             cellComponent: 'table/cell/dropdown',
             ddButtonText: false,
@@ -185,21 +237,25 @@ export default class ApiKeysIndexController extends Controller {
             width: 60,
             actions: [
                 {
+                    id: 'edit-api-key',
                     label: this.intl.t('developers.api-keys.index.edit-key'),
                     fn: this.editApiKey,
                     permission: 'developers view api-key',
                 },
                 {
+                    id: 'roll-api-key',
                     label: this.intl.t('developers.api-keys.index.roll-key'),
                     fn: this.rollApiKey,
                     permission: 'developers roll api-key',
                 },
                 {
+                    id: 'view-request-logs',
                     label: this.intl.t('developers.api-keys.index.view-logs'),
                     fn: this.viewRequestLogs,
                     permission: 'developers view log',
                 },
                 {
+                    id: 'delete-api-key',
                     label: this.intl.t('developers.api-keys.index.delete-key'),
                     fn: this.deleteApiKey,
                     className: 'text-red-700 hover:text-red-800',

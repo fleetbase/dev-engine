@@ -62,7 +62,7 @@ export default class WebhooksIndexController extends BaseController {
      *
      * @var {Array}
      */
-    queryParams = ['page', 'limit', 'sort', 'query'];
+    queryParams = this.webhookActions.queryParamsFor(['page', 'limit', 'sort', 'query']);
 
     /**
      * All webhook events
@@ -88,12 +88,32 @@ export default class WebhooksIndexController extends BaseController {
     @fromStore('api-credential', { limit: -1 }) apiCredentials;
 
     /**
+     * Header buttons. Extensions add to them through `developers:table:webhook:actions`.
+     *
+     * @var {Array}
+     */
+    get actionButtons() {
+        return [
+            {
+                id: 'create',
+                type: 'primary',
+                icon: 'plus',
+                iconPrefix: 'fas',
+                text: this.intl.t('developers.webhooks.index.button-text'),
+                onClick: this.createWebhook,
+                permission: 'developers create webhook',
+            },
+        ];
+    }
+
+    /**
      * Columns for table component.
      *
      * @var {Array}
      */
     @tracked columns = [
         {
+            id: 'url',
             label: this.intl.t('developers.common.url'),
             valuePath: 'url',
             width: '40%',
@@ -104,6 +124,7 @@ export default class WebhooksIndexController extends BaseController {
             cellClassNames: 'no-underline',
         },
         {
+            id: 'status',
             label: this.intl.t('developers.common.status'),
             valuePath: 'status',
             width: '15%',
@@ -111,15 +132,17 @@ export default class WebhooksIndexController extends BaseController {
             cellComponent: 'table/cell/status',
         },
         {
+            id: 'mode',
             label: this.intl.t('developers.common.mode'),
             valuePath: 'mode',
             width: '15%',
             sortable: false,
             cellComponent: 'table/cell/status',
         },
-        { label: this.intl.t('developers.common.version'), valuePath: 'version', width: '10%', sortable: false },
-        { label: this.intl.t('developers.common.created'), valuePath: 'createdAt', sortable: false, width: '10%' },
+        { id: 'version', label: this.intl.t('developers.common.version'), valuePath: 'version', width: '10%', sortable: false },
+        { id: 'created-at', label: this.intl.t('developers.common.created'), valuePath: 'createdAt', sortable: false, width: '10%' },
         {
+            id: 'row-actions',
             label: '',
             cellComponent: 'table/cell/dropdown',
             ddButtonText: false,
@@ -132,16 +155,19 @@ export default class WebhooksIndexController extends BaseController {
             align: 'right',
             actions: [
                 {
+                    id: 'view-webhook',
                     label: this.intl.t('developers.webhooks.index.view-logs'),
                     fn: this.viewWebhook,
                     permission: 'developers view webhook',
                 },
                 {
+                    id: 'edit-webhook',
                     label: this.intl.t('developers.webhooks.index.edit-webhook'),
                     fn: this.editWebhook,
                     permission: 'developers update webhook',
                 },
                 {
+                    id: 'delete-webhook',
                     label: this.intl.t('developers.webhooks.index.delete-webhook'),
                     fn: this.deleteWebhook,
                     permission: 'developers delete webhook',

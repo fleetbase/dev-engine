@@ -8,7 +8,7 @@ import groupApiEvents from '@fleetbase/ember-core/utils/group-api-events';
 export default class WebhookActionsService extends ResourceActionService {
     constructor() {
         super(...arguments);
-        this.initialize('webhook-endpoint', { permissionPrefix: 'developers', mountPrefix: 'console.developers' });
+        this.initialize('webhook-endpoint', { permissionPrefix: 'developers', mountPrefix: 'console.developers', registryResource: 'webhook' });
     }
 
     transition = {
