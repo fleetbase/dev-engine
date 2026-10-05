@@ -4,8 +4,8 @@
 ## Highlights
 
 - **Resource view registries.** Extensions can add the following for `api-key`, `webhook`, `event`, `log` and `socket`:
-  - columns, row actions, bulk actions and toolbar buttons, through `developers:table:<resource>:<slot>`;
-  - header buttons and menu items on the detail pages, through `developers:details:<resource>:<slot>`.
+  - columns, row actions, bulk actions and toolbar buttons, through `developers:<resource>:table:<slot>`;
+  - header buttons and menu items on the detail pages, through `developers:<resource>:details:<slot>`.
 - **API keys, webhooks, events, logs and sockets use the standard table layout.**
 - **Fix: search on the events and logs pages was always disabled.**
 
