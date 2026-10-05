@@ -1,14 +1,8 @@
-<Layout::Section::Header @title={{@model.url}}>
+<Layout::Section::Header @title={{@model.url}} @actionsWrapperClass="space-x-2">
     {{!-- {{#if @model.isTestMode}}
         <Button @icon="reply" @text={{t "developers.webhooks.view.send-button-text"}} class="mr-2" />
     {{/if}} --}}
-    <Button @icon="refresh" @onClick={{this.reload}} @helpText={{t "common.reload-data"}} class="mr-2" />
-    {{#if @model.isEnabled}}
-        <Button @icon="ban" @text={{t "developers.webhooks.view.disable-button-text"}} class="mr-2" @onClick={{fn this.disableWebhook @model}} @permission="developers disable webhook" />
-    {{else}}
-        <Button @icon="ban" @text={{t "developers.webhooks.view.enable-button-text"}} class="mr-2" @onClick={{fn this.enableWebhook @model}} @permission="developers enable webhook" />
-    {{/if}}
-    <Button @iconPrefix="fas" @icon="times" @text={{t "developers.webhooks.view.delete-button-text"}} @onClick={{fn this.deleteWebhook @model}} @permission="developers delete webhook" />
+    <Layout::Resource::ActionButtons @buttons={{this.actionButtons}} />
 </Layout::Section::Header>
 
 <Layout::Section::Body>

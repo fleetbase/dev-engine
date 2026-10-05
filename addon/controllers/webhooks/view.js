@@ -50,6 +50,43 @@ export default class WebhooksViewController extends BaseController {
     }
 
     /**
+     * Header buttons. Extensions add to them through `developers:webhook:details`.
+     *
+     * @var {Array}
+     */
+    get actionButtons() {
+        const webhook = this.model;
+        const toggle = webhook?.isEnabled
+            ? {
+                  id: 'disable',
+                  icon: 'ban',
+                  text: this.intl.t('developers.webhooks.view.disable-button-text'),
+                  onClick: () => this.disableWebhook(webhook),
+                  permission: 'developers disable webhook',
+              }
+            : {
+                  id: 'enable',
+                  icon: 'ban',
+                  text: this.intl.t('developers.webhooks.view.enable-button-text'),
+                  onClick: () => this.enableWebhook(webhook),
+                  permission: 'developers enable webhook',
+              };
+
+        return this.detailsActionButtons('webhook', webhook, [
+            { id: 'refresh', icon: 'refresh', onClick: this.reload, helpText: this.intl.t('common.reload-data') },
+            toggle,
+            {
+                id: 'delete',
+                icon: 'times',
+                iconPrefix: 'fas',
+                text: this.intl.t('developers.webhooks.view.delete-button-text'),
+                onClick: () => this.deleteWebhook(webhook),
+                permission: 'developers delete webhook',
+            },
+        ]);
+    }
+
+    /**
      * Toggles dialog to delete webhook
      *
      * @void

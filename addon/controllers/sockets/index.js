@@ -14,6 +14,25 @@ export default class SocketsIndexController extends BaseController {
     @service abilities;
 
     /**
+     * Header buttons. Extensions add to them through `developers:socket:table:actions`.
+     *
+     * @var {Array}
+     */
+    get actionButtons() {
+        return [
+            {
+                id: 'listen-on-custom-channel',
+                type: 'magic',
+                icon: 'headphones',
+                iconPrefix: 'fas',
+                text: this.intl.t('developers.sockets.index.button-text'),
+                onClick: this.listenOnCustomChannel,
+                permission: 'developers view socket',
+            },
+        ];
+    }
+
+    /**
      * All columns applicable for orders
      *
      * @var {Array}
@@ -32,6 +51,7 @@ export default class SocketsIndexController extends BaseController {
             cellClassNames: 'no-underline',
         },
         {
+            id: 'name',
             label: this.intl.t('developers.sockets.index.channel'),
             valuePath: 'name',
             width: '88%',

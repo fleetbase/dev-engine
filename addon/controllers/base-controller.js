@@ -1,6 +1,8 @@
 import Controller from '@ember/controller';
 import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
+import { getOwner } from '@ember/application';
+import lookupResourceView, { mergeHeaderButtons } from '@fleetbase/ember-ui/utils/resource-view';
 
 export default class BaseController extends Controller {
     /**
@@ -27,5 +29,30 @@ export default class BaseController extends Controller {
      */
     @action transitionToRoute(route, ...args) {
         return this.universe.transitionToEngineRoute('@fleetbase/dev-engine', route, ...args);
+    }
+
+    /**
+     * The query params an index controller declares, plus the filter params of
+     * columns extensions registered under `developers:<resource>:table`.
+     *
+     * @param {String} resource e.g. 'event'
+     * @param {Array} baseQueryParams
+     * @returns {Array}
+     */
+    registeredQueryParams(resource, baseQueryParams = []) {
+        return lookupResourceView(getOwner(this))?.queryParamsFor('developers', resource, baseQueryParams) ?? baseQueryParams;
+    }
+
+    /**
+     * A details page's header buttons, with what extensions registered under
+     * `developers:<resource>:details` merged in.
+     *
+     * @param {String} resource e.g. 'webhook'
+     * @param {Object} record The record the page shows
+     * @param {Array} buttons The page's own buttons
+     * @returns {Array}
+     */
+    detailsActionButtons(resource, record, buttons = []) {
+        return mergeHeaderButtons(lookupResourceView(getOwner(this)), `developers:${resource}:details`, buttons, { resource: record, controller: this }, { withMenu: true });
     }
 }
