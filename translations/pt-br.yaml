@@ -261,6 +261,9 @@ developers:
       socket-connection-error: Erro na conexão do socket!
       socket-connected: Socket está conectado
       socket-subscribed: Socket inscrito no canal {modelName}
+      socket-subscribe-denied: Sem autorização para se inscrever no canal {modelName} ({reason})
+      socket-subscribe-failed: "Não foi possível se inscrever no canal {modelName}: {message}"
+      socket-kicked-out: Removido do canal {modelName} ({reason})
       output: Saída
       awaiting-events: Aguardando eventos...
   webhooks:

@@ -259,6 +259,9 @@ developers:
       socket-connection-error: Сокет холболтын алдаа!
       socket-connected: Сокет холбогдсон байна
       socket-subscribed: Сокет {modelName} сувгад захиалсан байна
+      socket-subscribe-denied: "{modelName} сувагт захиалах эрхгүй ({reason})"
+      socket-subscribe-failed: "{modelName} сувагт захиалж чадсангүй: {message}"
+      socket-kicked-out: "{modelName} сувгаас хасагдсан ({reason})"
       output: Гаралт
       awaiting-events: Үйл явдлуудыг хүлээж байна...
   webhooks:

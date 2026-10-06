@@ -264,6 +264,9 @@ developers:
       socket-connection-error: Грешка при свързване на сокет!
       socket-connected: Сокетът е свързан
       socket-subscribed: Сокетът е абониран за канал {modelName}
+      socket-subscribe-denied: Няма разрешение за абониране за канал {modelName} ({reason})
+      socket-subscribe-failed: "Неуспешно абониране за канал {modelName}: {message}"
+      socket-kicked-out: Премахнат от канал {modelName} ({reason})
       output: Изход
       awaiting-events: Очакване на събития...
   webhooks:

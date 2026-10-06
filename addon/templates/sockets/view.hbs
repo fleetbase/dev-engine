@@ -20,7 +20,7 @@
                         <div class="block w-1/2 font-mono font-semibold text-green-300">
                             {{t "developers.sockets.view.output"}}
                         </div>
-                        {{#if this.events.length}}
+                        {{#if this.isAwaitingEvents}}
                             <div class="flex items-center justify-end w-1/2 text-sm text-green-300">
                                 <Spinner @iconClass="green-loader" />
 
@@ -37,9 +37,7 @@
                                 <div class="text-{{event.color}}-300 uppercase text-sm font-mono pr-2 flex-shrink-0">
                                     [{{event.time}}]:
                                 </div>
-                                <div class="text-{{event.color}}-300 text-sm font-mono">
-                                    {{html-safe event.content}}
-                                </div>
+                                <div class="text-{{event.color}}-300 text-sm font-mono whitespace-pre-wrap break-all">{{event.content}}</div>
                             </div>
                         {{else}}
                             <div class="flex items-center mt-6 text-green-300">

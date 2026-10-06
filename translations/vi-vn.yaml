@@ -258,6 +258,9 @@ developers:
       socket-connection-error: Lỗi kết nối Socket!
       socket-connected: Socket đã kết nối
       socket-subscribed: Socket đã đăng ký kênh {modelName}
+      socket-subscribe-denied: Không được phép đăng ký kênh {modelName} ({reason})
+      socket-subscribe-failed: "Không thể đăng ký kênh {modelName}: {message}"
+      socket-kicked-out: Đã bị xóa khỏi kênh {modelName} ({reason})
       output: Đầu ra
       awaiting-events: Đang chờ sự kiện...
   webhooks:

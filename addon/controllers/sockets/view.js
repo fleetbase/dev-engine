@@ -44,6 +44,54 @@ export default class SocketsViewController extends BaseController {
     }
 
     /**
+     * Whether the last subscription attempt was refused. Cleared when the
+     * channel subscribes (the socket service resubscribes channels it lost
+     * for token reasons) and when leaving the page.
+     *
+     * @memberof SocketsViewController
+     */
+    @tracked subscriptionFailed = false;
+
+    /**
+     * The "Awaiting events..." indicator only makes sense while the channel can
+     * still deliver something.
+     *
+     * @memberof SocketsViewController
+     */
+    get isAwaitingEvents() {
+        return this.events.length > 0 && !this.subscriptionFailed;
+    }
+
+    /**
+     * Appends a line to the console output.
+     *
+     * @param {String} content
+     * @param {String} color tailwind color name
+     * @memberof SocketsViewController
+     */
+    logEvent(content, color) {
+        // Reassigned rather than mutated so the tracked property invalidates.
+        this.events = [...this.events, { time: format(new Date(), this.consoleDateFormat), content, color }];
+    }
+
+    /**
+     * Describes a refused subscription. Authorization refusals from the socket
+     * server arrive as an `AuthError` with a short snake_case `reason`.
+     *
+     * @param {String} channelName
+     * @param {Error} error
+     * @return {String}
+     * @memberof SocketsViewController
+     */
+    describeSubscribeFailure(channelName, error) {
+        if (error && error.name === 'AuthError') {
+            return this.intl.t('developers.sockets.view.socket-subscribe-denied', { modelName: channelName, reason: error.reason || error.message });
+        }
+
+        return this.intl.t('developers.sockets.view.socket-subscribe-failed', { modelName: channelName, message: error ? error.message : '' });
+    }
+
+    /**
      * Opens socket and logs all incoming events.
      *
      * @memberof SocketsViewController
@@ -56,12 +104,7 @@ export default class SocketsViewController extends BaseController {
         (async () => {
             // eslint-disable-next-line no-unused-vars
             for await (let event of socket.listener('error')) {
-                // Push an event or notification for socket connection here
-                this.events.pushObject({
-                    time: format(new Date(), this.consoleDateFormat),
-                    content: this.intl.t('developers.sockets.view.socket-connection-error'),
-                    color: 'red',
-                });
+                this.logEvent(this.intl.t('developers.sockets.view.socket-connection-error'), 'red');
             }
         })();
 
@@ -69,39 +112,44 @@ export default class SocketsViewController extends BaseController {
         (async () => {
             // eslint-disable-next-line no-unused-vars
             for await (let event of socket.listener('connect')) {
-                // Push an event or notification for socket connection here
-                this.events.pushObject({
-                    time: format(new Date(), this.consoleDateFormat),
-                    content: this.intl.t('developers.sockets.view.socket-connected'),
-                    color: 'green',
-                });
+                this.logEvent(this.intl.t('developers.sockets.view.socket-connected'), 'green');
             }
         })();
 
-        // Listed on company channel
+        // Subscribe to the channel
         const channel = socket.subscribe(model.name);
 
         // Listen for channel subscription
         (async () => {
             // eslint-disable-next-line no-unused-vars
             for await (let event of channel.listener('subscribe')) {
-                // Push an event or notification for channel subscription here
-                this.events.pushObject({
-                    time: format(new Date(), this.consoleDateFormat),
-                    content: this.intl.t('developers.sockets.view.socket-subscribed', { modelName: model.name }),
-                    color: 'blue',
-                });
+                this.subscriptionFailed = false;
+                this.logEvent(this.intl.t('developers.sockets.view.socket-subscribed', { modelName: model.name }), 'blue');
             }
         })();
 
-        // Listen for channel subscription
+        // Listen for a refused subscription, e.g. a channel this user is not
+        // authorized to see. Without this the page would wait silently forever.
+        (async () => {
+            for await (let { error } of channel.listener('subscribeFail')) {
+                this.subscriptionFailed = true;
+                this.logEvent(this.describeSubscribeFailure(model.name, error), 'red');
+            }
+        })();
+
+        // Listen for the server removing the subscription (for example when the
+        // socket token expired). The socket service resubscribes when it can, and
+        // the subscribe listener above logs that.
+        (async () => {
+            for await (let { message } of channel.listener('kickOut')) {
+                this.logEvent(this.intl.t('developers.sockets.view.socket-kicked-out', { modelName: model.name, reason: message }), 'red');
+            }
+        })();
+
+        // Listen for channel data
         (async () => {
             for await (let data of channel) {
-                this.events.pushObject({
-                    time: format(new Date(), this.consoleDateFormat),
-                    content: JSON.stringify(data, undefined, 2),
-                    color: 'green',
-                });
+                this.logEvent(JSON.stringify(data, undefined, 2), 'green');
             }
         })();
 
@@ -109,6 +157,7 @@ export default class SocketsViewController extends BaseController {
         this.hostRouter.on('routeWillChange', () => {
             channel.close();
             this.events = [];
+            this.subscriptionFailed = false;
         });
     }
 }
