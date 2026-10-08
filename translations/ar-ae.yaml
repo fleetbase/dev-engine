@@ -252,6 +252,9 @@ developers:
       socket-connection-error: خطأ في اتصال المقبس!
       socket-connected: المقبس متصل
       socket-subscribed: المقبس مشترك في القناة {modelName}
+      socket-subscribe-denied: غير مصرح بالاشتراك في القناة {modelName} ({reason})
+      socket-subscribe-failed: "تعذر الاشتراك في القناة {modelName}: {message}"
+      socket-kicked-out: تمت الإزالة من القناة {modelName} ({reason})
       output: الإخراج
       awaiting-events: في انتظار الأحداث...
   webhooks:

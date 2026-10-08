@@ -258,6 +258,9 @@ developers:
       socket-connection-error: Ошибка подключения сокета!
       socket-connected: Сокет подключен
       socket-subscribed: Сокет подписан на канал {modelName}
+      socket-subscribe-denied: Нет прав на подписку на канал {modelName} ({reason})
+      socket-subscribe-failed: "Не удалось подписаться на канал {modelName}: {message}"
+      socket-kicked-out: Удалён из канала {modelName} ({reason})
       output: Вывод
       awaiting-events: Ожидание событий...
   webhooks:

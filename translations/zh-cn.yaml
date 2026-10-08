@@ -240,6 +240,9 @@ developers:
       socket-connection-error: Socket 连接错误！
       socket-connected: Socket 已连接
       socket-subscribed: Socket 已订阅频道 {modelName}
+      socket-subscribe-denied: 无权订阅频道 {modelName}（{reason}）
+      socket-subscribe-failed: 无法订阅频道 {modelName}：{message}
+      socket-kicked-out: 已被移出频道 {modelName}（{reason}）
       output: 输出
       awaiting-events: 等待事件中...
   webhooks:

@@ -240,6 +240,9 @@ developers:
       socket-connection-error: Socket connection error!
       socket-connected: Socket is connected
       socket-subscribed: Socket subscribed to channel {modelName}
+      socket-subscribe-denied: Not authorized to subscribe to channel {modelName} ({reason})
+      socket-subscribe-failed: "Could not subscribe to channel {modelName}: {message}"
+      socket-kicked-out: Removed from channel {modelName} ({reason})
       output: Output
       awaiting-events: Awaiting events...
   webhooks:
