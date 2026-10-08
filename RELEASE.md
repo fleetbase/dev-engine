@@ -1,17 +1,14 @@
-> v0.2.17 ~ "Extensions can add columns, actions and buttons to developer pages"
+> v0.2.18 ~ "The sockets viewer shows channel authorization failures"
 
 ---
 ## Highlights
 
-- **Resource view registries.** Extensions can add the following for `api-key`, `webhook`, `event`, `log` and `socket`:
-  - columns, row actions, bulk actions and toolbar buttons, through `developers:<resource>:table:<slot>`;
-  - header buttons and menu items on the detail pages, through `developers:<resource>:details:<slot>`.
-- **API keys, webhooks, events, logs and sockets use the standard table layout.**
-- **Fix: search on the events and logs pages was always disabled.**
+- **Channel authorization failures are visible.** The sockets viewer logs `subscribeFail` and `kickOut` with the server's reason, for example when a channel is not authorized, instead of waiting indefinitely. The custom-channel dialog opens the same view, so it is covered too. ([#51](https://github.com/fleetbase/dev-engine/pull/51))
+- **Fix: socket event payloads render as text.** Published payloads were rendered as raw HTML in the sockets viewer; they are now escaped.
 
 ---
 ## Upgrading
-Needs fleetbase/ember-core v0.3.25 and fleetbase/ember-ui v0.4.5.
+Pairs with fleetbase/ember-core v0.3.26, which authenticates the console socket. No configuration changes.
 
 ---
 ## Need help?
