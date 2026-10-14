@@ -8,7 +8,7 @@
 
 ---
 ## Upgrading
-Pairs with fleetbase/ember-core v0.3.26, which authenticates the console socket. No configuration changes.
+Pairs with fleetbase/ember-core v0.3.26, which authenticates the console socket, and fleetbase/ember-ui v0.4.6. No configuration changes.
 
 ---
 ## Need help?
