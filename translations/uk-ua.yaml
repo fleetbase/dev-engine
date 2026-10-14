@@ -240,6 +240,9 @@ developers:
       socket-connection-error: Помилка підключення до сокета!
       socket-connected: Сокет підключено
       socket-subscribed: Сокет підписано на канал {modelName}
+      socket-subscribe-denied: Немає дозволу на підписку на канал {modelName} ({reason})
+      socket-subscribe-failed: "Не вдалося підписатися на канал {modelName}: {message}"
+      socket-kicked-out: Видалено з каналу {modelName} ({reason})
       output: Вивід
       awaiting-events: Очікування подій...
   webhooks:
