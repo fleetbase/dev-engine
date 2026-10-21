@@ -67,7 +67,7 @@ export default class SocketsIndexController extends BaseController {
                 id: 'type',
                 label: this.intl.t('developers.sockets.index.type'),
                 valuePath: 'type',
-                width: 100,
+                width: 150,
                 hidden: this.devViewport.below(640),
                 sortable: false,
                 cellComponent: 'channel/type-cell',
