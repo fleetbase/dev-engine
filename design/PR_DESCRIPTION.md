@@ -70,3 +70,7 @@ Implements the redesign on the design canvas https://claude.ai/artifact/9tHmccX6
 ## Visual checks
 
 See `design/visual-check.md` and `design/screenshots/`. Checked so far: dashboard (B1), API keys list (C1), create dialog (C2 form step), webhooks list empty and populated (D1), webhook form (D2), webhook detail with both tabs (D3), disable/delete confirms and the disabled page (D4). Remaining: C2 reveal step, C3 roll, C4 drawer, C5 edit/rename/delete, channels (E1 to E3), events (F1, F2), requests (G1, G2), Cmd-K search, the 390px pass and the light pass.
+
+## Note for reviewers running the console from source
+
+While adding files during a live `ember serve`, the lazy engine's dependency funnel can get stuck after a failed patch and silently drop new modules from `engine.js` (the console then reports unknown injections or unresolved components). Editing `addon/routes.js` forces the full rebuild that heals it; a restart does the same. This is a broccoli-dependency-funnel behaviour, not something in this branch.
