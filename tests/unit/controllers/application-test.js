@@ -2,6 +2,10 @@ import { module, test } from 'qunit';
 import { setupTest } from 'dummy/tests/helpers';
 
 class IntlStub {
+    static create(props) {
+        return Object.assign(new this(), props);
+    }
+
     translations = {
         'developers.application.sidebar.items.home': 'Dashboard',
         'developers.application.sidebar.items.api-keys': 'API Keys',
@@ -17,6 +21,10 @@ class IntlStub {
 }
 
 class AbilitiesStub {
+    static create(props) {
+        return Object.assign(new this(), props);
+    }
+
     denied = new Set();
 
     can(permission) {
@@ -25,6 +33,10 @@ class AbilitiesStub {
 }
 
 class FetchStub {
+    static create(props) {
+        return Object.assign(new this(), props);
+    }
+
     requests = [];
     response = {
         results: [

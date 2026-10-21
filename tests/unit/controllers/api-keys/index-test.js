@@ -2,12 +2,20 @@ import { module, test } from 'qunit';
 import { setupTest } from 'dummy/tests/helpers';
 
 class IntlStub {
+    static create(props) {
+        return Object.assign(new this(), props);
+    }
+
     t(key) {
         return key;
     }
 }
 
 class CurrentUserStub {
+    static create(props) {
+        return Object.assign(new this(), props);
+    }
+
     options = {};
     user = {};
 
@@ -21,12 +29,20 @@ class CurrentUserStub {
 }
 
 class AbilitiesStub {
+    static create(props) {
+        return Object.assign(new this(), props);
+    }
+
     cannot() {
         return false;
     }
 }
 
 class StoreStub {
+    static create(props) {
+        return Object.assign(new this(), props);
+    }
+
     record = { id: 'api_key_uuid', name: 'Live API Key' };
     findRequests = [];
 
@@ -41,6 +57,10 @@ class StoreStub {
 }
 
 class HostRouterStub {
+    static create(props) {
+        return Object.assign(new this(), props);
+    }
+
     transitions = [];
 
     transitionTo(...args) {
@@ -54,11 +74,19 @@ class HostRouterStub {
 }
 
 class ModalsManagerStub {
+    static create(props) {
+        return Object.assign(new this(), props);
+    }
+
     show() {}
     confirm() {}
 }
 
 class NotificationsStub {
+    static create(props) {
+        return Object.assign(new this(), props);
+    }
+
     warnings = [];
 
     warning(message) {
@@ -69,7 +97,11 @@ class NotificationsStub {
     success() {}
 }
 
-class EmptyServiceStub {}
+class EmptyServiceStub {
+    static create(props) {
+        return Object.assign(new this(), props);
+    }
+}
 
 module('Unit | Controller | api-keys/index', function (hooks) {
     setupTest(hooks);

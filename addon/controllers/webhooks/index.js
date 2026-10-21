@@ -3,8 +3,7 @@ import { tracked } from '@glimmer/tracking';
 import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
 import { isBlank } from '@ember/utils';
-import { timeout } from 'ember-concurrency';
-import { task } from 'ember-concurrency-decorators';
+import { task, timeout } from 'ember-concurrency';
 import fromStore from '@fleetbase/ember-core/decorators/legacy-from-store';
 import fetchFrom from '@fleetbase/ember-core/decorators/legacy-fetch-from';
 import { endpointHealth, HEALTH_BADGE } from '../../components/widget/endpoint-health';
@@ -252,9 +251,9 @@ export default class WebhooksIndexController extends BaseController {
         return badges;
     }
 
-    @task loadHealth = function* () {
+    loadHealth = task(async () => {
         try {
-            const data = yield this.developerMetrics.fetch.get('metrics/dev/endpoint-health', { period: '7d' });
+            const data = await this.developerMetrics.fetch.get('metrics/dev/endpoint-health', { period: '7d' });
             const byId = {};
 
             (data?.items ?? []).forEach((item) => {
@@ -266,22 +265,22 @@ export default class WebhooksIndexController extends BaseController {
         } catch {
             this.healthById = {};
         }
-    };
+    });
 
-    @task({ restartable: true }) *search({ target: { value } }) {
+    search = task({ restartable: true }, async ({ target: { value } }) => {
         if (isBlank(value)) {
             this.query = null;
             return;
         }
 
-        yield timeout(250);
+        await timeout(250);
 
         if (this.page > 1) {
             this.page = 1;
         }
 
         this.query = value;
-    }
+    });
 
     // Webhook dialogs live in the webhook-actions service so other engines can open them too.
     @action createWebhook(...args) {

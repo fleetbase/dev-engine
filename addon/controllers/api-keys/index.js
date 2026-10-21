@@ -3,8 +3,7 @@ import { tracked } from '@glimmer/tracking';
 import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
 import { isBlank } from '@ember/utils';
-import { timeout } from 'ember-concurrency';
-import { task } from 'ember-concurrency-decorators';
+import { task, timeout } from 'ember-concurrency';
 import { maskKey, timeAgo } from '../../utils/format';
 
 export default class ApiKeysIndexController extends Controller {
@@ -239,20 +238,20 @@ export default class ApiKeysIndexController extends Controller {
      *
      * @void
      */
-    @task({ restartable: true }) *search({ target: { value } }) {
+    search = task({ restartable: true }, async ({ target: { value } }) => {
         if (isBlank(value)) {
             this.query = null;
             return;
         }
 
-        yield timeout(250);
+        await timeout(250);
 
         if (this.page > 1) {
             this.page = 1;
         }
 
         this.query = value;
-    }
+    });
 
     // Dialogs and navigation live in the api-key-actions service so other engines can open them too.
     @action createApiKey(...args) {

@@ -1,4 +1,31 @@
 import { setupApplicationTest as upstreamSetupApplicationTest, setupRenderingTest as upstreamSetupRenderingTest, setupTest as upstreamSetupTest } from 'ember-qunit';
+import { setupIntl } from 'ember-intl/test-support';
+import Service from '@ember/service';
+
+/**
+ * The host console provides `hostRouter`; the dummy app registers a stub so
+ * engine units that inject it can be looked up. Tests override it as needed.
+ */
+class HostRouterStub extends Service {
+    currentRouteName = 'console.developers.index';
+    currentURL = '/developers';
+    transitionTo() {}
+    refresh() {}
+    urlFor() {
+        return '/';
+    }
+    on() {}
+    off() {}
+    one() {}
+}
+
+function registerHostStubs(hooks) {
+    hooks.beforeEach(function () {
+        if (!this.owner.hasRegistration('service:host-router')) {
+            this.owner.register('service:host-router', HostRouterStub);
+        }
+    });
+}
 
 // This file exists to provide wrappers around ember-qunit's
 // test setup functions. This way, you can easily extend the setup that is
@@ -25,12 +52,15 @@ function setupApplicationTest(hooks, options) {
 
 function setupRenderingTest(hooks, options) {
     upstreamSetupRenderingTest(hooks, options);
+    setupIntl(hooks, 'en-us');
+    registerHostStubs(hooks);
 
     // Additional setup for rendering tests can be done here.
 }
 
 function setupTest(hooks, options) {
     upstreamSetupTest(hooks, options);
+    registerHostStubs(hooks);
 
     // Additional setup for unit tests can be done here.
 }

@@ -3,8 +3,7 @@ import { tracked } from '@glimmer/tracking';
 import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
 import { isBlank } from '@ember/utils';
-import { timeout } from 'ember-concurrency';
-import { task } from 'ember-concurrency-decorators';
+import { task, timeout } from 'ember-concurrency';
 import fetchFrom from '@fleetbase/ember-core/decorators/legacy-fetch-from';
 import fromStore from '@fleetbase/ember-core/decorators/legacy-from-store';
 import { RETENTION_DAYS } from '../../utils/retention';
@@ -175,20 +174,20 @@ export default class EventsIndexController extends BaseController {
         };
     }
 
-    @task({ restartable: true }) *search({ target: { value } }) {
+    search = task({ restartable: true }, async ({ target: { value } }) => {
         if (isBlank(value)) {
             this.query = null;
             return;
         }
 
-        yield timeout(250);
+        await timeout(250);
 
         if (this.page > 1) {
             this.page = 1;
         }
 
         this.query = value;
-    }
+    });
 
     @action openEvent(event) {
         return this.developerPanels.openEvent(event);

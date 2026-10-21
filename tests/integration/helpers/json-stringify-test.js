@@ -6,12 +6,11 @@ import { hbs } from 'ember-cli-htmlbars';
 module('Integration | Helper | json-stringify', function (hooks) {
     setupRenderingTest(hooks);
 
-    // TODO: Replace this with your real tests.
-    test('it renders', async function (assert) {
-        this.set('inputValue', '1234');
+    test('it pretty-prints the value as JSON', async function (assert) {
+        this.set('inputValue', { id: 1234, status: 'created' });
 
         await render(hbs`{{json-stringify this.inputValue}}`);
 
-        assert.dom(this.element).hasText('1234');
+        assert.dom(this.element).hasText('{ "id": 1234, "status": "created" }');
     });
 });

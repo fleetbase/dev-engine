@@ -2,12 +2,20 @@ import { module, test } from 'qunit';
 import { setupTest } from 'dummy/tests/helpers';
 
 class IntlStub {
+    static create(props) {
+        return Object.assign(new this(), props);
+    }
+
     t(key, params) {
         return params ? `${key} ${JSON.stringify(params)}` : key;
     }
 }
 
 class HostRouterStub {
+    static create(props) {
+        return Object.assign(new this(), props);
+    }
+
     handlers = {};
 
     on(eventName, handler) {
@@ -22,6 +30,10 @@ class HostRouterStub {
 }
 
 class CurrentUserStub {
+    static create(props) {
+        return Object.assign(new this(), props);
+    }
+
     options = {};
 
     getOption(key, defaultValue = null) {
@@ -33,7 +45,11 @@ class CurrentUserStub {
     }
 }
 
-class EmptyServiceStub {}
+class EmptyServiceStub {
+    static create(props) {
+        return Object.assign(new this(), props);
+    }
+}
 
 // An async-iterable event stream a test can push into.
 function eventStream() {
@@ -91,6 +107,10 @@ function fakeChannel() {
 // Stands in for the ember-core socket service: `instance()` returns a client
 // whose subscribe hands back the test's channel.
 class SocketStub {
+    static create(props) {
+        return Object.assign(new this(), props);
+    }
+
     channel = null;
     subscribed = [];
     clientListeners = {};

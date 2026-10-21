@@ -2,12 +2,20 @@ import { module, test } from 'qunit';
 import { setupTest } from 'dummy/tests/helpers';
 
 class IntlStub {
+    static create(props) {
+        return Object.assign(new this(), props);
+    }
+
     t(key) {
         return key;
     }
 }
 
 class CurrentUserStub {
+    static create(props) {
+        return Object.assign(new this(), props);
+    }
+
     options = {};
 
     getOption(key, defaultValue = null) {

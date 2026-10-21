@@ -2,12 +2,20 @@ import { module, test } from 'qunit';
 import { setupTest } from 'dummy/tests/helpers';
 
 class IntlStub {
+    static create(props) {
+        return Object.assign(new this(), props);
+    }
+
     t(key) {
         return key;
     }
 }
 
-class EmptyServiceStub {}
+class EmptyServiceStub {
+    static create(props) {
+        return Object.assign(new this(), props);
+    }
+}
 
 module('Unit | Service | webhook-actions', function (hooks) {
     setupTest(hooks);
