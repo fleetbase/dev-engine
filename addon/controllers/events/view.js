@@ -4,19 +4,16 @@ import { action } from '@ember/object';
 
 export default class EventsViewController extends BaseController {
     @service intl;
+    @service hostRouter;
 
     /**
      * Header buttons. Extensions add to them through `developers:event:details`.
-     *
-     * @var {Array}
      */
     get actionButtons() {
-        return this.detailsActionButtons('event', this.model, [
-            { id: 'back', icon: 'long-arrow-left', iconPrefix: 'fas', text: this.intl.t('developers.common.back'), onClick: this.goBack },
-        ]);
+        return this.detailsActionButtons('event', this.model, []);
     }
 
     @action goBack() {
-        return window.history.back();
+        return this.hostRouter.transitionTo('console.developers.events.index');
     }
 }

@@ -68,7 +68,7 @@ developers:
         no-parameters: No query parameters
       request-headers: 
         title: Request headers
-        no-headers: No request HEADERS
+        no-headers: No request headers
       request-body:
         title: Request
         title-second-part: body
@@ -125,7 +125,7 @@ developers:
         version-help-text: Select a specific API version to receive callbacks for.
         version-message: Select an API version...
         events-send-label: Events to send
-        events-send-help-text: Explicilty set which events to receive callbacks for.
+        events-send-help-text: Explicitly set which events to receive callbacks for.
         select-events: Select events...
         event-search-label: Event Search
         event-search-placeholder: Search...
@@ -138,9 +138,9 @@ developers:
         view-event: View Event
         info-message: Event ID copied to clipboard.
         webhook-header: Webhook attempts
-        webhook-message: Attempts to send an event to your endpoint in the past 15 days
+        webhook-message: Attempts to send an event to your endpoint
         http-code: HTTP status code
-        response-time: Response timer
+        response-time: Response time
         request-endpoint: Request to your endpoint
         no-request-body: No request body
         response: Response
@@ -156,6 +156,22 @@ developers:
         api-credentials: Receiving from all API Credentials
       metrics:
         date-created: Date Created
+      attempt-panel:
+        title: "Attempt {attempt}"
+        heading: "Attempt {attempt}"
+        tab-request: Request
+        tab-response: Response
+        tab-headers: Headers
+        tab-error: Error
+        signature: Signature
+        signature-value: hmac_sha256(body, credential secret) in the Signature header
+        attempt-of: "{n} of 3"
+        backoff: "backoff 10 s, 100 s"
+        request-body: Request body
+        request-headers: Request headers
+        no-headers: No headers were recorded for this attempt
+        no-error: No transport error
+        no-error-message: The endpoint answered. The Response tab shows what it returned.
     widget:
       dashboard:
         name: Developers Dashboard
@@ -211,6 +227,93 @@ developers:
         delete-error: DELETE Error
         duration-ms: Duration (ms)
   api-keys:
+    expiration:
+      never: Never
+      immediately: Immediately
+      in-1-hour: In 1 hour
+      in-24-hours: In 24 hours
+      in-3-days: In 3 days
+      in-7-days: In 7 days
+    badges:
+      expired: Expired
+      expiring: "Expires in {when}"
+    expiry-in: "in {when}"
+    actions:
+      view: View details
+      view-requests: View requests
+      watch-channel: Watch channel
+      edit: Edit…
+      rename: Rename…
+      roll: Roll key…
+      delete: Delete…
+    empty:
+      title-live: No live API keys yet
+      title-test: No test API keys yet
+      message: Keys authenticate your integrations. The secret is shown once when a key is created or rolled.
+    form:
+      environment-help: Follows the environment switch in the header.
+      environment-live: Live keys start with flb_live_ and read and write production data.
+      environment-test: Test keys start with flb_test_ and use the sandbox database.
+      expiration-placeholder: Never
+      expiration-current: "Current: {value}"
+      add-origin: Add origin
+      origins-help: Only needed when the key is used from a browser. Leave empty for server-side use.
+    create:
+      title: Create API key
+      accept: Create key
+      reveal-title: Save your credentials
+      done: Done
+      step-details: Details
+      step-reveal: Save the secret
+    edit:
+      title: Edit {apiKeyName}
+      accept: Save changes
+      read-only: "Read only. Your role lacks {permission}."
+    rename:
+      title: Rename {apiKeyName}
+      accept: Rename
+      help: Shown in lists, webhooks and request logs. The key itself does not change.
+    roll:
+      title: Roll {apiKeyName}
+      accept: Roll key
+      reveal-title: Save the new credentials
+      step-expire: Expire the old key
+      step-reveal: Save the new secret
+      explain: "Rolling creates a new key and secret. Webhook endpoints and the channel {channel} move to the new key automatically. Requests that still send the old key fail with 401 once it expires."
+      current-key: Current key
+      dependents: Dependents
+      dependents-value: "{count, plural, =0 {No webhook endpoints} =1 {1 webhook endpoint} other {# webhook endpoints}} · 1 channel"
+      expire-label: Expire the old key
+      expire-help: Both keys work until then, so you can deploy the new secret without downtime.
+      expire:
+        never: Never
+        immediately: Now
+        in-1-hour: In 1 hour
+        in-24-hours: In 24 hours
+        in-3-days: In 3 days
+        in-7-days: In 7 days
+      confirm-title: Confirm it is you
+      confirm-text: "Rolling a key requires your password. You are signed in as {email}."
+      reveal-warning: "Shown once. The old key keeps working until it expires ({expiration})."
+    reveal:
+      warning: This is the only time these credentials are shown. If you lose them, roll the key to get new ones.
+      secret-label: Secret key
+      secret-help: Store it in your secret manager. Fleetbase keeps a hash only.
+      key-label: Public key
+      key-help: Safe to show; identifies the key in requests and logs.
+      acknowledge: I have copied the secret and stored it somewhere safe
+    delete:
+      title: Delete {apiKeyName}?
+      body: "Requests using this key start failing with 401 immediately. {count, plural, =0 {No webhook endpoints depend on it.} =1 {1 webhook endpoint receives from it and will stop receiving.} other {# webhook endpoints receive from it and will stop receiving.}} This cannot be undone."
+      accept: Delete key
+    panel:
+      secret: Secret
+      secret-hidden: Hidden since creation. Roll the key to get a new one.
+      no-origins: Server use only, no browser origins
+      linked: Linked
+      channel-sub: Live events created with this key
+      recent-requests: Recent requests
+      no-requests: No requests with this key yet
     index:
       public-key: Public Key
       secret-key: Secret Key
@@ -247,44 +350,163 @@ developers:
   events:
     index:
       title: Events
+      loading: Loading events…
+      count: "{count, plural, =1 {1 event} other {# events}}"
+    sources:
+      api: API
+      console: Console
+    actions:
+      copy-id: Copy event id
+      copy-json: Copy payload JSON
+    empty:
+      title: No events in this period
+      message: "Events are kept for {days} days. Create or update a resource through the API to see one."
+    panel:
+      payload: Payload
+      resource: Resource
+      no-deliveries: No webhook deliveries
+      no-deliveries-message: No enabled endpoint subscribed to this event type when it was emitted.
   logs:
     index:
-      api-credential: API Credential
-      http-method: HTTP Method
-      title: Logs
+      api-credential: Credential
+      http-method: Method
+      title: Requests
+      loading: Loading requests…
+      request: Request
+      duration: Duration
+      count: "{count, plural, =1 {1 request} other {# requests}}"
+    actions:
+      copy-id: Copy request id
+      filter-path: Filter by this path
+      filter-ip: Filter by this IP
+    empty:
+      title: No requests in this period
+      message: "Requests are kept for {days} days. Send a request with one of your keys to see it here."
+    panel:
+      tab-query: Query params
+      tab-request-headers: Request headers
+      tab-request-body: Request body
+      tab-response-headers: Response headers
+      tab-response-body: Response body
+      full-url: Full URL
+      content-type: Content type
+      sizes: Sizes
+      sizes-value: "request {request} · response {response}"
+      related: Related resources
+      masked: credentials masked
+      no-response-headers: No response headers were recorded
   sockets:
     index:
-      link-text: Watch Channel
+      link-text: Watch
+      watch: Watch
+      copy-name: Copy channel id
+      forget: Remove from my list
       channel: Channel
+      type: Type
+      access: Access
+      last-activity: Last activity
+      no-activity: No activity seen this session
+      activity-hint: Activity is what this browser saw since the page opened.
+      watching: Watching
       listen-channel-title: Listen on a custom channel
       listen-channel-button-text: Listen
-      title: Channels receiving events from your account
-      button-text: Listen on custom channel
+      title: Channels
+      loading: Loading channels…
+      button-text: Listen on a custom channel
+      company-description: Every event in this organization, live and test
+      api-description: "Events created with {name}"
+      custom-source: Added by you
+      custom-description: Custom channel
+      empty-title: No channels match
+      empty-message: Clear the filters or listen on a custom channel.
+    types:
+      company: Company
+      api: API key
+      custom: Custom
+    access:
+      allowed: Allowed
+      denied: "Denied · {reason}"
+      unknown: Not tried yet
+    connection:
+      connected: "Socket connected · {host}"
+      connecting: Socket connecting…
+      disconnected: Socket disconnected
+    listen:
+      shape: "No spaces, up to 255 characters. The server authorizes by prefix."
+      rules-title: Channels you can subscribe to
+      access-you: You
+      access-participants: If participant
+      access-admins: Admins
+      remember: Remember this channel in my Channels list
+      error-empty: Enter a channel id.
+      error-length: Channel ids are at most 255 characters.
+      error-whitespace: Channel ids cannot contain spaces.
+    rules:
+      company: Your organization · all events
+      api: Events created with one of your keys
+      user: Members of your organization
+      driver: Drivers in your organization (FleetOps)
+      chat: Only participants
+      test: Admins or your own id
     view:
-      socket-connection-error: Socket connection error!
+      socket-connection-error: Socket connection error
       socket-connected: Socket is connected
+      socket-connected-to: "Socket connected to {host}"
       socket-subscribed: Socket subscribed to channel {modelName}
+      subscribed-rule: "Subscribed to {modelName} · rule {rule}"
       socket-subscribe-denied: Not authorized to subscribe to channel {modelName} ({reason})
       socket-subscribe-failed: "Could not subscribe to channel {modelName}: {message}"
       socket-kicked-out: Removed from channel {modelName} ({reason})
+      reconnecting: Connection lost, reconnecting…
+      reconnecting-banner: Connection lost. Reconnecting and resubscribing; messages sent in between are not replayed, they are in Events.
+      denied: "The socket server refused the subscription to {modelName}: {reason}. Denials are cached for 30 s before a retry is attempted."
+      denied-no-token: "Not authorized: {reason}. The console did not authenticate with the socket server. This is a console issue (the socket service never requests socket/token); an administrator can set SOCKETCLUSTER_AUTH_MODE=log to diagnose."
+      kicked: "Removed from {modelName}: {reason}. The socket token lasts up to 60 minutes. Retry to resubscribe; messages sent in between are in Events."
+      state-connecting: Connecting
+      state-subscribed: Subscribed
+      state-denied: Not authorized
+      state-kicked: Removed
+      state-reconnecting: Reconnecting
+      state-error: Connection error
+      state-closed: Unsubscribed
+      session-count: "{count, plural, =0 {No messages this session} =1 {1 message this session} other {# messages this session}}"
+      buffered: "{count} buffered while paused"
+      pause: Pause
+      resume: Resume
+      download: Download .ndjson
+      publish: Publish test message
+      unsubscribe: Unsubscribe
+      retry: Retry
+      kind-data: Data
+      kind-lifecycle: Lifecycle
+      kind-errors: Errors
+      filter-placeholder: Filter by event, resource id or payload text
+      event-type-any: "Event type: any"
+      time-format-time: Time
+      time-format-ms: Time + ms
+      time-format-relative: Relative
+      payload: Payload
+      paused-foot: "Paused · {count} buffered, oldest dropped past 2,000"
+      listening: Listening… rows buffer in memory (max 2,000, oldest dropped).
+      quiet: "Subscribed to {modelName}, nothing yet. Send a request that produces an event on this channel to see it here."
+      connecting: Connecting to the socket server…
+      shown-hidden: "{shown} shown · {hidden} hidden by filters"
       output: Output
-      awaiting-events: Awaiting events...
+      awaiting-events: Awaiting events…
   webhooks:
-    index:
-      view-logs: View Logs
-      edit-webhook: Edit Webhook
-      delete-webhook: Delete Webhook
-      add-webhook: Add a webhook endpoint
-      add-webhook-button-text: Confirm & Create
-      edit-webhook-endpoint: Edit webhook endpoint
-      edit-webhook-endpoint-button-text: Save Changes
-      new-webhook-success-message: New Webhook created.
-      delete-webhook-endpoint: Delete this Webhook Endpoint
-      delete-webhook-endpoint-body: Are you sure you want to delete this Webhook? All of your data assosciated with this Webhook will become unreachable. This endpoint will also stop receiving future events. This action cannot be undone.
-      delete-webhook-success-message: Webhook endpoint removed.
-      title: Webhooks
-      button-text: Add new endpoint
     view:
+      stat-success: Success 7d
+      stat-success-hint: normal is above 99.5%
+      stat-deliveries: Deliveries 7d
+      stat-deliveries-hint: "{failed} failed"
+      stat-duration: Avg response
+      stat-duration-hint: timeout at 5 s
+      stat-last: Last delivery
+      stat-last-hint: "last {days} days"
+      tab-deliveries: Deliveries
+      tab-details: Details
+      failing-banner: "{count, plural, =1 {1 delivery failed} other {# deliveries failed}} in the last 7 days. Fleetbase retries each event twice (after 10 s and 100 s) then marks it failed."
+      disabled-banner: This endpoint is disabled. Events that occur while it is disabled are not queued or retried.
       webhook-deleted-success-message: Webhook endpoint deleted.
       disable-webhook-title: Disable a webhook endpoint
       disable-webhook-body: This webhook endpoint may be temporarily disabled so that it will not receive notifications until it is enabled again. Fleetbase will not retry any notifications that are generated while the endpoint is disabled.
@@ -300,6 +522,96 @@ developers:
       disable-button-text: Disable...
       enable-button-text: Enable...
       delete-button-text: Delete...
+    deliveries:
+      title: Deliveries
+      date-range: Date range
+      event-type-any: "Event type: any"
+      search: Event id or payload text
+      attempts: Attempts
+      duration: Duration
+      sent: Sent
+      inspect: Inspect attempt
+      attempt-n: "Attempt {n}"
+      final: final
+      next-retry: "next retry in {when}"
+      marked-failed: marked failed
+      redeliver: Redeliver
+      result-successful: Delivered
+      result-failed: Failed
+      result-pending: Pending
+      empty: No deliveries yet
+      empty-filtered: No deliveries match these filters
+      empty-message: "Deliveries are kept for {days} days."
+    status:
+      enabled: Enabled
+      disabled: Disabled
+    badges:
+      all-events: All events
+    actions:
+      view: View deliveries
+      test: Send test event…
+      edit: Edit…
+      disable: Disable…
+      enable: Enable…
+      delete: Delete…
+    empty:
+      title-live: No live webhook endpoints
+      title-test: No test webhook endpoints
+      message: Fleetbase POSTs a signed JSON body for each subscribed event and retries after 10 s and 100 s.
+    form:
+      edit-title: "Edit {endpoint}"
+      create-accept: Create endpoint
+      url-required: An endpoint URL is required.
+      url-invalid: Enter a full URL, for example https://example.com/hooks.
+      url-private: Must be a public URL. Localhost and private networks are not reachable from Fleetbase.
+      credential-help: Only events created by this key are delivered and the payload is signed with its secret. Leave empty to receive from every key.
+      any-credential: Any credential
+      mode-help: Follows the environment switch in the header.
+      mode-text: Deliveries only include events from the same environment.
+      all-events: All events
+      all-events-warning: "This endpoint receives every event type ({count} today and new ones as they are added). Narrow it unless your receiver filters itself."
+      search-events: "Search {count} event types, e.g. order"
+      no-matching-events: No event types match.
+      selected-count: "{count, plural, =0 {Nothing selected} =1 {1 selected} other {# selected}}"
+      none-selected: Pick event types from the list.
+      chips-hint: A whole group collapses to a wildcard chip.
+    delete:
+      title: Delete this endpoint?
+      body: "Deliveries to {endpoint} stop immediately and its delivery history is removed with it. Disabling keeps the history and the configuration."
+      accept: Delete endpoint
+      disable-instead: Disable instead
+    disable:
+      title: Disable this endpoint?
+      body: "Fleetbase stops sending events to {endpoint} until you enable it again. Events that occur while it is disabled are not queued or retried."
+      accept: Disable endpoint
+    enable:
+      title: Enable this endpoint?
+      body: "Deliveries to {endpoint} resume for new events. The URL is re-validated first; events missed while disabled are not replayed."
+      accept: Enable endpoint
+    index:
+      view-logs: View Logs
+      edit-webhook: Edit Webhook
+      delete-webhook: Delete Webhook
+      add-webhook: Add a webhook endpoint
+      add-webhook-button-text: Confirm & Create
+      edit-webhook-endpoint: Edit webhook endpoint
+      edit-webhook-endpoint-button-text: Save Changes
+      new-webhook-success-message: New Webhook created.
+      delete-webhook-endpoint: Delete this Webhook Endpoint
+      delete-webhook-endpoint-body: Are you sure you want to delete this webhook? Its delivery history will be removed and it will stop receiving events. This action cannot be undone.
+      delete-webhook-success-message: Webhook endpoint removed.
+      title: Webhooks
+      button-text: Add endpoint
+      loading: Loading webhooks…
+      endpoint: Endpoint
+      events: Events
+      events-count: "{count, plural, =1 {1 event} other {# events}}"
+      credential: Credential
+      any-credential: Any credential
+      success-7d: Success 7d
+      last-delivery: Last delivery
+      failing-count: "{count, plural, =1 {1 failing} other {# failing}}"
+      failures-short: failed
   application:
     sidebar:
       title: Developers Console
@@ -391,91 +703,3 @@ developers:
         channel: Watch company channel
       env-live: You are in Live. Switch to Test in the API Keys header to try everything against the sandbox first; test keys start with flb_test_.
       env-test: You are in Test. Requests with flb_test_ keys use the sandbox and never touch live data.
-  api-keys:
-    expiration:
-      never: Never
-      immediately: Immediately
-      in-1-hour: In 1 hour
-      in-24-hours: In 24 hours
-      in-3-days: In 3 days
-      in-7-days: In 7 days
-    badges:
-      expired: Expired
-      expiring: "Expires in {when}"
-    expiry-in: "in {when}"
-    actions:
-      view: View details
-      view-requests: View requests
-      watch-channel: Watch channel
-      edit: Edit…
-      rename: Rename…
-      roll: Roll key…
-      delete: Delete…
-    empty:
-      title-live: No live API keys yet
-      title-test: No test API keys yet
-      message: Keys authenticate your integrations. The secret is shown once when a key is created or rolled.
-    form:
-      environment-help: Follows the environment switch in the header.
-      environment-live: Live keys start with flb_live_ and read and write production data.
-      environment-test: Test keys start with flb_test_ and use the sandbox database.
-      expiration-placeholder: Never
-      expiration-current: "Current: {value}"
-      add-origin: Add origin
-      origins-help: Only needed when the key is used from a browser. Leave empty for server-side use.
-    create:
-      title: Create API key
-      accept: Create key
-      reveal-title: Save your credentials
-      done: Done
-      step-details: Details
-      step-reveal: Save the secret
-    edit:
-      title: Edit {apiKeyName}
-      accept: Save changes
-      read-only: "Read only. Your role lacks {permission}."
-    rename:
-      title: Rename {apiKeyName}
-      accept: Rename
-      help: Shown in lists, webhooks and request logs. The key itself does not change.
-    roll:
-      title: Roll {apiKeyName}
-      accept: Roll key
-      reveal-title: Save the new credentials
-      step-expire: Expire the old key
-      step-reveal: Save the new secret
-      explain: "Rolling creates a new key and secret. Webhook endpoints and the channel {channel} move to the new key automatically. Requests that still send the old key fail with 401 once it expires."
-      current-key: Current key
-      dependents: Dependents
-      dependents-value: "{count, plural, =0 {No webhook endpoints} =1 {1 webhook endpoint} other {# webhook endpoints}} · 1 channel"
-      expire-label: Expire the old key
-      expire-help: Both keys work until then, so you can deploy the new secret without downtime.
-      expire:
-        never: Never
-        immediately: Now
-        in-1-hour: In 1 hour
-        in-24-hours: In 24 hours
-        in-3-days: In 3 days
-        in-7-days: In 7 days
-      confirm-title: Confirm it is you
-      confirm-text: "Rolling a key requires your password. You are signed in as {email}."
-      reveal-warning: "Shown once. The old key keeps working until it expires ({expiration})."
-    reveal:
-      warning: This is the only time these credentials are shown. If you lose them, roll the key to get new ones.
-      secret-label: Secret key
-      secret-help: Store it in your secret manager. Fleetbase keeps a hash only.
-      key-label: Public key
-      key-help: Safe to show; identifies the key in requests and logs.
-      acknowledge: I have copied the secret and stored it somewhere safe
-    delete:
-      title: Delete {apiKeyName}?
-      body: "Requests using this key start failing with 401 immediately. {count, plural, =0 {No webhook endpoints depend on it.} =1 {1 webhook endpoint receives from it and will stop receiving.} other {# webhook endpoints receive from it and will stop receiving.}} This cannot be undone."
-      accept: Delete key
-    panel:
-      secret: Secret
-      secret-hidden: Hidden since creation. Roll the key to get a new one.
-      no-origins: Server use only, no browser origins
-      linked: Linked
-      channel-sub: Live events created with this key
-      recent-requests: Recent requests
-      no-requests: No requests with this key yet

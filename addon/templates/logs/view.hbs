@@ -1,16 +1,17 @@
-<Layout::Section::Header @title={{@model.description}} @actionsWrapperClass="space-x-2" @badge={{@model.status_code}}>
-    <Layout::Resource::ActionButtons @buttons={{this.actionButtons}} />
+<Layout::Section::Header @title={{@model.description}} @actionsWrapperClass="space-x-2" @titleClass="dev-nowrap dev-mono" @badge={{@model.status_code}} @hideStatusDot={{true}} @disableBadgeHumanize={{true}}>
+    <Button @icon="arrow-left" @size="xs" @text={{t "developers.logs.index.title"}} @onClick={{this.goBack}} />
+    <Layout::Resource::ActionButtons @buttons={{this.actionButtons}} @renderInPlace={{true}} />
 </Layout::Section::Header>
 
 <Layout::Section::Body>
-    <div class="h-screen overflow-y-scroll">
-        <div class="max-w-6xl mx-auto">
-            <ApiRequestLog::Details @apiRequest={{@model}} />
-            <ApiRequestLog::QueryParams @apiRequest={{@model}} />
-            <ApiRequestLog::RequestHeaders @apiRequest={{@model}} />
-            <ApiRequestLog::RequestBody @apiRequest={{@model}} />
-            <ApiRequestLog::ResponseBody @apiRequest={{@model}} />
+    <div class="dev-page-scroll">
+        <div class="dev-page dev-page-narrow">
+            <SectionCard @flush={{true}}>
+                <:default>
+                    <ApiRequestLog::Panel @resource={{@model}} @isPage={{true}} />
+                </:default>
+            </SectionCard>
         </div>
-        <Spacer @height="200px" />
+        <Spacer @height="120px" />
     </div>
 </Layout::Section::Body>

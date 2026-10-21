@@ -1,55 +1,144 @@
-<Layout::Section::Header @title={{@model.name}} @leftSubheaderClass="flex-1" @actionsWrapperClass="space-x-2">
-    <Layout::Resource::ActionButtons @buttons={{this.actionButtons}} />
+{{! template-lint-disable no-invalid-interactive require-presentational-children }}
+<Layout::Section::Header @title={{@model.name}} @actionsWrapperClass="space-x-2" @titleClass="dev-nowrap dev-mono">
+    <Button @icon="arrow-left" @size="xs" @text={{t "developers.sockets.index.title"}} @onClick={{this.goBack}} />
 </Layout::Section::Header>
 
 <Layout::Section::Body>
-    <div class="h-screen overflow-y-scroll pb-40">
-        <div class="py-6 max-w-4xl mx-auto">
-            <ContentPanel
-                @titleStatusRight="Channel"
-                @titleStatusRightClass="info-status-badge"
-                @hideStatusDot={{true}}
-                @title={{@model.name}}
-                @open={{true}}
-                @pad={{false}}
-                @panelBodyClass="bg-black p-0i"
-                @wrapperClass="bordered-classic"
-            >
-                <div id="output" class="font-mono rounded-b-md max-h-full p-6 overflow-y-scroll bg-black shadow-inner dark:shadow-none">
-                    <div class="flex items-center justify-between mb-4">
-                        <div class="block w-1/2 font-mono font-semibold text-green-300">
-                            {{t "developers.sockets.view.output"}}
-                        </div>
-                        {{#if this.isAwaitingEvents}}
-                            <div class="flex items-center justify-end w-1/2 text-sm text-green-300">
-                                <Spinner @iconClass="green-loader" />
+    <div class="dev-page-scroll">
+        <div class="dev-page">
+            <ResourceHeader @icon="tower-broadcast" @iconTone={{this.iconTone}} @title={{@model.name}} @status={{this.connectionBadge}} @statusText={{t (concat "developers.sockets.view.state-" this.connection)}} @hideStatusDot={{true}} @disableHumanize={{true}} class="dev-channel-header">
+                <:badges>
+                    <Badge @status={{if (eq this.channelType "company") "purple" (if (eq this.channelType "api") "success" "info")}} @text={{t (concat "developers.sockets.types." this.channelType)}} @size="xs" @hideStatusDot={{true}} @disableHumanize={{true}} />
+                </:badges>
+                <:subtitle>
+                    <span>{{t "developers.sockets.view.session-count" count=this.dataCount}}</span>
+                    {{#if this.rate}}<span>· {{this.rate}} / s</span>{{/if}}
+                    {{#if this.paused}}<span>· {{t "developers.sockets.view.buffered" count=this.buffered.length}}</span>{{/if}}
+                </:subtitle>
+                <:actions>
+                    <div class="dev-segmented">
+                        <button type="button" class="dev-segment {{if this.paused 'is-active'}}" {{on "click" this.togglePause}} disabled={{not this.isSubscribed}}><FaIcon @icon="pause" @size="xs" /><span class="dev-segment-label">{{t "developers.sockets.view.pause"}}</span></button>
+                        <button type="button" class="dev-segment {{unless this.paused 'is-active'}}" {{on "click" this.togglePause}} disabled={{not this.isSubscribed}}><FaIcon @icon="play" @size="xs" /><span class="dev-segment-label">{{t "developers.sockets.view.resume"}}</span></button>
+                    </div>
+                    <Button @size="sm" @icon="eraser" @text={{t "developers.common.clear"}} @onClick={{this.clear}} @disabled={{not this.messages.length}} />
+                    <Button @size="sm" @icon="download" @text={{t "developers.sockets.view.download"}} @onClick={{this.download}} @disabled={{not this.messages.length}} />
+                    <Button @size="sm" @icon="paper-plane" @text={{t "developers.sockets.view.publish"}} @disabled={{true}} @helpText={{t "developers.common.unavailable-later"}} />
+                    {{#if (eq this.channelType "custom")}}
+                        <Button @size="sm" @icon="trash" @helpText={{t "developers.sockets.index.forget"}} @onClick={{this.forget}} />
+                    {{/if}}
+                    {{#if this.isSubscribed}}
+                        <Button @size="sm" @icon="xmark" @helpText={{t "developers.sockets.view.unsubscribe"}} @onClick={{this.unsubscribe}} />
+                    {{else}}
+                        <Button @size="sm" @type="primary" @icon="rotate" @text={{t "developers.sockets.view.retry"}} @onClick={{this.retry}} />
+                    {{/if}}
+                </:actions>
+            </ResourceHeader>
 
-                                <span class="ml-2 font-mono">
-                                    {{t "developers.sockets.view.awaiting-events"}}
-                                </span>
-                            </div>
+            {{#if this.isDenied}}
+                <div class="dev-note dev-note-danger">
+                    <FaIcon @icon="lock" />
+                    <span>
+                        {{#if this.isNoToken}}
+                            {{t "developers.sockets.view.denied-no-token" reason=this.reason}}
+                        {{else}}
+                            {{t "developers.sockets.view.denied" modelName=@model.name reason=this.reason}}
                         {{/if}}
+                    </span>
+                </div>
+            {{else if (eq this.connection "kicked")}}
+                <div class="dev-note dev-note-warning">
+                    <FaIcon @icon="triangle-exclamation" />
+                    <span>{{t "developers.sockets.view.kicked" modelName=@model.name reason=this.reason}}</span>
+                </div>
+            {{else if (eq this.connection "reconnecting")}}
+                <div class="dev-note dev-note-warning">
+                    <FaIcon @icon="rotate" />
+                    <span>{{t "developers.sockets.view.reconnecting-banner"}}</span>
+                </div>
+            {{else if (eq this.connection "error")}}
+                <div class="dev-note dev-note-danger">
+                    <FaIcon @icon="triangle-exclamation" />
+                    <span>{{t "developers.sockets.view.socket-connection-error"}}</span>
+                </div>
+            {{/if}}
+
+            <SectionCard @flush={{true}} class="dev-channel-log">
+                <:default>
+                    <div class="dev-filter-bar dev-filter-bar-inset">
+                        <button type="button" class="dev-chip {{if this.showData 'is-active'}}" {{on "click" (fn this.toggleKind "data")}}>{{t "developers.sockets.view.kind-data"}} <span class="dev-segment-count">{{this.dataCount}}</span></button>
+                        <button type="button" class="dev-chip {{if this.showLifecycle 'is-active'}}" {{on "click" (fn this.toggleKind "lifecycle")}}>{{t "developers.sockets.view.kind-lifecycle"}} <span class="dev-segment-count">{{this.lifecycleCount}}</span></button>
+                        <button type="button" class="dev-chip {{if this.showErrors 'is-active'}}" {{on "click" (fn this.toggleKind "error")}}>{{t "developers.sockets.view.kind-errors"}} <span class="dev-segment-count">{{this.errorCount}}</span></button>
+                        <Input @value={{this.query}} placeholder={{t "developers.sockets.view.filter-placeholder"}} class="form-input form-input-sm dev-filter-search" aria-label={{t "developers.sockets.view.filter-placeholder"}} {{on "input" this.setQuery}} />
+                        <Select @options={{this.eventTypes}} @value={{this.eventType}} @placeholder={{t "developers.sockets.view.event-type-any"}} @onSelect={{this.setEventType}} class="form-input form-input-sm dev-filter-select" />
+                        {{#if this.hasFilters}}
+                            <Button @type="link" @size="xs" @icon="xmark" @text={{t "developers.filter-bar.clear-all"}} @onClick={{this.clearFilters}} />
+                        {{/if}}
+                        <div class="dev-filter-bar-end">
+                            <div class="dev-segmented dev-segmented-xs">
+                                {{#each this.timeFormats as |option|}}
+                                    <button type="button" class="dev-segment {{if (eq this.timeFormat option.value) 'is-active'}}" {{on "click" (fn this.setTimeFormat option.value)}}>{{option.label}}</button>
+                                {{/each}}
+                            </div>
+                        </div>
                     </div>
 
-                    <div>
-                        {{#each this.events as |event|}}
-                            <div class="mb-3 text-sm font-mono rounded-lg shadow-sm flex flex-row">
-                                <div class="text-{{event.color}}-300 uppercase text-sm font-mono pr-2 flex-shrink-0">
-                                    [{{event.time}}]:
-                                </div>
-                                <div class="text-{{event.color}}-300 text-sm font-mono whitespace-pre-wrap break-all">{{event.content}}</div>
-                            </div>
-                        {{else}}
-                            <div class="flex items-center mt-6 text-green-300">
-                                <Spinner @iconClass="green-loader" />
-                                <span class="ml-2 font-mono">
-                                    {{t "developers.sockets.view.awaiting-events"}}
+                    <div class="dev-log">
+                        <div class="dev-log-head">
+                            <span>{{t "developers.common.time"}}</span><span>{{t "developers.common.event"}}</span><span>{{t "developers.sockets.view.payload"}}</span><span></span>
+                        </div>
+                        {{#each this.visibleMessages as |message|}}
+                            <div class="dev-log-row is-{{message.kind}} {{if message.expanded 'is-expanded'}}" role="button" tabindex="0" {{on "click" (fn this.toggleExpanded message)}}>
+                                <span class="dev-log-time">{{message.time}}</span>
+                                <span class="dev-log-event">
+                                    {{#if (eq message.kind "data")}}
+                                        <Badge @status="success" @text={{or message.event "message"}} @size="xxs" @hideStatusDot={{true}} @disableHumanize={{true}} />
+                                    {{else}}
+                                        <Badge @status={{if (eq message.kind "error") "danger" "info"}} @text={{or message.event "info"}} @size="xxs" @hideStatusDot={{true}} @disableHumanize={{true}} />
+                                    {{/if}}
+                                </span>
+                                <span class="dev-log-body">
+                                    {{#if (eq message.kind "data")}}
+                                        {{#if message.expanded}}
+                                            <span class="dev-log-meta">{{message.resourceId}}{{#if message.eventId}} · {{message.eventId}}{{/if}}</span>
+                                            <CodeViewer @value={{message.payload}} @title={{or message.event "payload"}} class="mt-2" />
+                                        {{else}}
+                                            <span class="dev-log-preview">{{json-stringify message.payload}}</span>
+                                        {{/if}}
+                                    {{else}}
+                                        <span class="dev-log-text">{{message.text}}</span>
+                                    {{/if}}
+                                </span>
+                                <span class="dev-log-actions">
+                                    {{#if (eq message.kind "data")}}
+                                        <Button @size="xs" @icon="copy" @helpText={{t "developers.common.copy"}} @onClick={{fn this.copyPayload message}} />
+                                        {{#if message.eventId}}
+                                            <Button @size="xs" @icon="bolt" @helpText={{t "developers.component.webhook.attempts.view-event"}} @onClick={{fn this.openEvent message}} />
+                                        {{/if}}
+                                    {{/if}}
                                 </span>
                             </div>
                         {{/each}}
+                        <div class="dev-log-foot">
+                            {{#if this.isSubscribed}}
+                                {{#if this.paused}}
+                                    <FaIcon @icon="pause" @size="xs" class="text-yellow-500" />
+                                    <span>{{t "developers.sockets.view.paused-foot" count=this.buffered.length}}</span>
+                                {{else}}
+                                    <span class="dev-dot dev-dot-green dev-pulse"></span>
+                                    <span>{{#if this.dataCount}}{{t "developers.sockets.view.listening"}}{{else}}{{t "developers.sockets.view.quiet" modelName=@model.name}}{{/if}}</span>
+                                {{/if}}
+                            {{else if (eq this.connection "connecting")}}
+                                <Spinner @width={{12}} @height={{12}} />
+                                <span>{{t "developers.sockets.view.connecting"}}</span>
+                            {{else}}
+                                <span>{{t (concat "developers.sockets.view.state-" this.connection)}}</span>
+                            {{/if}}
+                            <span class="dev-log-foot-end">{{t "developers.sockets.view.shown-hidden" shown=this.visibleMessages.length hidden=this.hiddenCount}}</span>
+                        </div>
                     </div>
-                </div>
-            </ContentPanel>
+                </:default>
+            </SectionCard>
         </div>
+        <Spacer @height="120px" />
     </div>
 </Layout::Section::Body>

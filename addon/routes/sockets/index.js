@@ -10,7 +10,7 @@ export default class SocketsIndexRoute extends Route {
     @service intl;
 
     @action loading(transition) {
-        this.loader.showOnInitialTransition(transition, 'section.next-view-section', { loadingMessage: 'Loading websockets...' });
+        this.loader.showOnInitialTransition(transition, 'section.next-view-section', { loadingMessage: this.intl.t('developers.sockets.index.loading') });
     }
 
     beforeModel() {

@@ -1,206 +1,223 @@
 import BaseController from '../base-controller';
 import { tracked } from '@glimmer/tracking';
 import { inject as service } from '@ember/service';
-import { action, computed } from '@ember/object';
+import { action } from '@ember/object';
 import { isBlank } from '@ember/utils';
 import { timeout } from 'ember-concurrency';
 import { task } from 'ember-concurrency-decorators';
 import fromStore from '@fleetbase/ember-core/decorators/legacy-from-store';
 import fetchFrom from '@fleetbase/ember-core/decorators/legacy-fetch-from';
+import { RETENTION_DAYS } from '../../utils/retention';
 
 export default class LogsIndexController extends BaseController {
     @service filters;
     @service intl;
     @service hostRouter;
     @service abilities;
+    @service developerPanels;
 
-    /**
-     * All api versions
-     *
-     * @memberof WebhooksIndexController
-     * @var {Array}
-     */
     @fetchFrom('webhook-endpoints/versions') apiVersions;
-
-    /**
-     * All api credentials.
-     *
-     * @memberof WebhooksIndexController
-     */
     @fromStore('api-credential', { limit: -1 }) apiCredentials;
 
-    /**
-     * Queryable parameters for this controller's model
-     *
-     * @var {Array}
-     */
-    queryParams = this.registeredQueryParams('log', ['query', 'page', 'limit', 'sort', 'version', 'key', 'method', 'created_at']);
+    queryParams = this.registeredQueryParams('log', ['query', 'page', 'limit', 'sort', 'version', 'key', 'method', 'created_at', 'source', 'status_code_gte', 'status_code_lt']);
 
-    /**
-     * The current page of data being viewed
-     *
-     * @var {Integer}
-     */
     @tracked page = 1;
-
-    /**
-     * The maximum number of items to show per page
-     *
-     * @var {Integer}
-     */
     @tracked limit = 40;
-
-    /**
-     * The param to sort the data on, the param with prepended `-` is descending
-     *
-     * @var {String}
-     */
     @tracked sort = '-id';
-
-    /**
-     * The param to query the data by
-     *
-     * @var {String}
-     */
     @tracked query;
-
-    /**
-     * The filterable param `created_at`
-     *
-     * @var {String}
-     */
     @tracked created_at;
-
-    /**
-     * The filterable param `version`
-     *
-     * @var {String}
-     */
     @tracked version;
-
-    /**
-     * The filterable param `method`
-     *
-     * @var {String}
-     */
     @tracked method;
-
-    /**
-     * The filterable param `key`
-     *
-     * @var {String}
-     */
     @tracked key;
+    @tracked source;
+    @tracked status_code_gte;
+    @tracked status_code_lt;
+    @tracked table;
+    retentionDays = RETENTION_DAYS;
 
     /**
-     * Columns for table component.
-     *
-     * @var {Array}
+     * Status-class segments map to `status_code_gte` / `status_code_lt`, which
+     * the generic filter operator suffixes support.
      */
-    @computed('apiCredentials.@each.id', 'apiVersions.[]') get columns() {
+    get segments() {
+        return [
+            { label: this.intl.t('developers.common.all'), params: { status_code_gte: null, status_code_lt: null } },
+            { label: '2xx', params: { status_code_gte: 200, status_code_lt: 300 } },
+            { label: '4xx', params: { status_code_gte: 400, status_code_lt: 500 } },
+            { label: '5xx', params: { status_code_gte: 500, status_code_lt: 600 } },
+        ];
+    }
+
+    get columns() {
         return [
             {
-                id: 'description',
-                sticky: true,
-                label: this.intl.t('developers.common.description'),
-                valuePath: 'description',
+                id: 'request',
+                label: this.intl.t('developers.logs.index.request'),
+                valuePath: 'path',
+                width: 420,
                 sortable: false,
+                resizable: true,
+                cellComponent: 'api-request-log/request-cell',
             },
             {
                 id: 'status',
                 label: this.intl.t('developers.common.status'),
-                valuePath: 'status',
+                valuePath: 'status_code',
+                width: 140,
                 sortable: false,
-                cellComponent: 'table/cell/status',
-                cellClassNames: 'uppercase',
+                cellComponent: 'api-request-log/status-cell',
             },
             {
-                id: 'public-id',
-                label: this.intl.t('developers.common.id'),
-                valuePath: 'public_id',
-                cellComponent: 'click-to-copy',
-                align: 'right',
+                id: 'duration',
+                label: this.intl.t('developers.logs.index.duration'),
+                valuePath: 'duration',
+                width: 100,
                 sortable: false,
+                align: 'right',
+                cellComponent: 'api-request-log/duration-cell',
             },
             {
                 id: 'api-credential-name',
                 label: this.intl.t('developers.logs.index.api-credential'),
                 valuePath: 'api_credential_name',
-                cellComponent: 'click-to-copy',
-                filterParam: 'key',
+                width: 180,
                 sortable: false,
                 filterable: true,
+                filterParam: 'key',
+                filterLabel: this.intl.t('developers.logs.index.api-credential'),
                 filterComponent: 'filter/select',
                 filterOptionLabel: 'fullName',
                 filterOptionValue: 'id',
                 filterOptions: this.apiCredentials,
+                cellComponent: 'api-request-log/credential-cell',
             },
             {
                 id: 'method',
                 label: this.intl.t('developers.logs.index.http-method'),
                 valuePath: 'method',
+                width: 90,
+                sortable: false,
+                hidden: true,
                 filterable: true,
+                filterLabel: this.intl.t('developers.logs.index.http-method'),
                 filterComponent: 'filter/multi-option',
                 filterOptions: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'],
+                cellComponent: 'api-request-log/method-cell',
+            },
+            {
+                id: 'source',
+                label: this.intl.t('developers.common.source'),
+                valuePath: 'source',
+                width: 100,
+                sortable: false,
+                filterable: true,
+                filterLabel: this.intl.t('developers.common.source'),
+                filterComponent: 'filter/select',
+                filterOptions: [
+                    { label: this.intl.t('developers.events.sources.api'), value: 'api' },
+                    { label: this.intl.t('developers.events.sources.console'), value: 'console' },
+                ],
+                cellComponent: 'table/cell/status',
             },
             {
                 id: 'version',
                 label: this.intl.t('developers.common.version'),
                 valuePath: 'version',
+                width: 110,
+                sortable: false,
                 filterable: true,
+                filterLabel: this.intl.t('developers.common.version'),
                 filterComponent: 'filter/select',
                 filterOptions: this.apiVersions,
+                cellClassNames: 'dev-mono',
             },
             {
                 id: 'created-at',
-                label: this.intl.t('developers.common.date'),
-                valuePath: 'createdAt',
-                filterParam: 'created_at',
-                sortParam: 'created_at',
+                label: this.intl.t('developers.common.time'),
+                valuePath: 'created_at',
+                width: 170,
                 sortable: false,
-                align: 'right',
                 filterable: true,
+                filterParam: 'created_at',
+                filterLabel: this.intl.t('developers.common.date'),
                 filterComponent: 'filter/date',
+                cellComponent: 'api-request-log/time-cell',
+            },
+            {
+                id: 'row-actions',
+                label: '',
+                cellComponent: 'table/cell/dropdown',
+                ddButtonText: false,
+                ddButtonIcon: 'ellipsis-h',
+                ddButtonIconPrefix: 'fas',
+                ddMenuLabel: null,
+                cellClassNames: 'overflow-visible',
+                wrapperClass: 'flex items-center justify-end mx-2',
+                align: 'right',
+                sticky: 'right',
+                width: 50,
+                actions: [
+                    { id: 'open', label: this.intl.t('developers.common.open'), icon: 'terminal', fn: this.openRequest, permission: 'developers view log' },
+                    { id: 'open-page', label: this.intl.t('developers.common.open-full-page'), icon: 'arrow-up-right-from-square', fn: this.openFullPage, permission: 'developers view log' },
+                    { id: 'copy-id', label: this.intl.t('developers.logs.actions.copy-id'), icon: 'copy', fn: this.copyId },
+                    { id: 'copy-curl', label: this.intl.t('developers.code-viewer.copy-curl'), icon: 'terminal', fn: this.copyCurl },
+                    { separator: true },
+                    { id: 'filter-path', label: this.intl.t('developers.logs.actions.filter-path'), icon: 'filter', fn: this.filterByPath },
+                    { id: 'filter-ip', label: this.intl.t('developers.logs.actions.filter-ip'), icon: 'filter', fn: this.filterByIp },
+                ],
             },
         ];
     }
 
-    /**
-     * The search task.
-     *
-     * @void
-     */
+    get emptyState() {
+        return {
+            icon: 'terminal',
+            title: this.intl.t('developers.logs.empty.title'),
+            message: this.intl.t('developers.logs.empty.message', { days: RETENTION_DAYS }),
+        };
+    }
+
     @task({ restartable: true }) *search({ target: { value } }) {
-        // if no query don't search
         if (isBlank(value)) {
             this.query = null;
             return;
         }
 
-        // timeout for typing
         yield timeout(250);
 
-        // reset page for results
         if (this.page > 1) {
             this.page = 1;
         }
 
-        // update the query param
         this.query = value;
     }
 
-    /**
-     * Link user to full request log view
-     *
-     * @void
-     */
-    @action onRowClick(log) {
+    @action openRequest(log) {
+        return this.developerPanels.openRequest(log);
+    }
+
+    @action openFullPage(log) {
         return this.hostRouter.transitionTo('console.developers.logs.view', log);
     }
 
-    /**
-     * Reload data.
-     */
+    @action copyId(log) {
+        return navigator.clipboard?.writeText(log.public_id);
+    }
+
+    @action copyCurl(log) {
+        return navigator.clipboard?.writeText(log.curl);
+    }
+
+    @action filterByPath(log) {
+        this.query = log.path;
+        this.page = 1;
+    }
+
+    @action filterByIp(log) {
+        this.query = log.ip_address;
+        this.page = 1;
+    }
+
     @action reload() {
         return this.hostRouter.refresh();
     }

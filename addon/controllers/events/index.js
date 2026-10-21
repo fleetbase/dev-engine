@@ -6,149 +6,204 @@ import { isBlank } from '@ember/utils';
 import { timeout } from 'ember-concurrency';
 import { task } from 'ember-concurrency-decorators';
 import fetchFrom from '@fleetbase/ember-core/decorators/legacy-fetch-from';
+import fromStore from '@fleetbase/ember-core/decorators/legacy-from-store';
+import { RETENTION_DAYS } from '../../utils/retention';
 
 export default class EventsIndexController extends BaseController {
     @service filters;
     @service intl;
     @service hostRouter;
     @service abilities;
+    @service developerPanels;
 
     /**
-     * All api versions
-     *
-     * @memberof LogsIndexController
-     * @var {Array}
+     * All event types.
      */
     @fetchFrom('webhook-endpoints/events') webhookEvents;
 
     /**
-     * Queryable parameters for this controller's model
-     *
-     * @var {Array}
+     * All api credentials.
      */
-    queryParams = this.registeredQueryParams('event', ['query', 'page', 'limit', 'sort', 'event', 'created_at']);
+    @fromStore('api-credential', { limit: -1 }) apiCredentials;
 
-    /**
-     * The current page of data being viewed
-     *
-     * @var {Integer}
-     */
+    queryParams = this.registeredQueryParams('event', ['query', 'page', 'limit', 'sort', 'event', 'created_at', 'source', 'api_credential_uuid', 'method']);
+
     @tracked page = 1;
-
-    /**
-     * The maximum number of items to show per page
-     *
-     * @var {Integer}
-     */
     @tracked limit = 40;
-
-    /**
-     * The param to sort the data on, the param with prepended `-` is descending
-     *
-     * @var {String}
-     */
     @tracked sort = '-id';
-
-    /**
-     * The param to query the data by
-     *
-     * @var {String}
-     */
     @tracked query;
-
-    /**
-     * The filterable param `created_at`
-     *
-     * @var {String}
-     */
     @tracked created_at;
-
-    /**
-     * The filterable `event`
-     *
-     * @var {String}
-     */
     @tracked event;
+    @tracked source;
+    @tracked api_credential_uuid;
+    @tracked method;
+    @tracked table;
+    retentionDays = RETENTION_DAYS;
 
-    /**
-     * Columns for table component.
-     *
-     * @var {Array}
-     */
-    @tracked columns = [
-        {
-            id: 'description',
-            sticky: true,
-            label: this.intl.t('developers.common.event'),
-            valuePath: 'description',
-            sortable: false,
-        },
-        {
-            id: 'event',
-            label: this.intl.t('developers.common.code'),
-            valuePath: 'event',
-            sortable: false,
-            filterable: true,
-            filterComponent: 'filter/select',
-            filterOptions: this.webhookEvents,
-        },
-        {
-            id: 'public-id',
-            label: this.intl.t('developers.common.id'),
-            valuePath: 'public_id',
-            cellComponent: 'click-to-copy',
-            align: 'right',
-            sortable: false,
-        },
-        {
-            id: 'created-at',
-            label: this.intl.t('developers.common.date'),
-            valuePath: 'createdAt',
-            filterParam: 'created_at',
-            sortParam: 'created_at',
-            sortable: false,
-            align: 'right',
-            filterable: true,
-            filterComponent: 'filter/date',
-        },
-    ];
+    get credentialNames() {
+        const names = {};
 
-    /**
-     * The search task.
-     *
-     * @void
-     */
+        (this.apiCredentials ?? []).forEach((credential) => {
+            names[credential.id] = credential.name ?? credential.key;
+        });
+
+        return names;
+    }
+
+    get columns() {
+        return [
+            {
+                id: 'event',
+                label: this.intl.t('developers.common.event'),
+                valuePath: 'event',
+                width: 380,
+                sortable: false,
+                cellComponent: 'table/cell/identity',
+                resourceType: 'api-event',
+                permission: 'developers view event',
+                action: this.openEvent,
+                wrapperClass: 'max-w-full',
+                labelPath: 'event',
+                badges: (event) => [{ key: 'description', label: event.description, class: 'dev-identity-badge-plain' }],
+                badgeLimit: 1,
+                filterable: true,
+                filterParam: 'event',
+                filterLabel: this.intl.t('developers.common.event-type'),
+                filterComponent: 'filter/select',
+                filterOptions: this.webhookEvents,
+            },
+            {
+                id: 'source',
+                label: this.intl.t('developers.common.source'),
+                valuePath: 'source',
+                width: 140,
+                sortable: false,
+                filterable: true,
+                filterLabel: this.intl.t('developers.common.source'),
+                filterComponent: 'filter/select',
+                filterOptions: [
+                    { label: this.intl.t('developers.events.sources.api'), value: 'api' },
+                    { label: this.intl.t('developers.events.sources.console'), value: 'console' },
+                ],
+                cellComponent: 'api-event/source-cell',
+            },
+            {
+                id: 'method',
+                label: this.intl.t('developers.logs.index.http-method'),
+                valuePath: 'method',
+                width: 100,
+                sortable: false,
+                hidden: true,
+                filterable: true,
+                filterLabel: this.intl.t('developers.logs.index.http-method'),
+                filterComponent: 'filter/multi-option',
+                filterOptions: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'],
+                cellComponent: 'api-request-log/method-cell',
+            },
+            {
+                id: 'api-credential',
+                label: this.intl.t('developers.webhooks.index.credential'),
+                valuePath: 'api_credential_uuid',
+                width: 180,
+                sortable: false,
+                filterable: true,
+                filterParam: 'api_credential_uuid',
+                filterLabel: this.intl.t('developers.webhooks.index.credential'),
+                filterComponent: 'filter/select',
+                filterOptionLabel: 'fullName',
+                filterOptionValue: 'id',
+                filterOptions: this.apiCredentials,
+                cellComponent: 'api-event/credential-cell',
+                cellComponentArgs: { names: this.credentialNames },
+            },
+            {
+                id: 'public-id',
+                label: this.intl.t('developers.common.id'),
+                valuePath: 'public_id',
+                width: 170,
+                sortable: false,
+                cellComponent: 'api-key/key-cell',
+            },
+            {
+                id: 'created-at',
+                label: this.intl.t('developers.common.time'),
+                valuePath: 'created_at',
+                width: 170,
+                sortable: false,
+                filterable: true,
+                filterParam: 'created_at',
+                filterLabel: this.intl.t('developers.common.date'),
+                filterComponent: 'filter/date',
+                cellComponent: 'api-request-log/time-cell',
+            },
+            {
+                id: 'row-actions',
+                label: '',
+                cellComponent: 'table/cell/dropdown',
+                ddButtonText: false,
+                ddButtonIcon: 'ellipsis-h',
+                ddButtonIconPrefix: 'fas',
+                ddMenuLabel: null,
+                cellClassNames: 'overflow-visible',
+                wrapperClass: 'flex items-center justify-end mx-2',
+                align: 'right',
+                sticky: 'right',
+                width: 50,
+                actions: [
+                    { id: 'open', label: this.intl.t('developers.common.open'), icon: 'bolt', fn: this.openEvent, permission: 'developers view event' },
+                    {
+                        id: 'open-page',
+                        label: this.intl.t('developers.common.open-full-page'),
+                        icon: 'arrow-up-right-from-square',
+                        fn: this.openFullPage,
+                        permission: 'developers view event',
+                    },
+                    { id: 'copy-id', label: this.intl.t('developers.events.actions.copy-id'), icon: 'copy', fn: this.copyId },
+                    { id: 'copy-json', label: this.intl.t('developers.events.actions.copy-json'), icon: 'code', fn: this.copyJson },
+                ],
+            },
+        ];
+    }
+
+    get emptyState() {
+        return {
+            icon: 'bolt',
+            title: this.intl.t('developers.events.empty.title'),
+            message: this.intl.t('developers.events.empty.message', { days: RETENTION_DAYS }),
+        };
+    }
+
     @task({ restartable: true }) *search({ target: { value } }) {
-        // if no query don't search
         if (isBlank(value)) {
             this.query = null;
             return;
         }
 
-        // timeout for typing
         yield timeout(250);
 
-        // reset page for results
         if (this.page > 1) {
             this.page = 1;
         }
 
-        // update the query param
         this.query = value;
     }
 
-    /**
-     * Link user to full request log view
-     *
-     * @void
-     */
-    @action onRowClick(log) {
-        return this.hostRouter.transitionTo('console.developers.events.view', log);
+    @action openEvent(event) {
+        return this.developerPanels.openEvent(event);
     }
 
-    /**
-     * Reload data.
-     */
+    @action openFullPage(event) {
+        return this.hostRouter.transitionTo('console.developers.events.view', event);
+    }
+
+    @action copyId(event) {
+        return navigator.clipboard?.writeText(event.public_id);
+    }
+
+    @action copyJson(event) {
+        return navigator.clipboard?.writeText(JSON.stringify(event.data ?? {}, null, 2));
+    }
+
     @action reload() {
         return this.hostRouter.refresh();
     }

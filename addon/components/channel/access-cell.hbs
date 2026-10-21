@@ -1,0 +1,9 @@
+<span class="dev-cell-text" title={{@row.reason}}>
+    {{#if (eq @value "allowed")}}
+        <Badge @status="success" @text={{t "developers.sockets.access.allowed"}} @size="xs" @hideStatusDot={{true}} @disableHumanize={{true}} />
+    {{else if (eq @value "denied")}}
+        <Badge @status="danger" @text={{t "developers.sockets.access.denied" reason=@row.reason}} @size="xs" @hideStatusDot={{true}} @disableHumanize={{true}} />
+    {{else}}
+        <span class="dev-muted">{{t "developers.sockets.access.unknown"}}</span>
+    {{/if}}
+</span>

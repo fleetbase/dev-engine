@@ -1,13 +1,39 @@
 <Layout::Resource::Tabular
     @registry="developers:socket:table"
     @title={{t "developers.sockets.index.title"}}
+    @searchQuery={{this.query}}
+    @onSearch={{this.search}}
+    @searchDisabled={{cannot "developers list socket"}}
     @onReload={{this.reload}}
     @data={{this.channels}}
     @columns={{this.columns}}
-    @selectable={{false}}
-    @canSelectAll={{false}}
-    @pagination={{false}}
     @setupTable={{fn (mut this.table)}}
     @actionButtons={{this.actionButtons}}
     @controller={{this}}
-/>
+    @filterPickerButtonClass="hidden"
+    @hideColumnsPicker={{true}}
+    @headerClass="dev-list-header"
+>
+    <:header>
+        <div class="dev-subheader-controls">
+            <Channel::ConnectionBadge />
+        </div>
+    </:header>
+    <:default as |rows|>
+        <FilterBar @columns={{this.columns}} @controller={{this}} @segments={{this.segments}}>
+            <span class="dev-muted dev-nowrap">{{t "developers.sockets.index.activity-hint"}}</span>
+        </FilterBar>
+        <Table
+            @rows={{rows}}
+            @columns={{this.columns}}
+            @selectable={{false}}
+            @canSelectAll={{false}}
+            @onSetup={{fn (mut this.table)}}
+            @pagination={{false}}
+            @onRowClick={{this.watchChannel}}
+            @wrapperClass="dev-table-compact"
+            @emptyStateComponent={{component "states/empty" icon="tower-broadcast" title=(t "developers.sockets.index.empty-title") message=(t "developers.sockets.index.empty-message")}}
+            @searchQuery={{this.query}}
+        />
+    </:default>
+</Layout::Resource::Tabular>

@@ -1,0 +1,9 @@
+{{#let (@column.cellComponentArgs.healthFor @row) as |health|}}
+    {{#if health.rateText}}
+        <span class="dev-cell-text font-semibold {{if (eq health.health 'failing') 'text-rose-600 dark:text-rose-300'}}">{{health.rateText}}</span>
+    {{else if health.success_rate}}
+        <span class="dev-cell-text font-semibold {{if (eq health.health 'failing') 'text-rose-600 dark:text-rose-300'}}">{{health.success_rate}}%</span>
+    {{else}}
+        <span class="dev-cell-text dev-muted">—</span>
+    {{/if}}
+{{/let}}

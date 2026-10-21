@@ -1,0 +1,44 @@
+<div class="dev-panel-content" ...attributes>
+    <div class="dev-panel-identity">
+        <span class="dev-identity-icon {{if this.isSuccess 'is-green' 'is-red'}}"><FaIcon @icon="paper-plane" @size="xs" /></span>
+        <div class="dev-identity-text">
+            <span class="dev-identity-title dev-mono" title={{this.apiEvent.event}}>{{t "developers.component.webhook.attempt-panel.heading" attempt=(or this.attempt.attempt 1)}} · {{this.apiEvent.event}}</span>
+            <span class="dev-identity-sub">
+                <Badge @status={{this.statusBadge}} @text={{this.statusText}} @size="xxs" @hideStatusDot={{true}} @disableHumanize={{true}} />
+                <span>{{this.sentAt}}</span>
+                {{#if this.duration}}<span>· {{this.duration}}</span>{{/if}}
+                <span class="dev-mono">· {{this.attempt.public_id}}</span>
+            </span>
+        </div>
+    </div>
+
+    <div class="dev-inline-wrap">
+        <Button @size="xs" @icon="rotate-right" @text={{t "developers.webhooks.deliveries.redeliver"}} @disabled={{true}} @helpText={{t "developers.common.unavailable-later"}} />
+        <Button @size="xs" @icon="bolt" @text={{t "developers.component.webhook.attempts.view-event"}} @onClick={{this.openEvent}} @disabled={{not this.apiEvent}} />
+    </div>
+
+    <dl class="dev-kv is-compact">
+        <dt>{{this.attempt.method}}</dt>
+        <dd class="dev-mono">{{this.attempt.url}}</dd>
+        <dt>{{t "developers.component.webhook.attempt-panel.signature"}}</dt>
+        <dd class="dev-mono">{{t "developers.component.webhook.attempt-panel.signature-value"}}</dd>
+        <dt>{{t "developers.common.attempt"}}</dt>
+        <dd>{{t "developers.component.webhook.attempt-panel.attempt-of" n=(or this.attempt.attempt 1)}} · {{t "developers.component.webhook.attempt-panel.backoff"}}</dd>
+    </dl>
+
+    <TabNavigation @tabs={{this.tabs}} @activeTabId={{this.activeTab}} @onTabChange={{this.setTab}} @style="github" @size="sm" @tablistClass="dev-tabs">
+        {{#if (eq this.activeTab "request")}}
+            <CodeViewer @value={{this.requestBody}} @title={{t "developers.component.webhook.attempt-panel.request-body"}} @curl={{this.curl}} @emptyText={{t "developers.component.webhook.attempts.no-request-body"}} class="mt-3" />
+        {{else if (eq this.activeTab "response")}}
+            <CodeViewer @value={{this.responseBody}} @title={{concat (t "developers.component.webhook.attempts.response") " · " this.statusText}} @emptyText={{t "developers.component.webhook.attempts.no-response-body"}} class="mt-3" />
+        {{else if (eq this.activeTab "headers")}}
+            <CodeViewer @value={{this.requestHeaders}} @title={{t "developers.component.webhook.attempt-panel.request-headers"}} @emptyText={{t "developers.component.webhook.attempt-panel.no-headers"}} class="mt-3" />
+        {{else}}
+            {{#if this.hasError}}
+                <CodeViewer @value={{this.errorMeta}} @title={{t "developers.component.webhook.attempt-panel.tab-error"}} class="mt-3" />
+            {{else}}
+                <States::Empty @icon="circle-check" @title={{t "developers.component.webhook.attempt-panel.no-error"}} @message={{t "developers.component.webhook.attempt-panel.no-error-message"}} class="py-6" />
+            {{/if}}
+        {{/if}}
+    </TabNavigation>
+</div>

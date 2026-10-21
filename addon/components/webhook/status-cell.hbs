@@ -1,0 +1,12 @@
+{{#let (@column.cellComponentArgs.healthFor @row) as |health|}}
+    {{#if health.health}}
+        <span class="dev-cell-text">
+            <Badge @status={{or health.badge (if (eq health.health "disabled") "inactive" "info")}} @text={{t (concat "developers.health." health.health)}} @size="xs" @hideStatusDot={{true}} @disableHumanize={{true}} />
+            {{#if (eq health.health "failing")}}
+                <span class="dev-muted ml-1">{{health.failures}} {{t "developers.webhooks.index.failures-short"}}</span>
+            {{/if}}
+        </span>
+    {{else}}
+        <Badge @status={{if @row.isEnabled "success" "inactive"}} @text={{if @row.isEnabled (t "developers.webhooks.status.enabled") (t "developers.webhooks.status.disabled")}} @size="xs" @hideStatusDot={{true}} @disableHumanize={{true}} />
+    {{/if}}
+{{/let}}

@@ -1,0 +1,65 @@
+<div class="dev-panel-content" ...attributes>
+    <div class="dev-panel-identity">
+        <span class="dev-identity-icon {{if (eq this.statusBadge 'danger') 'is-red' (if (eq this.statusBadge 'warning') 'is-amber' 'is-green')}}"><FaIcon @icon="terminal" @size="xs" /></span>
+        <div class="dev-identity-text">
+            <span class="dev-identity-title" title={{this.log.full_url}}><span class="dev-method dev-method-{{lowercase this.log.method}}">{{this.log.method}}</span> <span class="dev-mono">{{this.log.path}}</span> <Badge @status={{this.statusBadge}} @text={{this.statusText}} @size="xxs" @hideStatusDot={{true}} @disableHumanize={{true}} /></span>
+            <span class="dev-identity-sub">
+                <span class={{if this.isSlow "text-rose-600 dark:text-rose-300 font-semibold"}}>{{or this.duration "—"}}</span>
+                <span>· {{this.createdAt}}</span>
+                <span class="dev-mono">· {{this.log.public_id}}</span>
+            </span>
+        </div>
+        <div class="dev-panel-identity-actions">
+            <Button @size="xs" @icon="terminal" @text={{t "developers.code-viewer.copy-curl"}} @onClick={{this.copyCurl}} />
+            <Button @size="xs" @icon="copy" @helpText={{t "developers.logs.actions.copy-id"}} @onClick={{this.copyId}} />
+            {{#unless @isPage}}
+                <Button @size="xs" @icon="arrow-up-right-from-square" @helpText={{t "developers.common.open-full-page"}} @onClick={{this.openFullPage}} />
+            {{/unless}}
+        </div>
+    </div>
+
+    <dl class="dev-kv is-compact dev-kv-facts">
+        <dt>{{t "developers.logs.panel.full-url"}}</dt>
+        <dd><ClickToCopy @value={{this.log.full_url}}><span class="dev-mono">{{this.log.full_url}}</span></ClickToCopy></dd>
+        <dt>{{t "developers.logs.index.api-credential"}}</dt>
+        <dd>
+            {{#if this.log.api_credential_uuid}}
+                <button type="button" class="dev-tag dev-tag-button" {{on "click" this.requestsForKey}}><FaIcon @icon="key" @size="xs" /><span>{{or this.log.api_credential_name (mask-key this.log.api_credential_uuid)}}</span></button>
+            {{else}}
+                <span class="dev-muted">—</span>
+            {{/if}}
+        </dd>
+        <dt>{{t "developers.component.api-request-log.details.ip-address"}}</dt>
+        <dd>
+            {{#if this.log.ip_address}}
+                <button type="button" class="dev-tag dev-tag-button" {{on "click" this.requestsFromIp}}><span>{{this.log.ip_address}}</span><FaIcon @icon="filter" @size="xs" /></button>
+            {{else}}
+                <span class="dev-muted">—</span>
+            {{/if}}
+        </dd>
+        <dt>{{t "developers.common.version"}}</dt>
+        <dd><span class="dev-mono">{{n-a this.log.version}}</span> · {{t "developers.common.source"}} <Badge @status="info" @text={{or this.log.source "api"}} @size="xxs" @hideStatusDot={{true}} @disableHumanize={{true}} /></dd>
+        <dt>{{t "developers.logs.panel.content-type"}}</dt>
+        <dd><span class="dev-mono">{{n-a this.log.content_type}}</span></dd>
+        <dt>{{t "developers.logs.panel.sizes"}}</dt>
+        <dd>{{t "developers.logs.panel.sizes-value" request=(or this.requestSize "0 B") response=(or this.responseSize "0 B")}}</dd>
+        {{#if this.relatedResources.length}}
+            <dt>{{t "developers.logs.panel.related"}}</dt>
+            <dd class="dev-inline-wrap">{{#each this.relatedResources as |id|}}<span class="dev-tag"><span>{{id}}</span></span>{{/each}}</dd>
+        {{/if}}
+    </dl>
+
+    <TabNavigation @tabs={{this.tabs}} @activeTabId={{this.activeTab}} @onTabChange={{this.setTab}} @style="github" @size="sm" @tablistClass="dev-tabs">
+        {{#if (eq this.activeTab "query-params")}}
+            <CodeViewer @value={{this.log.query_params}} @title={{t "developers.component.api-request-log.query-params.title"}} @emptyText={{t "developers.component.api-request-log.query-params.no-parameters"}} class="mt-3" />
+        {{else if (eq this.activeTab "request-headers")}}
+            <CodeViewer @value={{this.maskedRequestHeaders}} @title={{t "developers.component.api-request-log.request-headers.title"}} @meta={{t "developers.logs.panel.masked"}} @emptyText={{t "developers.component.api-request-log.request-headers.no-headers"}} class="mt-3" />
+        {{else if (eq this.activeTab "response-headers")}}
+            <CodeViewer @value={{this.log.response_headers}} @title={{t "developers.logs.panel.tab-response-headers"}} @emptyText={{t "developers.logs.panel.no-response-headers"}} class="mt-3" />
+        {{else if (eq this.activeTab "response-body")}}
+            <CodeViewer @value={{this.responseBody}} @title={{concat (t "developers.component.api-request-log.response-body.title") " · " this.statusText}} @emptyText={{t "developers.component.api-request-log.response-body.no-response-body"}} class="mt-3" />
+        {{else}}
+            <CodeViewer @value={{this.requestBody}} @title={{t "developers.logs.panel.tab-request-body"}} @curl={{this.curl}} @emptyText={{t "developers.component.api-request-log.request-body.no-request-body" method=this.log.method}} class="mt-3" />
+        {{/if}}
+    </TabNavigation>
+</div>

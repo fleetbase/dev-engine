@@ -7,12 +7,40 @@
     @onReload={{this.reload}}
     @data={{@model}}
     @columns={{this.columns}}
-    @selectable={{false}}
-    @canSelectAll={{false}}
-    @onRowClick={{this.viewWebhook}}
     @page={{this.page}}
     @onPageChange={{fn (mut this.page)}}
     @setupTable={{fn (mut this.table)}}
     @actionButtons={{this.actionButtons}}
     @controller={{this}}
-/>
+    @filterPickerButtonClass="hidden"
+    @headerClass="dev-list-header"
+>
+    <:header>
+        <div class="dev-subheader-controls">
+            <EnvironmentSwitch @hideHint={{true}} />
+            {{#if this.failingCount}}
+                <Badge @status="danger" @text={{t "developers.webhooks.index.failing-count" count=this.failingCount}} @hideStatusDot={{false}} @disableHumanize={{true}} />
+            {{/if}}
+        </div>
+    </:header>
+    <:default as |rows|>
+        <FilterBar @columns={{this.columns}} @controller={{this}}>
+            <span class="dev-muted dev-nowrap">{{t "developers.common.retention" days=this.retentionDays}}</span>
+        </FilterBar>
+        <Table
+            @rows={{rows}}
+            @columns={{this.columns}}
+            @selectable={{false}}
+            @canSelectAll={{false}}
+            @onSetup={{fn (mut this.table)}}
+            @pagination={{true}}
+            @paginationMeta={{rows.meta}}
+            @page={{this.page}}
+            @onPageChange={{fn (mut this.page)}}
+            @onRowClick={{this.viewWebhook}}
+            @wrapperClass="dev-table-compact"
+            @emptyStateComponent={{component "states/empty" icon=this.emptyState.icon title=this.emptyState.title message=this.emptyState.message action=this.emptyState.action}}
+            @searchQuery={{this.query}}
+        />
+    </:default>
+</Layout::Resource::Tabular>

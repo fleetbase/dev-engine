@@ -1,9 +1,32 @@
 <Modal::Default @modalIsOpened={{@modalIsOpened}} @options={{@options}} @confirm={{@onConfirm}} @decline={{@onDecline}} as |options|>
-    <div class="modal-body-container">
-        <InputGroup
-            @name={{t "developers.component.modals.listen-custom-channel.name"}}
-            @value={{@options.channelId}}
-            @helpText={{t "developers.component.modals.listen-custom-channel.name-help-text"}}
-        />
+    <div class="modal-body-container dev-modal-body">
+        <InputGroup @name={{t "developers.component.modals.listen-custom-channel.name"}} @required={{true}} @helpText={{t "developers.component.modals.listen-custom-channel.name-help-text"}}>
+            <Input @value={{options.channelId}} placeholder="driver.driver_3k1xq9" class="w-full form-input dev-mono {{if options.error 'is-invalid'}}" aria-label={{t "developers.component.modals.listen-custom-channel.name"}} />
+            <InputInfo @text={{t "developers.sockets.listen.shape"}} />
+            {{#if options.error}}
+                <div class="dev-error">{{options.error}}</div>
+            {{/if}}
+        </InputGroup>
+
+        <SectionCard @title={{t "developers.sockets.listen.rules-title"}} @flush={{true}} class="mb-4">
+            <:default>
+                <table class="dev-widget-table">
+                    <tbody>
+                        {{#each options.rules as |rule|}}
+                            <tr>
+                                <td class="dev-mono">{{rule.prefix}}</td>
+                                <td class="dev-muted">{{rule.description}}</td>
+                                <td class="text-right"><Badge @status={{if (eq rule.access "you") "success" "warning"}} @text={{t (concat "developers.sockets.listen.access-" rule.access)}} @size="xxs" @hideStatusDot={{true}} @disableHumanize={{true}} /></td>
+                            </tr>
+                        {{/each}}
+                    </tbody>
+                </table>
+            </:default>
+        </SectionCard>
+
+        <label class="dev-ack">
+            <Checkbox @value={{options.remember}} @onToggle={{options.toggleRemember}} />
+            <span>{{t "developers.sockets.listen.remember"}}</span>
+        </label>
     </div>
 </Modal::Default>

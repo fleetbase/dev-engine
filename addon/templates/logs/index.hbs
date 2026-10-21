@@ -7,11 +7,39 @@
     @onReload={{this.reload}}
     @data={{@model}}
     @columns={{this.columns}}
-    @selectable={{false}}
-    @canSelectAll={{false}}
-    @onRowClick={{this.onRowClick}}
     @page={{this.page}}
     @onPageChange={{fn (mut this.page)}}
     @setupTable={{fn (mut this.table)}}
     @controller={{this}}
-/>
+    @filterPickerButtonClass="hidden"
+    @headerClass="dev-list-header"
+>
+    <:header>
+        <div class="dev-subheader-controls">
+            <EnvironmentSwitch @hideHint={{true}} />
+            {{#if @model.meta.total}}
+                <span class="dev-muted dev-nowrap">{{t "developers.logs.index.count" count=@model.meta.total}}</span>
+            {{/if}}
+        </div>
+    </:header>
+    <:default as |rows|>
+        <FilterBar @columns={{this.columns}} @controller={{this}} @segments={{this.segments}}>
+            <span class="dev-muted dev-nowrap">{{t "developers.common.retention" days=this.retentionDays}}</span>
+        </FilterBar>
+        <Table
+            @rows={{rows}}
+            @columns={{this.columns}}
+            @selectable={{false}}
+            @canSelectAll={{false}}
+            @onSetup={{fn (mut this.table)}}
+            @pagination={{true}}
+            @paginationMeta={{rows.meta}}
+            @page={{this.page}}
+            @onPageChange={{fn (mut this.page)}}
+            @onRowClick={{this.openRequest}}
+            @wrapperClass="dev-table-compact"
+            @emptyStateComponent={{component "states/empty" icon=this.emptyState.icon title=this.emptyState.title message=this.emptyState.message}}
+            @searchQuery={{this.query}}
+        />
+    </:default>
+</Layout::Resource::Tabular>

@@ -15,12 +15,11 @@
     @controller={{this}}
     @filterPickerButtonClass="hidden"
     @headerClass="dev-list-header"
-    as |rows|
 >
     <:header>
         <EnvironmentSwitch class="dev-subheader-controls" />
     </:header>
-    <:default>
+    <:default as |rows|>
         <FilterBar @columns={{this.columns}} @controller={{this}} />
         <Table
             @rows={{rows}}

@@ -29,10 +29,19 @@ export default class EventsIndexRoute extends Route {
         event: {
             refreshModel: true,
         },
+        source: {
+            refreshModel: true,
+        },
+        api_credential_uuid: {
+            refreshModel: true,
+        },
+        method: {
+            refreshModel: true,
+        },
     };
 
     @action loading(transition) {
-        this.loader.showOnInitialTransition(transition, 'section.next-view-section', { loadingMessage: 'Loading events...' });
+        this.loader.showOnInitialTransition(transition, 'section.next-view-section', { loadingMessage: this.intl.t('developers.events.index.loading') });
     }
 
     beforeModel() {

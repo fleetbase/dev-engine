@@ -36,6 +36,28 @@ export default class ApiRequestLogModel extends Model {
     @attr('date') updated_at;
 
     /** @computed */
+    get curl() {
+        const headers = this.request_headers && typeof this.request_headers === 'object' ? this.request_headers : {};
+        const lines = [`curl -X ${this.method ?? 'GET'} '${this.full_url ?? this.path ?? ''}'`];
+
+        Object.keys(headers)
+            .filter((name) => !['host', 'content-length', 'connection', 'accept-encoding'].includes(name.toLowerCase()))
+            .forEach((name) => {
+                const value = Array.isArray(headers[name]) ? headers[name].join(', ') : headers[name];
+                const masked = ['authorization', 'x-api-key', 'cookie'].includes(name.toLowerCase()) ? `${String(value).slice(0, 14)}••••` : value;
+                lines.push(`  -H '${name}: ${String(masked).replace(/'/g, "'\\''")}'`);
+            });
+
+        const body = this.request_body ?? this.request_raw_body;
+
+        if (body && this.method && this.method !== 'GET') {
+            const raw = typeof body === 'string' ? body : JSON.stringify(body);
+            lines.push(`  --data-raw '${raw.replace(/'/g, "'\\''")}'`);
+        }
+
+        return lines.join(' \\\n');
+    }
+
     @computed('status_code', 'reason_phrase') get status() {
         return `${this.status_code} ${this.reason_phrase}`;
     }
