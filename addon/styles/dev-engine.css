@@ -2670,3 +2670,28 @@ body[data-theme='dark'] .dev-kv-facts {
         display: none;
     }
 }
+
+/* Phone widths: drawer identity rows wrap their actions underneath, code toolbars wrap */
+@media (width <= 640px) {
+    .dev-panel-identity {
+        flex-wrap: wrap;
+    }
+
+    .dev-panel-identity .dev-identity-text {
+        min-width: 0;
+        flex: 1 1 12rem;
+    }
+
+    .dev-panel-identity-actions {
+        width: 100%;
+        justify-content: flex-start;
+        margin-top: 8px;
+        margin-left: 0;
+    }
+
+    .dev-code-toolbar,
+    .dev-code-actions {
+        flex-wrap: wrap;
+        row-gap: 6px;
+    }
+}
