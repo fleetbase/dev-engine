@@ -1,0 +1,7 @@
+{{#let (or @row.last_used_at @value) as |lastUsed|}}
+    {{#if lastUsed}}
+        <span class="dev-cell-text" title={{time-stamp lastUsed "yyyy-MM-dd HH:mm:ss"}}>{{time-ago lastUsed}}</span>
+    {{else}}
+        <span class="dev-cell-text dev-muted">{{t "developers.common.never-used"}}</span>
+    {{/if}}
+{{/let}}

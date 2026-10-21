@@ -1,97 +1,67 @@
 <Modal::Default @modalIsOpened={{@modalIsOpened}} @options={{@options}} @confirm={{@onConfirm}} @decline={{@onDecline}} as |options|>
-    <div class="px-4 mb-10">
-        <div class="flex">
-            <div class="w-1/4">
-                <span class="font-semibold dark:text-gray-100">
-                    {{t "developers.common.key"}}
-                </span>
-            </div>
-            <div class="w-3/4">
-                <div class="mb-2 dark:text-gray-100">
-                    {{@options.apiKey.key}}
-                </div>
-                <Button
-                    @text={{t "developers.component.modals.roll-api-key-form.view-button-text"}}
-                    @size="xs"
-                    @icon="arrow-right"
-                    @onClick={{fn @options.viewRequestLogs @options.apiKey}}
-                />
-            </div>
-        </div>
-    </div>
+    <div class="modal-body-container dev-modal-body">
+        <Modal::Steps
+            @steps={{array
+                (hash label=(t "developers.api-keys.roll.step-expire") state=(if (eq options.step "form") "active" "done"))
+                (hash label=(t "developers.api-keys.roll.step-reveal") state=(if (eq options.step "reveal") "active" "pending"))
+            }}
+            class="mb-4"
+        />
 
-    <div class="px-4 mb-10">
-        <div class="flex">
-            <div class="w-1/4">
-                <span class="font-semibold dark:text-gray-100">
-                    {{t "developers.component.modals.roll-api-key-form.last-used"}}
-                </span>
-            </div>
-            <div class="w-3/4 dark:text-gray-100">
-                {{@options.apiKey.lastUsed}}
-            </div>
-        </div>
-    </div>
-
-    <div class="px-4 mb-10">
-        <div class="flex">
-            <div class="w-1/4">
-                <span class="font-semibold dark:text-gray-100">
-                    {{t "developers.component.modals.roll-api-key-form.expiration"}}
-                </span>
-            </div>
-            <div class="w-3/4">
-                <select
-                    class="w-full mb-2 form-select form-input-sm"
-                    aria-label={{t "developers.component.modals.roll-api-key-form.api-key-expiration-label"}}
-                    disabled={{cannot @options.formPermission}}
-                    {{on "change" @options.setExpiration}}
-                >
-                    <option selected disabled>
-                        {{t "developers.component.modals.roll-api-key-form.select-date"}}
-                    </option>
-                    {{#each @options.expirationOptions as |opt|}}
-                        <option value={{opt}}>
-                            {{opt}}
-                        </option>
-                    {{/each}}
-                </select>
-                <p class="dark:text-gray-100">
-                    {{t "developers.component.modals.roll-api-key-form.key-expires"}}
-                </p>
-            </div>
-        </div>
-    </div>
-
-    <div class="px-5 py-4 border-t border-gray-200 dark:border-gray-800">
-        <div class="mt-2 mb-7">
-            <div class="font-semibold dark:text-gray-100">
-                {{t "developers.component.modals.roll-api-key-form.additional-required"}}
-            </div>
-            <p class="dark:text-white">
-                {{t "developers.component.modals.roll-api-key-form.enter-password"}}
-            </p>
-        </div>
-
-        <div class="input-group">
-            <label>
-                {{t "developers.common.email"}}
-            </label>
-            <Input @type="email" @value={{@options.user.email}} aria-label={{t "developers.component.modals.roll-api-key-form.user-email"}} class="w-full form-input" disabled="true" />
-        </div>
-
-        <div class="input-group">
-            <label>
-                {{t "developers.common.password"}}
-            </label>
-            <Input
-                @type="password"
-                @value={{@options.password}}
-                aria-label={{t "developers.component.modals.roll-api-key-form.user-password"}}
-                placeholder={{t "developers.component.modals.roll-api-key-form.user-password-placeholder"}}
-                class="w-full form-input"
-                disabled={{cannot @options.formPermission}}
+        {{#if (eq options.step "reveal")}}
+            <ApiKey::Reveal
+                @revealed={{options.revealed}}
+                @acknowledged={{options.acknowledged}}
+                @onToggleAck={{options.toggleAck}}
+                @warning={{t "developers.api-keys.roll.reveal-warning" expiration=options.expiration}}
             />
-        </div>
+        {{else}}
+            <div class="dev-note dev-note-info mb-4">
+                <FaIcon @icon="circle-info" />
+                <span>{{t "developers.api-keys.roll.explain" channel=options.dependents.channel}}</span>
+            </div>
+
+            <dl class="dev-kv is-compact mb-4">
+                <dt>{{t "developers.api-keys.roll.current-key"}}</dt>
+                <dd><span class="dev-tag"><span>{{options.apiKey.key}}</span></span></dd>
+                <dt>{{t "developers.api-keys.index.last-used"}}</dt>
+                <dd>
+                    {{or (time-ago options.apiKey.last_used_at) (t "developers.common.never-used")}}
+                    <Button @type="link" @size="xs" @text={{t "developers.api-keys.actions.view-requests"}} @onClick={{options.viewRequestLogs}} />
+                </dd>
+                <dt>{{t "developers.api-keys.roll.dependents"}}</dt>
+                <dd>{{t "developers.api-keys.roll.dependents-value" count=options.dependents.webhooks.length}}</dd>
+            </dl>
+
+            <InputGroup @name={{t "developers.api-keys.roll.expire-label"}} @helpText={{t "developers.api-keys.roll.expire-help"}}>
+                <div class="dev-chip-choices" role="radiogroup">
+                    {{#each options.expirationChoices as |choice|}}
+                        <button type="button" class="dev-chip {{if (eq options.expiration choice.value) 'is-active'}}" {{on "click" (fn options.setExpiration choice.value)}} disabled={{cannot options.formPermission}}>{{choice.label}}</button>
+                    {{/each}}
+                </div>
+            </InputGroup>
+
+            <div class="dev-divider"></div>
+
+            <div class="mb-3">
+                <div class="dev-label">{{t "developers.api-keys.roll.confirm-title"}}</div>
+                <div class="dev-muted">{{t "developers.api-keys.roll.confirm-text" email=options.user.email}}</div>
+            </div>
+
+            <InputGroup @name={{t "developers.common.password"}}>
+                <Input
+                    @type="password"
+                    @value={{options.password}}
+                    placeholder={{t "developers.component.modals.roll-api-key-form.user-password-placeholder"}}
+                    aria-label={{t "developers.component.modals.roll-api-key-form.user-password"}}
+                    class="w-full form-input {{if options.error 'is-invalid'}}"
+                    disabled={{cannot options.formPermission}}
+                    autocomplete="current-password"
+                />
+                {{#if options.error}}
+                    <div class="dev-error">{{options.error}}</div>
+                {{/if}}
+            </InputGroup>
+        {{/if}}
     </div>
 </Modal::Default>

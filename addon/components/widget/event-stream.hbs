@@ -1,35 +1,44 @@
-<div class="developers-dashboard-widget flex h-full flex-col overflow-hidden rounded-md border bg-white shadow-sm dark:bg-gray-800" ...attributes>
+<div class="developers-dashboard-widget flex h-full flex-col overflow-hidden rounded-md border bg-white shadow-sm dark:bg-gray-800" {{did-update this.refresh this.period}} ...attributes>
     <div class="developers-widget-header">
         <div class="min-w-0">
             <div class="developers-widget-title">{{t "developers.component.widget.dashboard.event-stream.title"}}</div>
             <div class="developers-widget-subtitle">{{t "developers.component.widget.dashboard.event-stream.subtitle"}}</div>
         </div>
+        {{#if this.data}}
+            <span class="dev-count mr-2" title={{t "developers.component.widget.dashboard.event-stream.total"}}>{{this.total}}</span>
+        {{/if}}
         <button type="button" class="developers-widget-icon-button" {{on "click" this.refresh}} title={{t "developers.common.reload"}}>
             <FaIcon @icon="rotate" class={{if this.load.isRunning "animate-spin"}} />
         </button>
     </div>
     <div class="developers-widget-scroll-body">
         {{#if this.load.isRunning}}
-            <div class="developers-empty-state"><Spinner /></div>
+            <div class="p-2 flex flex-col gap-3"><Skeleton @variant="text" @width="70%" /><Skeleton @variant="text" @width="55%" /><Skeleton @variant="text" @width="60%" /><Skeleton @variant="text" @width="40%" /></div>
         {{else if this.error}}
-            <div class="developers-empty-state text-rose-500">{{this.error}}</div>
+            <States::Error @message={{this.error}} @onRetry={{this.refresh}} class="py-6" />
+        {{else if (or this.types.length this.sources.length)}}
+            <div class="dev-bars-grid">
+                <div>
+                    <div class="developers-mini-section">{{t "developers.component.widget.dashboard.event-stream.types"}}</div>
+                    {{#each this.types as |item|}}
+                        <div class="dev-bar-row">
+                            <div class="dev-bar-meta"><span class="dev-bar-label dev-mono" title={{item.label}}>{{item.label}}</span><span class="dev-bar-value">{{item.valueText}}</span></div>
+                            <div class="dev-bar-track"><div class="dev-bar-fill" style={{html-safe (concat "width:" item.share "%")}}></div></div>
+                        </div>
+                    {{/each}}
+                </div>
+                <div>
+                    <div class="developers-mini-section">{{t "developers.component.widget.dashboard.event-stream.sources"}}</div>
+                    {{#each this.sources as |item|}}
+                        <div class="dev-bar-row">
+                            <div class="dev-bar-meta"><span class="dev-bar-label" title={{item.label}}>{{item.label}}</span><span class="dev-bar-value">{{item.valueText}}</span></div>
+                            <div class="dev-bar-track"><div class="dev-bar-fill is-purple" style={{html-safe (concat "width:" item.share "%")}}></div></div>
+                        </div>
+                    {{/each}}
+                </div>
+            </div>
         {{else}}
-            <div class="developers-mini-section">{{t "developers.component.widget.dashboard.event-stream.types"}}</div>
-            {{#each this.types as |item|}}
-                <div class="developers-list-row">
-                    <div class="developers-list-title">{{item.label}}</div>
-                    <div class="developers-list-metric">{{item.value}}</div>
-                </div>
-            {{else}}
-                <div class="developers-empty-state">{{t "developers.component.widget.dashboard.empty"}}</div>
-            {{/each}}
-            <div class="developers-mini-section mt-3">{{t "developers.component.widget.dashboard.event-stream.sources"}}</div>
-            {{#each this.sources as |item|}}
-                <div class="developers-list-row">
-                    <div class="developers-list-title">{{item.label}}</div>
-                    <div class="developers-list-metric">{{item.value}}</div>
-                </div>
-            {{/each}}
+            <States::Empty @icon="bolt" @title={{t "developers.component.widget.dashboard.empty"}} class="py-6" />
         {{/if}}
     </div>
 </div>

@@ -1,0 +1,30 @@
+{{! The reveal-once step shared by create and roll. }}
+<div class="dev-reveal" ...attributes>
+    <div class="dev-note dev-note-warning">
+        <FaIcon @icon="triangle-exclamation" />
+        <span>{{or @warning (t "developers.api-keys.reveal.warning")}}</span>
+    </div>
+
+    <InputGroup @name={{t "developers.api-keys.reveal.secret-label"}} @helpText={{t "developers.api-keys.reveal.secret-help"}}>
+        <div class="dev-reveal-row">
+            <code class="dev-reveal-value" data-test-revealed-secret>{{@revealed.secret}}</code>
+            <ClickToCopy @value={{@revealed.secret}} class="dev-reveal-copy">
+                <Button @icon="copy" @text={{t "developers.common.copy"}} @size="sm" />
+            </ClickToCopy>
+        </div>
+    </InputGroup>
+
+    <InputGroup @name={{t "developers.api-keys.reveal.key-label"}} @helpText={{t "developers.api-keys.reveal.key-help"}}>
+        <div class="dev-reveal-row">
+            <code class="dev-reveal-value is-muted">{{@revealed.key}}</code>
+            <ClickToCopy @value={{@revealed.key}} class="dev-reveal-copy">
+                <Button @icon="copy" @text={{t "developers.common.copy"}} @size="sm" />
+            </ClickToCopy>
+        </div>
+    </InputGroup>
+
+    <label class="dev-ack">
+        <Checkbox @value={{@acknowledged}} @onToggle={{@onToggleAck}} />
+        <span>{{t "developers.api-keys.reveal.acknowledge"}}</span>
+    </label>
+</div>

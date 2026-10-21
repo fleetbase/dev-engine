@@ -10,21 +10,23 @@
     </div>
     <div class="developers-widget-scroll-body">
         {{#if this.load.isRunning}}
-            <div class="developers-empty-state"><Spinner /></div>
+            <div class="p-2 flex flex-col gap-3"><Skeleton @variant="text" @width="80%" /><Skeleton @variant="text" @width="65%" /><Skeleton @variant="text" @width="70%" /><Skeleton @variant="text" @width="50%" /></div>
         {{else if this.error}}
-            <div class="developers-empty-state text-rose-500">{{this.error}}</div>
+            <States::Error @message={{this.error}} @onRetry={{this.refresh}} class="py-6" />
         {{else if this.items.length}}
-            {{#each this.items as |item|}}
-                <div class="developers-activity-row">
-                    <div class="developers-activity-icon"><FaIcon @icon={{this.iconFor item.type}} /></div>
-                    <div class="min-w-0">
-                        <div class="developers-list-title">{{item.label}}</div>
-                        <div class="developers-list-subtitle">{{item.type}} / {{item.status}}</div>
-                    </div>
-                </div>
-            {{/each}}
+            <ol class="dev-timeline">
+                {{#each this.items as |item|}}
+                    <li class="dev-timeline-item">
+                        <span class="dev-timeline-dot is-{{item.tone}}"></span>
+                        <div class="dev-timeline-body">
+                            <div class="dev-timeline-title" title={{item.label}}><FaIcon @icon={{item.icon}} @size="xs" class="mr-1 text-gray-400" />{{item.label}}</div>
+                            <div class="dev-timeline-meta">{{t (concat "developers.activity." item.type)}}{{#if item.status}} · {{item.status}}{{/if}}{{#if item.duration}} · {{item.duration}}{{/if}}{{#if item.when}} · {{item.when}}{{/if}}</div>
+                        </div>
+                    </li>
+                {{/each}}
+            </ol>
         {{else}}
-            <div class="developers-empty-state">{{t "developers.component.widget.dashboard.empty"}}</div>
+            <States::Empty @icon="timeline" @title={{t "developers.component.widget.dashboard.empty"}} class="py-6" />
         {{/if}}
     </div>
 </div>

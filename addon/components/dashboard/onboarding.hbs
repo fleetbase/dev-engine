@@ -1,0 +1,40 @@
+<SectionCard class="dev-onboarding" ...attributes>
+    <div class="dev-onboarding-intro">
+        <h2 class="dev-onboarding-title">{{t "developers.dashboard.onboarding.title"}}</h2>
+        <p class="dev-onboarding-text">{{t "developers.dashboard.onboarding.text"}}</p>
+    </div>
+    <div class="dev-onboarding-steps">
+        <div class="dev-onboarding-step is-next">
+            <div class="dev-onboarding-step-head"><span class="dev-step-num">1</span><b>{{t "developers.dashboard.onboarding.step-1.title"}}</b></div>
+            <p>{{t "developers.dashboard.onboarding.step-1.text"}}</p>
+            <div class="dev-onboarding-step-actions">
+                <Button @type="primary" @icon="plus" @text={{t "developers.dashboard.onboarding.step-1.action"}} @onClick={{this.createApiKey}} @permission="developers create api-key" />
+            </div>
+        </div>
+        <div class="dev-onboarding-step">
+            <div class="dev-onboarding-step-head"><span class="dev-step-num">2</span><b>{{t "developers.dashboard.onboarding.step-2.title"}}</b></div>
+            <p>{{t "developers.dashboard.onboarding.step-2.text"}}</p>
+            <div class="dev-onboarding-step-actions">
+                <Button @icon="globe" @text={{t "developers.dashboard.onboarding.step-2.action"}} @onClick={{this.createWebhook}} @permission="developers create webhook" />
+            </div>
+        </div>
+        <div class="dev-onboarding-step">
+            <div class="dev-onboarding-step-head"><span class="dev-step-num">3</span><b>{{t "developers.dashboard.onboarding.step-3.title"}}</b></div>
+            <div class="dev-onboarding-code"><span>curl https://api.fleetbase.io/v1/orders \</span><span class="dev-onboarding-code-indent">-H "Authorization: Bearer flb_live_…"</span></div>
+            <div class="dev-onboarding-step-actions">
+                <Button @icon="terminal" @text={{t "developers.dashboard.onboarding.step-3.action"}} @onClick={{fn this.go "logs.index"}} />
+                <Button @icon="tower-broadcast" @text={{t "developers.dashboard.onboarding.step-3.channel"}} @onClick={{fn this.go "sockets.index"}} />
+            </div>
+        </div>
+    </div>
+    <div class="dev-note dev-note-info">
+        <FaIcon @icon="circle-info" />
+        <span>
+            {{#if this.isSandbox}}
+                {{t "developers.dashboard.onboarding.env-test"}}
+            {{else}}
+                {{t "developers.dashboard.onboarding.env-live"}}
+            {{/if}}
+        </span>
+    </div>
+</SectionCard>

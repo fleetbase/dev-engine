@@ -5,13 +5,9 @@
             <div class="developers-widget-subtitle">{{t "developers.component.widget.dashboard.quick-resources.subtitle"}}</div>
         </div>
     </div>
-    <div class="developers-widget-scroll-body">
+    <div class="developers-widget-scroll-body dev-quick-grid">
         {{#each this.resources as |resource|}}
-            <LinkTo @route={{resource.route}} class="developers-resource-link">
-                <span class="developers-activity-icon"><FaIcon @icon={{resource.icon}} /></span>
-                <span class="min-w-0 truncate">{{resource.label}}</span>
-                <FaIcon @icon="arrow-right" class="ml-auto text-[10px] text-gray-400" />
-            </LinkTo>
+            <Button @icon={{resource.icon}} @text={{resource.label}} @permission={{resource.permission}} @onClick={{fn this.open resource}} @wrapperClass="dev-quick-link" @textClass="truncate" class="w-full justify-start" />
         {{/each}}
     </div>
 </div>

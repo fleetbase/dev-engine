@@ -1,0 +1,24 @@
+<section class="dev-card {{@class}}" ...attributes>
+    {{#if (or @title (has-block "actions"))}}
+        <header class="dev-card-header">
+            <div class="dev-card-heading">
+                {{#if @icon}}
+                    <FaIcon @icon={{@icon}} @prefix={{or @iconPrefix "fas"}} class="dev-card-icon" />
+                {{/if}}
+                <h3 class="dev-card-title">{{@title}}</h3>
+                {{#if @subtitle}}
+                    <span class="dev-card-subtitle">{{@subtitle}}</span>
+                {{/if}}
+                {{#if @count}}
+                    <span class="dev-count">{{@count}}</span>
+                {{/if}}
+            </div>
+            <div class="dev-card-actions">
+                {{yield to="actions"}}
+            </div>
+        </header>
+    {{/if}}
+    <div class="dev-card-body {{if @flush 'is-flush'}} {{@bodyClass}}">
+        {{yield}}
+    </div>
+</section>

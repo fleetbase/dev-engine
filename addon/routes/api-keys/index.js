@@ -28,10 +28,16 @@ export default class ApiKeysIndexRoute extends Route {
         sort: {
             refreshModel: true,
         },
+        expires_at: {
+            refreshModel: true,
+        },
+        last_used_at: {
+            refreshModel: true,
+        },
     };
 
     @action loading(transition) {
-        this.loader.showOnInitialTransition(transition, 'section.next-view-section', { loadingMessage: 'Loading api keys...' });
+        this.loader.showOnInitialTransition(transition, 'section.next-view-section', { loadingMessage: this.intl.t('developers.api-keys.index.loading') });
     }
 
     beforeModel() {
@@ -50,7 +56,6 @@ export default class ApiKeysIndexRoute extends Route {
 
     setupController(controller) {
         super.setupController(...arguments);
-        controller.testMode = this.currentUser.getOption('sandbox', false);
         later(controller, controller.openDeepLinkedApiKey);
     }
 }

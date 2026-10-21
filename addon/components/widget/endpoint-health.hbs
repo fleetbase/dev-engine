@@ -1,4 +1,5 @@
-<div class="developers-dashboard-widget flex h-full flex-col overflow-hidden rounded-md border bg-white shadow-sm dark:bg-gray-800" ...attributes>
+{{! template-lint-disable require-presentational-children no-invalid-interactive }}
+<div class="developers-dashboard-widget flex h-full flex-col overflow-hidden rounded-md border bg-white shadow-sm dark:bg-gray-800" {{did-update this.refresh this.period}} ...attributes>
     <div class="developers-widget-header">
         <div class="min-w-0">
             <div class="developers-widget-title">{{t "developers.component.widget.dashboard.endpoint-health.title"}}</div>
@@ -10,21 +11,40 @@
     </div>
     <div class="developers-widget-scroll-body">
         {{#if this.load.isRunning}}
-            <div class="developers-empty-state"><Spinner /></div>
+            <div class="p-2"><Skeleton::Table @rows={{4}} @columns={{3}} @header={{false}} /></div>
         {{else if this.error}}
-            <div class="developers-empty-state text-rose-500">{{this.error}}</div>
+            <States::Error @message={{this.error}} @onRetry={{this.refresh}} class="py-6" />
         {{else if this.items.length}}
-            {{#each this.items as |item|}}
-                <div class="developers-list-row">
-                    <div class="min-w-0">
-                        <div class="developers-list-title">{{item.url}}</div>
-                        <div class="developers-list-subtitle">{{item.status}} / {{item.mode}} / {{item.deliveries}} deliveries</div>
-                    </div>
-                    <div class="developers-list-metric {{this.statusClass item}}">{{item.success_rate}}%</div>
-                </div>
-            {{/each}}
+            <table class="dev-widget-table">
+                <thead>
+                    <tr>
+                        <th>{{t "developers.component.widget.dashboard.endpoint-health.endpoint"}}</th>
+                        <th class="text-right">{{t "developers.component.widget.dashboard.endpoint-health.success"}}</th>
+                        <th class="text-right">{{t "developers.component.widget.dashboard.endpoint-health.failures"}}</th>
+                        <th class="text-right">{{t "developers.component.widget.dashboard.endpoint-health.last"}}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {{#each this.items as |item|}}
+                        <tr class="dev-widget-row" role="button" tabindex="0" {{on "click" (fn this.open item)}}>
+                            <td>
+                                <div class="dev-identity">
+                                    <span class="dev-identity-icon {{item.tone}}"><FaIcon @icon="globe" @size="xs" /></span>
+                                    <span class="dev-identity-text">
+                                        <span class="dev-identity-title" title={{item.url}}>{{item.shortUrl}}</span>
+                                        <span class="dev-identity-sub"><Badge @status={{item.badge}} @text={{t (concat "developers.health." item.health)}} @size="xxs" @hideStatusDot={{true}} /> {{item.mode}} · {{item.deliveries}} {{t "developers.component.widget.dashboard.endpoint-health.deliveries"}}</span>
+                                    </span>
+                                </div>
+                            </td>
+                            <td class="text-right font-semibold {{if (eq item.health 'failing') 'text-rose-600 dark:text-rose-300'}}">{{item.rateText}}</td>
+                            <td class="text-right">{{item.failures}}</td>
+                            <td class="text-right text-gray-500 dark:text-gray-400">{{or item.lastDelivery "—"}}</td>
+                        </tr>
+                    {{/each}}
+                </tbody>
+            </table>
         {{else}}
-            <div class="developers-empty-state">{{t "developers.component.widget.dashboard.empty"}}</div>
+            <States::Empty @icon="globe" @title={{t "developers.component.widget.dashboard.endpoint-health.empty"}} class="py-6" />
         {{/if}}
     </div>
 </div>

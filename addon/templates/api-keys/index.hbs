@@ -3,7 +3,7 @@
     @title={{t "developers.api-keys.index.title"}}
     @searchQuery={{this.query}}
     @onSearch={{perform this.search}}
-    @searchDisabled={{cannot "developers list api-keys"}}
+    @searchDisabled={{cannot "developers list api-key"}}
     @onReload={{this.reload}}
     @data={{@model}}
     @columns={{this.columns}}
@@ -13,33 +13,29 @@
     @actionButtons={{this.actionButtons}}
     @bulkActions={{this.bulkActions}}
     @controller={{this}}
+    @filterPickerButtonClass="hidden"
+    @headerClass="dev-list-header"
+    as |rows|
 >
     <:header>
-        <div class="flex items-center mr-3">
-            <Toggle
-                @isToggled={{this.isTestMode}}
-                @onToggle={{this.toggleTestMode}}
-                @label={{t "developers.api-keys.index.label"}}
-                @helpText={{t "developers.api-keys.index.help-text"}}
-                class="mr-1"
-            />
-            {{#if this.isTestMode}}
-                <span class="mx-2">
-                    <select class="form-select form-input-sm" aria-label="Select API Key" {{on "change" this.toggleTestKey}}>
-                        <option selected disabled>
-                            {{t "developers.api-keys.index.select-key"}}
-                        </option>
-                        <option value="null" selected={{eq this.testKey null}}>
-                            {{t "developers.api-keys.index.test-data"}}
-                        </option>
-                        {{#each (filter-by "isTestKey" @model) as |key|}}
-                            <option value={{key.id}} selected={{eq this.testKey key.id}}>
-                                {{or key.name key.key}}
-                            </option>
-                        {{/each}}
-                    </select>
-                </span>
-            {{/if}}
-        </div>
+        <EnvironmentSwitch class="dev-subheader-controls" />
     </:header>
+    <:default>
+        <FilterBar @columns={{this.columns}} @controller={{this}} />
+        <Table
+            @rows={{rows}}
+            @columns={{this.columns}}
+            @selectable={{true}}
+            @canSelectAll={{true}}
+            @onSetup={{fn (mut this.table)}}
+            @pagination={{true}}
+            @paginationMeta={{rows.meta}}
+            @page={{this.page}}
+            @onPageChange={{fn (mut this.page)}}
+            @onRowClick={{this.viewApiKey}}
+            @wrapperClass="dev-table-compact"
+            @emptyStateComponent={{component "states/empty" icon=this.emptyState.icon title=this.emptyState.title message=this.emptyState.message action=this.emptyState.action}}
+            @searchQuery={{this.query}}
+        />
+    </:default>
 </Layout::Resource::Tabular>

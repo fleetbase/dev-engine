@@ -1,0 +1,25 @@
+<div class="dev-resource-header {{@class}}" ...attributes>
+    <div class="dev-resource-header-icon {{or @iconTone 'is-blue'}}">
+        <FaIcon @icon={{or @icon "cube"}} @prefix={{or @iconPrefix "fas"}} />
+    </div>
+    <div class="dev-resource-header-main">
+        <div class="dev-resource-header-title-row">
+            <h1 class="dev-resource-header-title" title={{@title}}>{{@title}}</h1>
+            {{#if @status}}
+                <Badge @status={{@status}} @text={{@statusText}} @hideStatusDot={{@hideStatusDot}} @disableHumanize={{@disableHumanize}} />
+            {{/if}}
+            {{yield to="badges"}}
+        </div>
+        {{#if (has-block "subtitle")}}
+            <div class="dev-resource-header-sub">
+                {{yield to="subtitle"}}
+            </div>
+        {{/if}}
+    </div>
+    <div class="dev-resource-header-actions">
+        {{yield to="actions"}}
+        {{#if @actionButtons}}
+            <Layout::Resource::ActionButtons @buttons={{@actionButtons}} @renderInPlace={{true}} />
+        {{/if}}
+    </div>
+</div>

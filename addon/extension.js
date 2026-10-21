@@ -9,37 +9,37 @@ export default {
         menuService.registerHeaderMenuItem('Developers', 'console.developers', {
             icon: 'code',
             priority: 2,
-            description: 'API keys, webhooks, socket channels, event logs, and developer tooling.',
+            description: 'API keys, webhooks, events, request logs and live channels.',
             shortcuts: [
                 {
                     title: 'API Keys',
-                    description: 'Create and manage API keys for authenticating your integrations.',
+                    description: 'Create and manage keys for your integrations.',
                     icon: 'key',
                     route: 'console.developers.api-keys',
                 },
                 {
                     title: 'Webhooks',
-                    description: 'Configure webhook endpoints to receive real-time event notifications.',
+                    description: 'Endpoints that receive platform events.',
                     icon: 'globe',
                     route: 'console.developers.webhooks',
                 },
                 {
-                    title: 'Sockets',
-                    description: 'Monitor active WebSocket channels and connected clients.',
-                    icon: 'plug',
-                    route: 'console.developers.sockets',
-                },
-                {
                     title: 'Events',
-                    description: 'Browse the full history of platform events and payloads.',
+                    description: 'Every platform event and its payload.',
                     icon: 'bolt',
                     route: 'console.developers.events',
                 },
                 {
-                    title: 'Logs',
-                    description: 'Inspect API request and response logs for debugging.',
+                    title: 'Requests',
+                    description: 'API request and response logs.',
                     icon: 'terminal',
                     route: 'console.developers.logs',
+                },
+                {
+                    title: 'Channels',
+                    description: 'Watch live socket channels.',
+                    icon: 'tower-broadcast',
+                    route: 'console.developers.sockets',
                 },
             ],
         });
@@ -199,6 +199,7 @@ export default {
             }),
         ];
 
+        // eslint-disable-next-line no-unused-vars
         const getWidgetById = (id = null, mutate = null) => {
             if (!id) return null;
             const widget = widgets.find((w) => w.id === id);

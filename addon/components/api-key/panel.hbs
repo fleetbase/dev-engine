@@ -1,0 +1,110 @@
+{{! template-lint-disable require-presentational-children no-invalid-interactive }}
+<div class="dev-panel-content" ...attributes>
+    <div class="dev-panel-identity">
+        <span class="dev-identity-icon {{if this.isExpired 'is-red' (if this.apiKey.test_mode 'is-amber' 'is-green')}}"><FaIcon @icon="key" @size="xs" /></span>
+        <div class="dev-identity-text">
+            <span class="dev-identity-title" title={{this.apiKey.name}}>{{or this.apiKey.name (mask-key this.apiKey.key)}}</span>
+            <span class="dev-identity-sub"><Badge @status={{this.environmentBadge.status}} @text={{this.environmentBadge.text}} @size="xxs" @hideStatusDot={{true}} /> <span class="dev-mono">{{mask-key this.apiKey.key}}</span></span>
+        </div>
+    </div>
+
+    <SectionCard @title={{t "developers.common.details"}}>
+        <:actions>
+            <Button @size="xs" @icon="pencil" @text={{t "developers.common.edit"}} @onClick={{this.edit}} @permission="developers update api-key" />
+        </:actions>
+        <:default>
+            <dl class="dev-kv">
+                <dt>{{t "developers.api-keys.index.public-key"}}</dt>
+                <dd><ClickToCopy @value={{this.apiKey.key}}><span class="dev-tag"><span>{{this.apiKey.key}}</span><FaIcon @icon="copy" @size="xs" /></span></ClickToCopy></dd>
+                <dt>{{t "developers.api-keys.panel.secret"}}</dt>
+                <dd class="dev-muted">{{t "developers.api-keys.panel.secret-hidden"}}</dd>
+                <dt>{{t "developers.component.modals.api-key-form.allowed-browser-label"}}</dt>
+                <dd>
+                    {{#if this.origins.length}}
+                        <div class="dev-inline-wrap">
+                            {{#each this.origins as |origin|}}<span class="dev-tag"><span>{{origin}}</span></span>{{/each}}
+                        </div>
+                    {{else}}
+                        <span class="dev-muted">{{t "developers.api-keys.panel.no-origins"}}</span>
+                    {{/if}}
+                </dd>
+                <dt>{{t "developers.api-keys.index.expiry"}}</dt>
+                <dd>{{or this.apiKey.expiresAt (t "developers.common.never")}}</dd>
+                <dt>{{t "developers.api-keys.index.last-used"}}</dt>
+                <dd>{{or (time-ago this.apiKey.last_used_at) (t "developers.common.never-used")}}</dd>
+                <dt>{{t "developers.common.created"}}</dt>
+                <dd>{{this.apiKey.createdAt}}</dd>
+            </dl>
+        </:default>
+    </SectionCard>
+
+    <SectionCard @title={{t "developers.api-keys.panel.linked"}} @flush={{true}}>
+        <:actions>
+            <Button @size="xs" @icon="tower-broadcast" @text={{t "developers.api-keys.actions.watch-channel"}} @onClick={{this.watchChannel}} @permission="developers view socket" />
+        </:actions>
+        <:default>
+            {{#if this.load.isRunning}}
+                <div class="p-3"><Skeleton::Table @rows={{3}} @columns={{2}} @header={{false}} /></div>
+            {{else if this.error}}
+                <States::Error @message={{this.error}} class="py-4" />
+            {{else}}
+                <table class="dev-widget-table">
+                    <tbody>
+                        {{#each this.linkedWebhooks as |item|}}
+                            <tr class="dev-widget-row" role="button" tabindex="0" {{on "click" (fn this.openWebhook item.webhook)}}>
+                                <td>
+                                    <div class="dev-identity">
+                                        <span class="dev-identity-icon is-blue"><FaIcon @icon="globe" @size="xs" /></span>
+                                        <span class="dev-identity-text">
+                                            <span class="dev-identity-title" title={{item.webhook.url}}>{{item.shortUrl}}</span>
+                                            <span class="dev-identity-sub">{{t "developers.resource.webhook-endpoint"}} · <Badge @status={{item.webhook.status}} @size="xxs" @hideStatusDot={{true}} /></span>
+                                        </span>
+                                    </div>
+                                </td>
+                                <td class="text-right"><FaIcon @icon="chevron-right" @size="xs" class="text-gray-400" /></td>
+                            </tr>
+                        {{/each}}
+                        <tr class="dev-widget-row" role="button" tabindex="0" {{on "click" this.watchChannel}}>
+                            <td>
+                                <div class="dev-identity">
+                                    <span class="dev-identity-icon is-purple"><FaIcon @icon="tower-broadcast" @size="xs" /></span>
+                                    <span class="dev-identity-text">
+                                        <span class="dev-identity-title dev-mono" title={{this.channelName}}>{{this.channelName}}</span>
+                                        <span class="dev-identity-sub">{{t "developers.api-keys.panel.channel-sub"}}</span>
+                                    </span>
+                                </div>
+                            </td>
+                            <td class="text-right"><FaIcon @icon="chevron-right" @size="xs" class="text-gray-400" /></td>
+                        </tr>
+                    </tbody>
+                </table>
+            {{/if}}
+        </:default>
+    </SectionCard>
+
+    <SectionCard @title={{t "developers.api-keys.panel.recent-requests"}} @flush={{true}}>
+        <:actions>
+            <Button @size="xs" @icon="terminal" @text={{t "developers.api-keys.actions.view-requests"}} @onClick={{this.viewRequests}} @permission="developers list log" />
+        </:actions>
+        <:default>
+            {{#if this.load.isRunning}}
+                <div class="p-3"><Skeleton::Table @rows={{4}} @columns={{3}} @header={{false}} @identityColumn={{false}} /></div>
+            {{else if this.recentRequests.length}}
+                <table class="dev-widget-table">
+                    <tbody>
+                        {{#each this.recentRequests as |item|}}
+                            <tr class="dev-widget-row" role="button" tabindex="0" {{on "click" (fn this.openRequest item.log)}}>
+                                <td><span class="dev-method dev-method-{{lowercase item.log.method}}">{{item.log.method}}</span></td>
+                                <td class="dev-mono dev-path-cell" title={{item.log.path}}>{{item.log.path}}</td>
+                                <td><Badge @status={{status-tone item.log.status_code}} @text={{item.log.status_code}} @size="xxs" @hideStatusDot={{true}} @disableHumanize={{true}} /></td>
+                                <td class="text-right text-gray-500 dark:text-gray-400">{{item.when}}</td>
+                            </tr>
+                        {{/each}}
+                    </tbody>
+                </table>
+            {{else}}
+                <States::Empty @icon="terminal" @title={{t "developers.api-keys.panel.no-requests"}} class="py-4" />
+            {{/if}}
+        </:default>
+    </SectionCard>
+</div>

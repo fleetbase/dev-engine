@@ -1,22 +1,33 @@
 import Component from '@glimmer/component';
-import { tracked } from '@glimmer/tracking';
 import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
-import { task } from 'ember-concurrency';
 
+/**
+ * One KPI tile. Reads its metric from the shared developer-metrics service,
+ * which fetches `metrics/dev/kpis` once per period for all tiles.
+ */
 export default class WidgetDevelopersKpiTileComponent extends Component {
-    @service fetch;
-
-    @tracked data = null;
-    @tracked error = null;
+    @service developerMetrics;
+    @service intl;
 
     constructor() {
         super(...arguments);
-        this.load.perform();
+
+        if (!this.developerMetrics.kpis && !this.developerMetrics.loadKpis.isRunning) {
+            this.developerMetrics.loadKpis.perform();
+        }
+    }
+
+    get isLoading() {
+        return this.developerMetrics.loadKpis.isRunning && !this.developerMetrics.kpis;
+    }
+
+    get error() {
+        return this.developerMetrics.kpisError;
     }
 
     get metric() {
-        return this.data?.metrics?.[this.args.metric] ?? {};
+        return this.developerMetrics.metrics[this.args.metric] ?? {};
     }
 
     get title() {
@@ -27,30 +38,40 @@ export default class WidgetDevelopersKpiTileComponent extends Component {
         const value = this.metric.value ?? 0;
 
         if (this.metric.format === 'percent') {
-            return `${value}%`;
+            return `${Number(value).toLocaleString(undefined, { maximumFractionDigits: 1 })}%`;
         }
 
         if (this.metric.format === 'duration') {
-            return `${Number(value).toLocaleString()}ms`;
+            return `${Number(value).toLocaleString(undefined, { maximumFractionDigits: 0 })} ms`;
         }
 
         return Number(value).toLocaleString();
     }
 
+    get hasDelta() {
+        return typeof this.metric.delta_percent === 'number';
+    }
+
     get deltaText() {
         const delta = this.metric.delta_percent;
 
-        if (typeof delta !== 'number') {
-            return 'Current';
+        if (!this.hasDelta) {
+            return this.intl.t('developers.dashboard.kpi.no-previous');
         }
 
-        return `${delta > 0 ? '+' : ''}${delta}%`;
+        const sign = delta > 0 ? '+' : '';
+
+        if (this.metric.format === 'percent') {
+            return `${sign}${delta} pt`;
+        }
+
+        return `${sign}${delta}%`;
     }
 
     get deltaStatus() {
         const delta = this.metric.delta_percent;
 
-        if (typeof delta !== 'number' || delta === 0) {
+        if (!this.hasDelta || delta === 0) {
             return 'info';
         }
 
@@ -60,20 +81,11 @@ export default class WidgetDevelopersKpiTileComponent extends Component {
         return isGood ? 'success' : 'danger';
     }
 
-    get accentClass() {
-        return `developers-kpi-accent-${this.args.accent ?? 'blue'}`;
-    }
-
-    @task *load() {
-        try {
-            this.data = yield this.fetch.get('metrics/dev/kpis', { period: this.args.period ?? '30d' });
-            this.error = null;
-        } catch (error) {
-            this.error = error?.message ?? 'Unable to load metric';
-        }
+    get footnote() {
+        return this.args.footnote ?? this.intl.t('developers.dashboard.kpi.vs-previous', { period: this.developerMetrics.period });
     }
 
     @action refresh() {
-        this.load.perform();
+        this.developerMetrics.refreshKpis();
     }
 }

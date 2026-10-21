@@ -1,0 +1,7 @@
+<span class="dev-cell-text" title={{this.title}}>
+    {{#if this.showBadge}}
+        <Badge @status={{this.badgeStatus}} @text={{this.text}} @size="xs" @hideStatusDot={{true}} @disableHumanize={{true}} />
+    {{else}}
+        {{this.text}}
+    {{/if}}
+</span>

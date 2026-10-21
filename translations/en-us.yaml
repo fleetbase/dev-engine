@@ -31,6 +31,25 @@ developers:
     version: Version
     reload: Reload
     reload-data: Reload data
+    copy: Copy
+    copied: Copied
+    close: Close
+    open: Open
+    open-full-page: Open full page
+    none: None
+    any: Any
+    details: Details
+    overview: Overview
+    live: Live
+    test: Test
+    environment: Environment
+    retention: Retained {days} days
+    retention-short: "{days}d retention"
+    never: Never
+    never-used: Never used
+    view: View
+    filters: Filters
+    unavailable-later: Available in a later release
 
   component:
     api-event: 
@@ -153,18 +172,25 @@ developers:
           events-emitted: Events Emitted
         api-traffic:
           title: API Traffic
-          subtitle: Request volume, successes, and errors
+          subtitle: Requests, successes and errors per day
         webhook-delivery:
           title: Webhook Delivery Health
           subtitle: Delivery volume, retries, and failures
         endpoint-health:
           title: Endpoint Health
-          subtitle: Recent webhook endpoint reliability
+          subtitle: Per endpoint, this period
+          endpoint: Endpoint
+          success: Success
+          failures: Failures
+          last: Last delivery
+          deliveries: deliveries
+          empty: No webhook deliveries in this period
         event-stream:
           title: Event Stream
           subtitle: Top event types and sources
           types: Event types
           sources: Sources
+          total: Events in this period
         developer-activity:
           title: Developer Activity
           subtitle: Recent logs, webhooks, and events
@@ -203,7 +229,6 @@ developers:
       untitled: Untitled
       rename-api-key-success-message: API credential renamed to {apiKeyName}
       delete-api-key-title: Delete {apiKeyName} API Key
-      delete-api-key-body: Are you sure you want to delete this API key? All of your data assosciated with this API key will become unreachable. This action cannot be undone.
       delete-api-key-success-message: API credential {apiKeyName} removed.
       delete-accept-button-text: Delete API Credentials
       roll-api-key: Roll {apiKeyName} API Key
@@ -214,12 +239,11 @@ developers:
       export-api-accept-button-text: Download
       export-api-error-message: Unable to download API credentials export.
       title: API Keys
-      label: View test data 
-      help-text: Toggling view test data will enable the console to display all test data from your sandbox environment
-      select-api-key-aria-label: Select API Key
-      select-key: Select specific key
-      test-data: All test data...
-      delete-api: Delete API Credentials
+      key: Key
+      create: Create key
+      loading: Loading API keys…
+      deep-link-error: Unable to open the selected API key.
+      delete-api: Delete selected keys
   events:
     index:
       title: Events
@@ -283,6 +307,175 @@ developers:
         home: Dashboard
         api-keys: API Keys
         webhooks: Webhooks
-        websockets:  WebSockets
-        logs: Logs
         events: Events
+        requests: Requests
+        channels: Channels
+        websockets: Channels
+        logs: Requests
+      descriptions:
+        home: Developer dashboard and API health overview.
+        api-keys: Create and manage API credentials.
+        webhooks: Endpoints that receive platform events.
+        events: Every platform event and its payload.
+        requests: API request and response logs.
+        channels: Watch live socket channels.
+  environment:
+    label: Environment
+    live: Live
+    test: Test
+    live-hint: Showing live data. Live keys start with flb_live_.
+    test-hint: Showing sandbox data. Test keys start with flb_test_.
+  filter-bar:
+    any: Any
+    apply: Apply
+    clear-all: Clear filters
+  code-viewer:
+    pretty: Pretty
+    raw: Raw
+    wrap: Toggle line wrapping
+    copied: Copied to clipboard.
+    copied-curl: cURL command copied to clipboard.
+    copy-curl: Copy as cURL
+    empty: Nothing to show
+  states:
+    error:
+      title: Could not load this view
+      message: "The API answered {status}. Nothing was changed."
+      retry: Try again
+    denied:
+      title: You do not have access to this view
+      message: "Your role lacks the {permission} ability. Ask an administrator in IAM."
+  resource:
+    api-credential: API key
+    webhook-endpoint: Webhook endpoint
+    api-event: Event
+    api-request-log: Request
+    webhook-request-log: Delivery attempt
+    socket-channel: Channel
+  health:
+    healthy: Healthy
+    degraded: Degraded
+    failing: Failing
+    disabled: Disabled
+    idle: No deliveries
+  activity:
+    api_request: Request
+    webhook: Delivery
+    event: Event
+  dashboard:
+    period:
+      label: Period
+      compared: vs previous {period}
+    kpi:
+      no-previous: No previous period
+      vs-previous: vs previous {period}
+    webhook-summary: "{sent} sent · {succeeded} succeeded · {failed} failed · avg {attempts} attempts · avg {duration} ms"
+    quick:
+      create-key: Create API key
+      add-endpoint: Add webhook endpoint
+      api-reference: API reference
+    onboarding:
+      title: Connect your first integration
+      text: No API requests yet in this organization. Three steps get data flowing into this dashboard.
+      step-1:
+        title: Create a live API key
+        text: Keys authenticate your server. The secret is shown once; keep it in your secret manager.
+        action: Create API key
+      step-2:
+        title: Add a webhook endpoint
+        text: Receive signed POSTs for order, driver and entity events.
+        action: Add endpoint
+      step-3:
+        title: Send a request, watch it land
+        action: Open Requests
+        channel: Watch company channel
+      env-live: You are in Live. Switch to Test in the API Keys header to try everything against the sandbox first; test keys start with flb_test_.
+      env-test: You are in Test. Requests with flb_test_ keys use the sandbox and never touch live data.
+  api-keys:
+    expiration:
+      never: Never
+      immediately: Immediately
+      in-1-hour: In 1 hour
+      in-24-hours: In 24 hours
+      in-3-days: In 3 days
+      in-7-days: In 7 days
+    badges:
+      expired: Expired
+      expiring: "Expires in {when}"
+    expiry-in: "in {when}"
+    actions:
+      view: View details
+      view-requests: View requests
+      watch-channel: Watch channel
+      edit: Edit…
+      rename: Rename…
+      roll: Roll key…
+      delete: Delete…
+    empty:
+      title-live: No live API keys yet
+      title-test: No test API keys yet
+      message: Keys authenticate your integrations. The secret is shown once when a key is created or rolled.
+    form:
+      environment-help: Follows the environment switch in the header.
+      environment-live: Live keys start with flb_live_ and read and write production data.
+      environment-test: Test keys start with flb_test_ and use the sandbox database.
+      expiration-placeholder: Never
+      expiration-current: "Current: {value}"
+      add-origin: Add origin
+      origins-help: Only needed when the key is used from a browser. Leave empty for server-side use.
+    create:
+      title: Create API key
+      accept: Create key
+      reveal-title: Save your credentials
+      done: Done
+      step-details: Details
+      step-reveal: Save the secret
+    edit:
+      title: Edit {apiKeyName}
+      accept: Save changes
+      read-only: "Read only. Your role lacks {permission}."
+    rename:
+      title: Rename {apiKeyName}
+      accept: Rename
+      help: Shown in lists, webhooks and request logs. The key itself does not change.
+    roll:
+      title: Roll {apiKeyName}
+      accept: Roll key
+      reveal-title: Save the new credentials
+      step-expire: Expire the old key
+      step-reveal: Save the new secret
+      explain: "Rolling creates a new key and secret. Webhook endpoints and the channel {channel} move to the new key automatically. Requests that still send the old key fail with 401 once it expires."
+      current-key: Current key
+      dependents: Dependents
+      dependents-value: "{count, plural, =0 {No webhook endpoints} =1 {1 webhook endpoint} other {# webhook endpoints}} · 1 channel"
+      expire-label: Expire the old key
+      expire-help: Both keys work until then, so you can deploy the new secret without downtime.
+      expire:
+        never: Never
+        immediately: Now
+        in-1-hour: In 1 hour
+        in-24-hours: In 24 hours
+        in-3-days: In 3 days
+        in-7-days: In 7 days
+      confirm-title: Confirm it is you
+      confirm-text: "Rolling a key requires your password. You are signed in as {email}."
+      reveal-warning: "Shown once. The old key keeps working until it expires ({expiration})."
+    reveal:
+      warning: This is the only time these credentials are shown. If you lose them, roll the key to get new ones.
+      secret-label: Secret key
+      secret-help: Store it in your secret manager. Fleetbase keeps a hash only.
+      key-label: Public key
+      key-help: Safe to show; identifies the key in requests and logs.
+      acknowledge: I have copied the secret and stored it somewhere safe
+    delete:
+      title: Delete {apiKeyName}?
+      body: "Requests using this key start failing with 401 immediately. {count, plural, =0 {No webhook endpoints depend on it.} =1 {1 webhook endpoint receives from it and will stop receiving.} other {# webhook endpoints receive from it and will stop receiving.}} This cannot be undone."
+      accept: Delete key
+    panel:
+      secret: Secret
+      secret-hidden: Hidden since creation. Roll the key to get a new one.
+      no-origins: Server use only, no browser origins
+      linked: Linked
+      channel-sub: Live events created with this key
+      recent-requests: Recent requests
+      no-requests: No requests with this key yet
