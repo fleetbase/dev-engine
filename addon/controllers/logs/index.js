@@ -109,7 +109,7 @@ export default class LogsIndexController extends BaseController {
                 id: 'source',
                 label: this.intl.t('developers.common.source'),
                 valuePath: 'source',
-                width: 100,
+                width: 130,
                 hidden: this.devViewport.below(1280),
                 sortable: false,
                 filterable: true,
@@ -119,7 +119,7 @@ export default class LogsIndexController extends BaseController {
                     { label: this.intl.t('developers.events.sources.api'), value: 'api' },
                     { label: this.intl.t('developers.events.sources.console'), value: 'console' },
                 ],
-                cellComponent: 'table/cell/status',
+                cellComponent: 'api-request-log/source-cell',
             },
             {
                 id: 'version',
