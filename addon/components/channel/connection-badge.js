@@ -44,6 +44,7 @@ export default class ChannelConnectionBadgeComponent extends Component {
         this.state = instance.state === 'open' ? 'connected' : instance.state === 'closed' ? 'disconnected' : 'connecting';
 
         (async () => {
+            // eslint-disable-next-line no-unused-vars
             for await (const _ of instance.listener('connect')) {
                 if (this.isDestroyed) break;
                 this.state = 'connected';
@@ -51,6 +52,7 @@ export default class ChannelConnectionBadgeComponent extends Component {
         })();
 
         (async () => {
+            // eslint-disable-next-line no-unused-vars
             for await (const _ of instance.listener('close')) {
                 if (this.isDestroyed) break;
                 this.state = 'disconnected';
@@ -58,6 +60,7 @@ export default class ChannelConnectionBadgeComponent extends Component {
         })();
 
         (async () => {
+            // eslint-disable-next-line no-unused-vars
             for await (const _ of instance.listener('connecting')) {
                 if (this.isDestroyed) break;
                 this.state = 'connecting';

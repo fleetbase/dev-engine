@@ -371,11 +371,13 @@ body[data-theme='dark'] .developers-activity-icon {
     font-weight: 600;
 }
 
-/* ------------------------------------------------------------------ */
-/* Developers redesign: shared primitives (dev-* namespace)             */
-/* Tokens follow ember-ui: sky-500 primary, gray/night palettes,        */
-/* 4/8/12/16 spacing, 28px controls, radius 6 controls / 8 panels.      */
-/* ------------------------------------------------------------------ */
+/*
+ * Developers redesign: shared primitives (dev-* namespace).
+ * Tokens follow ember-ui: sky-500 primary, gray/night palettes,
+ * 4/8/12/16 spacing, 28px controls, radius 6 controls / 8 panels.
+ * Dark-theme overrides follow their light rule, so descending specificity is expected here.
+ */
+/* stylelint-disable no-descending-specificity */
 
 .dev-nowrap,
 .dev-segment-label,
@@ -1739,6 +1741,7 @@ body[data-theme='dark'] .dev-onboarding-step-head {
 }
 
 /* API keys */
+/* stylelint-disable-next-line selector-class-pattern */
 .dev-key-cell .click-to-copy--value {
     display: inline-flex;
     max-width: 100%;
@@ -1903,6 +1906,7 @@ body[data-theme='dark'] .dev-reveal-value.is-muted {
     align-items: center;
 }
 
+/* stylelint-disable-next-line selector-class-pattern */
 .dev-reveal-copy .click-to-copy--tooltip {
     display: none;
 }
@@ -2000,7 +2004,7 @@ body[data-theme='dark'] .dev-event-picker-body {
     background-color: #111827;
 }
 
-@media (max-width: 640px) {
+@media (width <= 640px) {
     .dev-event-picker-body {
         grid-template-columns: minmax(0, 1fr);
     }
@@ -2307,7 +2311,7 @@ body[data-theme='dark'] .dev-log-row {
 
 .dev-log-head {
     color: #6b7280;
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
     font-size: 10px;
     font-weight: 600;
     letter-spacing: 0.06em;
@@ -2390,7 +2394,7 @@ body[data-theme='dark'] .dev-log-text {
     gap: 8px;
     padding: 10px 14px;
     color: #6b7280;
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
     font-size: 12px;
 }
 
@@ -2414,7 +2418,7 @@ body[data-theme='dark'] .dev-log-text {
     animation: dev-pulse 1.6s ease-in-out infinite;
 }
 
-@media (max-width: 768px) {
+@media (width <= 768px) {
     .dev-log-head,
     .dev-log-row {
         grid-template-columns: 80px minmax(0, 1fr) 60px;
@@ -2479,7 +2483,7 @@ body[data-theme='dark'] .dev-kv-facts {
 }
 
 /* Mobile */
-@media (max-width: 768px) {
+@media (width <= 768px) {
     .next-content-overlay-panel:has(.dev-panel-content) {
         width: 100vw !important;
         max-width: 100vw !important;
@@ -2535,11 +2539,13 @@ body[data-theme='dark'] .dev-kv-facts {
         text-transform: uppercase;
     }
 
+    /* stylelint-disable-next-line selector-class-pattern */
     .flb--default-modal.dev-modal .modal-dialog {
         max-width: 100vw;
         margin: 0;
     }
 
+    /* stylelint-disable-next-line selector-class-pattern */
     .flb--default-modal.dev-modal .modal-content {
         min-height: 100vh;
         border-radius: 0;
@@ -2563,7 +2569,25 @@ body[data-theme='dark'] .dev-kv-facts {
     overflow-x: auto;
 }
 
-.dev-table-compact .next-table th,
-.dev-table-compact .next-table td {
+/* Header controls never wrap their text */
+.next-view-section-subheader .btn,
+.next-view-section-subheader .btn span,
+.dev-filter-bar .btn,
+.dev-card-actions .btn,
+.dev-resource-header-actions .btn {
+    white-space: nowrap;
+}
+
+.next-view-section-subheader-actions {
+    flex-wrap: nowrap;
+}
+
+@media (width <= 1500px) {
+    .dev-env-hint {
+        display: none;
+    }
+}
+
+.developers-kpi-delta .status-badge-inner-wrap {
     white-space: nowrap;
 }

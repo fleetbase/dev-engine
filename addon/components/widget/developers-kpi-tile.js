@@ -56,7 +56,7 @@ export default class WidgetDevelopersKpiTileComponent extends Component {
         const delta = this.metric.delta_percent;
 
         if (!this.hasDelta) {
-            return this.intl.t('developers.dashboard.kpi.no-previous');
+            return '—';
         }
 
         const sign = delta > 0 ? '+' : '';
@@ -82,6 +82,10 @@ export default class WidgetDevelopersKpiTileComponent extends Component {
     }
 
     get footnote() {
+        if (!this.hasDelta) {
+            return this.intl.t('developers.dashboard.kpi.no-previous');
+        }
+
         return this.args.footnote ?? this.intl.t('developers.dashboard.kpi.vs-previous', { period: this.developerMetrics.period });
     }
 

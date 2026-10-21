@@ -4,7 +4,6 @@ import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
 import { isBlank } from '@ember/utils';
 import { timeout } from 'ember-concurrency';
-import { later } from '@ember/runloop';
 import { task } from 'ember-concurrency-decorators';
 import { maskKey, timeAgo } from '../../utils/format';
 
@@ -323,7 +322,7 @@ export default class ApiKeysIndexController extends Controller {
 
         try {
             const apiKey = this.store.peekRecord('api-credential', apiKeyId) ?? (await this.store.findRecord('api-credential', apiKeyId));
-            later(this, () => this.editApiKey(apiKey, { onDecline: this.clearDeepLinkedApiKey, onFinish: this.clearDeepLinkedApiKey }), 10);
+            this.editApiKey(apiKey, { onDecline: this.clearDeepLinkedApiKey, onFinish: this.clearDeepLinkedApiKey });
         } catch (_) {
             this.notifications.warning(this.intl.t('developers.api-keys.index.deep-link-error'));
             this.clearDeepLinkedApiKey();
