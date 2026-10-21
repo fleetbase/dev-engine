@@ -69,7 +69,7 @@ Implements the redesign on the design canvas https://claude.ai/artifact/9tHmccX6
 
 ## Visual checks
 
-See `design/visual-check.md` and `design/screenshots/`. Checked so far: dashboard (B1), API keys list (C1), create dialog (C2 form step), webhooks list empty and populated (D1), webhook form (D2), webhook detail with both tabs (D3), disable/delete confirms and the disabled page (D4). Remaining: C2 reveal step, C3 roll, C4 drawer, C5 edit/rename/delete, channels (E1 to E3), events (F1, F2), requests (G1, G2), Cmd-K search, the 390px pass and the light pass.
+See `design/visual-check.md` and `design/screenshots/`. Every board was checked in the running console at 1280px in dark mode: dashboard (B1), API keys list, create/reveal, roll, drawer and dialogs (C1 to C5), webhooks list, form, detail and states (D1 to D4), channels list, viewer and custom channel (E1 to E3), events list (F1), requests list, drawer and page (G1, G2), the shell search, plus a light-theme pass and a 375px phone pass. The webhooks list was also checked at 1024px. Not checked against real data: the populated events list and event drawer (no events exist in this instance), the webhook deliveries table and attempt inspector (no deliveries), the roll submission (needs the user's password) and the denied/kicked channel states (the local socket server accepts every prefix); the unit tests cover the state logic for the last one.
 
 ## Note for reviewers running the console from source
 
