@@ -11,6 +11,7 @@ import { RETENTION_DAYS } from '../../utils/retention';
 
 export default class LogsIndexController extends BaseController {
     @service filters;
+    @service devViewport;
     @service intl;
     @service hostRouter;
     @service abilities;
@@ -54,7 +55,6 @@ export default class LogsIndexController extends BaseController {
                 id: 'request',
                 label: this.intl.t('developers.logs.index.request'),
                 valuePath: 'path',
-                width: 420,
                 sortable: false,
                 resizable: true,
                 cellComponent: 'api-request-log/request-cell',
@@ -63,7 +63,7 @@ export default class LogsIndexController extends BaseController {
                 id: 'status',
                 label: this.intl.t('developers.common.status'),
                 valuePath: 'status_code',
-                width: 140,
+                width: 120,
                 sortable: false,
                 cellComponent: 'api-request-log/status-cell',
             },
@@ -71,7 +71,7 @@ export default class LogsIndexController extends BaseController {
                 id: 'duration',
                 label: this.intl.t('developers.logs.index.duration'),
                 valuePath: 'duration',
-                width: 100,
+                width: 90,
                 sortable: false,
                 align: 'right',
                 cellComponent: 'api-request-log/duration-cell',
@@ -80,7 +80,8 @@ export default class LogsIndexController extends BaseController {
                 id: 'api-credential-name',
                 label: this.intl.t('developers.logs.index.api-credential'),
                 valuePath: 'api_credential_name',
-                width: 180,
+                width: 170,
+                hidden: this.devViewport.below(1100),
                 sortable: false,
                 filterable: true,
                 filterParam: 'key',
@@ -109,6 +110,7 @@ export default class LogsIndexController extends BaseController {
                 label: this.intl.t('developers.common.source'),
                 valuePath: 'source',
                 width: 100,
+                hidden: this.devViewport.below(1280),
                 sortable: false,
                 filterable: true,
                 filterLabel: this.intl.t('developers.common.source'),
@@ -123,7 +125,8 @@ export default class LogsIndexController extends BaseController {
                 id: 'version',
                 label: this.intl.t('developers.common.version'),
                 valuePath: 'version',
-                width: 110,
+                width: 90,
+                hidden: this.devViewport.below(1440),
                 sortable: false,
                 filterable: true,
                 filterLabel: this.intl.t('developers.common.version'),
@@ -135,7 +138,7 @@ export default class LogsIndexController extends BaseController {
                 id: 'created-at',
                 label: this.intl.t('developers.common.time'),
                 valuePath: 'created_at',
-                width: 170,
+                width: 150,
                 sortable: false,
                 filterable: true,
                 filterParam: 'created_at',

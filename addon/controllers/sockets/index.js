@@ -8,6 +8,7 @@ import { maskKey, timeAgo } from '../../utils/format';
 
 export default class SocketsIndexController extends BaseController {
     @service modalsManager;
+    @service devViewport;
     @service socketChannels;
     @service intl;
     @service notifications;
@@ -47,7 +48,6 @@ export default class SocketsIndexController extends BaseController {
                 id: 'name',
                 label: this.intl.t('developers.sockets.index.channel'),
                 valuePath: 'name',
-                width: 380,
                 sortable: false,
                 cellComponent: 'table/cell/identity',
                 resourceType: 'socket-channel',
@@ -62,10 +62,10 @@ export default class SocketsIndexController extends BaseController {
                         : [],
                 popover: false,
             },
-            { id: 'type', label: this.intl.t('developers.sockets.index.type'), valuePath: 'type', width: 110, sortable: false, cellComponent: 'channel/type-cell' },
-            { id: 'source', label: this.intl.t('developers.common.source'), valuePath: 'source', width: 200, sortable: false },
-            { id: 'access', label: this.intl.t('developers.sockets.index.access'), valuePath: 'access', width: 160, sortable: false, cellComponent: 'channel/access-cell' },
-            { id: 'activity', label: this.intl.t('developers.sockets.index.last-activity'), valuePath: 'activity', width: 220, sortable: false },
+            { id: 'type', label: this.intl.t('developers.sockets.index.type'), valuePath: 'type', width: 100, sortable: false, cellComponent: 'channel/type-cell' },
+            { id: 'source', label: this.intl.t('developers.common.source'), valuePath: 'source', width: 180, hidden: this.devViewport.below(1100), sortable: false },
+            { id: 'access', label: this.intl.t('developers.sockets.index.access'), valuePath: 'access', width: 140, sortable: false, cellComponent: 'channel/access-cell' },
+            { id: 'activity', label: this.intl.t('developers.sockets.index.last-activity'), valuePath: 'activity', width: 180, hidden: this.devViewport.below(1280), sortable: false },
             {
                 id: 'row-actions',
                 label: '',

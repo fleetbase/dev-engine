@@ -9,6 +9,7 @@ import { maskKey, timeAgo } from '../../utils/format';
 
 export default class ApiKeysIndexController extends Controller {
     @service apiKeyActions;
+    @service devViewport;
     @service currentUser;
     @service intl;
     @service modalsManager;
@@ -94,7 +95,6 @@ export default class ApiKeysIndexController extends Controller {
                 id: 'name',
                 label: this.intl.t('developers.api-keys.index.key'),
                 valuePath: 'name',
-                width: 320,
                 sortable: false,
                 resizable: true,
                 cellComponent: 'table/cell/identity',
@@ -110,7 +110,7 @@ export default class ApiKeysIndexController extends Controller {
                 id: 'key',
                 label: this.intl.t('developers.api-keys.index.public-key'),
                 valuePath: 'key',
-                width: 200,
+                width: 190,
                 sortable: false,
                 resizable: true,
                 cellComponent: 'api-key/key-cell',
@@ -119,7 +119,7 @@ export default class ApiKeysIndexController extends Controller {
                 id: 'expires-at',
                 label: this.intl.t('developers.api-keys.index.expiry'),
                 valuePath: 'expires_at',
-                width: 150,
+                width: 130,
                 sortable: false,
                 filterable: true,
                 filterParam: 'expires_at',
@@ -131,7 +131,8 @@ export default class ApiKeysIndexController extends Controller {
                 id: 'last-used',
                 label: this.intl.t('developers.api-keys.index.last-used'),
                 valuePath: 'last_used_at',
-                width: 140,
+                width: 130,
+                hidden: this.devViewport.below(1100),
                 sortable: false,
                 filterable: true,
                 filterParam: 'last_used_at',
@@ -143,7 +144,8 @@ export default class ApiKeysIndexController extends Controller {
                 id: 'created-at',
                 label: this.intl.t('developers.common.created'),
                 valuePath: 'createdAtShort',
-                width: 120,
+                width: 110,
+                hidden: this.devViewport.below(1280),
                 sortable: false,
             },
             {

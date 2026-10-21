@@ -11,7 +11,7 @@
                 </:badges>
                 <:subtitle>
                     {{#if @model.description}}<span>{{@model.description}}</span><span>·</span>{{/if}}
-                    <span>{{t "developers.webhooks.index.credential"}}: {{#if @model.api_credential_uuid}}{{@model.api_credential_name}}{{else}}{{t "developers.webhooks.index.any-credential"}}{{/if}}</span>
+                    <span>{{t "developers.webhooks.index.credential"}}: {{#if @model.api_credential_uuid}}{{credential-name @model.api_credential_name}}{{else}}{{t "developers.webhooks.index.any-credential"}}{{/if}}</span>
                     <span>·</span>
                     <span>{{t "developers.common.version"}} <span class="dev-mono">{{n-a @model.version}}</span></span>
                     <span>·</span>

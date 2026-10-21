@@ -12,6 +12,7 @@ import { RETENTION_DAYS } from '../../utils/retention';
 
 export default class WebhooksIndexController extends BaseController {
     @service webhookActions;
+    @service devViewport;
     @service developerMetrics;
     @service currentUser;
     @service intl;
@@ -76,7 +77,6 @@ export default class WebhooksIndexController extends BaseController {
                 id: 'url',
                 label: this.intl.t('developers.webhooks.index.endpoint'),
                 valuePath: 'url',
-                width: 340,
                 sortable: false,
                 resizable: true,
                 cellComponent: 'table/cell/identity',
@@ -93,7 +93,7 @@ export default class WebhooksIndexController extends BaseController {
                 id: 'status',
                 label: this.intl.t('developers.common.status'),
                 valuePath: 'status',
-                width: 140,
+                width: 120,
                 sortable: false,
                 filterable: true,
                 filterLabel: this.intl.t('developers.common.status'),
@@ -109,7 +109,7 @@ export default class WebhooksIndexController extends BaseController {
                 id: 'events',
                 label: this.intl.t('developers.webhooks.index.events'),
                 valuePath: 'events',
-                width: 170,
+                width: 160,
                 sortable: false,
                 cellComponent: 'webhook/events-cell',
             },
@@ -117,7 +117,8 @@ export default class WebhooksIndexController extends BaseController {
                 id: 'api-credential',
                 label: this.intl.t('developers.webhooks.index.credential'),
                 valuePath: 'api_credential_name',
-                width: 170,
+                width: 160,
+                hidden: this.devViewport.below(1024),
                 sortable: false,
                 filterable: true,
                 filterParam: 'api_credential_uuid',
@@ -132,7 +133,8 @@ export default class WebhooksIndexController extends BaseController {
                 id: 'success',
                 label: this.intl.t('developers.webhooks.index.success-7d'),
                 valuePath: 'id',
-                width: 110,
+                width: 90,
+                hidden: this.devViewport.below(1280),
                 sortable: false,
                 align: 'right',
                 cellComponent: 'webhook/success-cell',
@@ -142,7 +144,8 @@ export default class WebhooksIndexController extends BaseController {
                 id: 'last-delivery',
                 label: this.intl.t('developers.webhooks.index.last-delivery'),
                 valuePath: 'id',
-                width: 150,
+                width: 130,
+                hidden: this.devViewport.below(1100),
                 sortable: false,
                 cellComponent: 'webhook/last-delivery-cell',
                 cellComponentArgs: { healthFor: this.healthFor },
@@ -151,7 +154,8 @@ export default class WebhooksIndexController extends BaseController {
                 id: 'version',
                 label: this.intl.t('developers.common.version'),
                 valuePath: 'version',
-                width: 110,
+                width: 90,
+                hidden: this.devViewport.below(1440),
                 sortable: false,
                 filterable: true,
                 filterLabel: this.intl.t('developers.common.version'),

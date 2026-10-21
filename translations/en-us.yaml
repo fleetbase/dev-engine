@@ -48,6 +48,8 @@ developers:
     never: Never
     never-used: Never used
     view: View
+    edit: Edit
+    delete: Delete
     filters: Filters
     unavailable-later: Available in a later release
 
@@ -519,8 +521,8 @@ developers:
       update-endpoint-button-text: Update endpoint
       update-endpoint-success-message: Webhook details updated.
       send-button-text: Send test webhook...
-      disable-button-text: Disable...
-      enable-button-text: Enable...
+      disable-button-text: Disable
+      enable-button-text: Enable
       delete-button-text: Delete...
     deliveries:
       title: Deliveries

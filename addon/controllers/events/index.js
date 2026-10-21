@@ -11,6 +11,7 @@ import { RETENTION_DAYS } from '../../utils/retention';
 
 export default class EventsIndexController extends BaseController {
     @service filters;
+    @service devViewport;
     @service intl;
     @service hostRouter;
     @service abilities;
@@ -56,7 +57,6 @@ export default class EventsIndexController extends BaseController {
                 id: 'event',
                 label: this.intl.t('developers.common.event'),
                 valuePath: 'event',
-                width: 380,
                 sortable: false,
                 cellComponent: 'table/cell/identity',
                 resourceType: 'api-event',
@@ -76,7 +76,7 @@ export default class EventsIndexController extends BaseController {
                 id: 'source',
                 label: this.intl.t('developers.common.source'),
                 valuePath: 'source',
-                width: 140,
+                width: 130,
                 sortable: false,
                 filterable: true,
                 filterLabel: this.intl.t('developers.common.source'),
@@ -104,7 +104,8 @@ export default class EventsIndexController extends BaseController {
                 id: 'api-credential',
                 label: this.intl.t('developers.webhooks.index.credential'),
                 valuePath: 'api_credential_uuid',
-                width: 180,
+                width: 170,
+                hidden: this.devViewport.below(1100),
                 sortable: false,
                 filterable: true,
                 filterParam: 'api_credential_uuid',
@@ -120,7 +121,8 @@ export default class EventsIndexController extends BaseController {
                 id: 'public-id',
                 label: this.intl.t('developers.common.id'),
                 valuePath: 'public_id',
-                width: 170,
+                width: 160,
+                hidden: this.devViewport.below(1280),
                 sortable: false,
                 cellComponent: 'api-key/key-cell',
             },
@@ -128,7 +130,7 @@ export default class EventsIndexController extends BaseController {
                 id: 'created-at',
                 label: this.intl.t('developers.common.time'),
                 valuePath: 'created_at',
-                width: 170,
+                width: 150,
                 sortable: false,
                 filterable: true,
                 filterParam: 'created_at',

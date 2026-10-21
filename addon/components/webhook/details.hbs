@@ -21,7 +21,7 @@
                         <span>{{t "developers.component.webhook.details.api-credentials"}}</span>
                         <InputInfo @text={{t "developers.component.webhook.details.help-text-event"}} />
                     {{else}}
-                        {{@webhook.api_credential_name}}
+                        {{credential-name @webhook.api_credential_name}}
                     {{/if}}
                 </dd>
                 <dt>{{t "developers.component.webhook.metrics.date-created"}}</dt>

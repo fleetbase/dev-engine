@@ -24,7 +24,7 @@
         <dt>{{t "developers.logs.index.api-credential"}}</dt>
         <dd>
             {{#if this.log.api_credential_uuid}}
-                <button type="button" class="dev-tag dev-tag-button" {{on "click" this.requestsForKey}}><FaIcon @icon="key" @size="xs" /><span>{{or this.log.api_credential_name (mask-key this.log.api_credential_uuid)}}</span></button>
+                <button type="button" class="dev-tag dev-tag-button" {{on "click" this.requestsForKey}}><FaIcon @icon="key" @size="xs" /><span>{{or (credential-name this.log.api_credential_name) (mask-key this.log.api_credential_uuid)}}</span></button>
             {{else}}
                 <span class="dev-muted">—</span>
             {{/if}}

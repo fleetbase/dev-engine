@@ -1316,14 +1316,46 @@ body[data-theme='dark'] .dev-method-delete {
     overflow-y: auto;
 }
 
-/* Compact tables: the identity column is the only flexible one */
-.dev-table-compact .next-table td,
-.dev-table-compact .next-table th {
+/* Compact tables: fixed layout, explicit widths, the identity column is the only flexible one */
+.dev-table-compact table {
+    width: 100%;
+    table-layout: fixed;
+}
+
+.dev-table-compact td,
+.dev-table-compact th {
+    overflow: hidden;
     white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+.dev-table-compact td.overflow-visible {
+    overflow: visible;
 }
 
 .dev-table-compact .table-cell-identity {
     max-width: none;
+}
+
+.dev-table-compact .dev-cell-text {
+    display: flex;
+    min-width: 0;
+    max-width: 100%;
+    align-items: center;
+    gap: 6px;
+}
+
+.dev-table-compact .dev-cell-text > * {
+    flex: 0 1 auto;
+    min-width: 0;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+.dev-table-compact .dev-cell-text > .status-badge,
+.dev-table-compact .dev-cell-text > .dev-identity-icon {
+    flex-shrink: 0;
 }
 
 /* Section header: keep the title, controls and actions on one baseline */
