@@ -41,6 +41,9 @@ Implements the redesign on the design canvas https://claude.ai/artifact/9tHmccX6
 - `restoreParams` wrote the `date` URL param into `status` (old `attempts.js`, replaced by `deliveries.js`).
 - "Send test webhook..." button with no handler; "Resend" commented out: now explicit disabled slots.
 - Copy: "Explicilty", "assosciated", "Response timer", "No request HEADERS", "past 15 days".
+- Compact-table rules targeted a `.next-table` class that does not exist, so list tables grew past their wrapper; tables now use a fixed layout with truncating cells and hide low-priority columns by viewport width (`dev-viewport` service).
+- Credential names from the API carry the key in parentheses; the `credential-name` helper shows the name alone.
+- KPI tiles started the metrics fetch inside the render computation; `developer-metrics.ensureKpis()` starts it on the next run loop.
 
 ## TODO inventory
 
@@ -54,6 +57,16 @@ Implements the redesign on the design canvas https://claude.ai/artifact/9tHmccX6
 
 `developers:<resource>:table:columns|row-actions|bulk-actions|actions` and `developers:<resource>:details:actions|menu` are still merged (Tabular merges the table slots; `detailsActionButtons` and the context panel's `registry` merge the detail slots). `api-key-actions` and `webhook-actions` keep `createApiKey`, `editApiKey`, `createWebhook`, `editWebhook`, `deleteWebhook`, plus the new `rollApiKey`, `renameApiKey`, `deleteApiKey`, `viewApiKey`, `enableWebhook`, `disableWebhook`.
 
+## Tests and lint
+
+`ember test` passes (76 tests) and `lint:js`, `lint:hbs`, `lint:css` and the intl lint are clean. The dummy test app needed harness work that is part of this branch:
+
+- `tests/dummy/config/environment.js` gains `API`, `socket` and `osrm` blocks because `@fleetbase/ember-core` reads them at import time.
+- `tests/dummy/config/ember-intl.js` limits the dummy app to `en-us`; the other locales are built by the console.
+- `tests/helpers/index.js` sets the locale for rendering tests and registers host-router and abilities stubs; test stubs carry a static `create()` for Ember 5's container.
+- The generated placeholder tests that asserted empty output were removed; the new tests cover the format utils, the three services, the viewer controller, the code viewer, the event picker, the steps indicator and the empty state.
+- Tasks use the `@task` decorator from `ember-concurrency`. The class-field `task()` form does not produce a performable task without the Babel transform, which only applies to packages that depend on ember-concurrency directly.
+
 ## Visual checks
 
-See `design/visual-check.md` and `design/screenshots/`.
+See `design/visual-check.md` and `design/screenshots/`. Checked so far: dashboard (B1), API keys list (C1), create dialog (C2 form step), webhooks list empty and populated (D1), webhook form (D2), webhook detail with both tabs (D3), disable/delete confirms and the disabled page (D4). Remaining: C2 reveal step, C3 roll, C4 drawer, C5 edit/rename/delete, channels (E1 to E3), events (F1, F2), requests (G1, G2), Cmd-K search, the 390px pass and the light pass.
