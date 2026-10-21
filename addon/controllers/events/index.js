@@ -174,7 +174,7 @@ export default class EventsIndexController extends BaseController {
         };
     }
 
-    search = task({ restartable: true }, function* ({ target: { value } }) {
+    @task({ restartable: true }) *search({ target: { value } }) {
         if (isBlank(value)) {
             this.query = null;
             return;
@@ -187,7 +187,7 @@ export default class EventsIndexController extends BaseController {
         }
 
         this.query = value;
-    });
+    }
 
     @action openEvent(event) {
         return this.developerPanels.openEvent(event);

@@ -11,6 +11,6 @@ module('Integration | Helper | json-stringify', function (hooks) {
 
         await render(hbs`{{json-stringify this.inputValue}}`);
 
-        assert.dom(this.element).hasText('{ "id": 1234, "status": "created" }');
+        assert.strictEqual(this.element.textContent.replace(/\s+/g, ''), '{"id":1234,"status":"created"}');
     });
 });

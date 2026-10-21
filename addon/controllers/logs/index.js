@@ -179,7 +179,7 @@ export default class LogsIndexController extends BaseController {
         };
     }
 
-    search = task({ restartable: true }, function* ({ target: { value } }) {
+    @task({ restartable: true }) *search({ target: { value } }) {
         if (isBlank(value)) {
             this.query = null;
             return;
@@ -192,7 +192,7 @@ export default class LogsIndexController extends BaseController {
         }
 
         this.query = value;
-    });
+    }
 
     @action openRequest(log) {
         return this.developerPanels.openRequest(log);

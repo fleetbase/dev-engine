@@ -21,7 +21,7 @@ module('Integration | Component | webhook/event-picker', function (hooks) {
         assert.dom('.dev-event-group:nth-child(1) .dev-event-group-count').hasText('0 / 2');
         assert.dom('.dev-event-group:nth-child(2) .dev-event-group-count').hasText('1 / 2');
 
-        await click('.dev-event-group:nth-child(2) .dev-event-row:nth-of-type(2) [role="checkbox"], .dev-event-group:nth-child(2) .dev-event-row:nth-of-type(2) input');
+        await click('.dev-event-group:nth-child(2) .dev-event-row:nth-of-type(3) input');
         assert.deepEqual(this.selected.slice().sort(), ['order.created', 'order.updated']);
         assert.dom('.dev-tag').exists({ count: 1 });
         assert.dom('.dev-tag').includesText('order.*');

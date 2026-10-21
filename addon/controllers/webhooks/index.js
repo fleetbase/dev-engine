@@ -251,7 +251,7 @@ export default class WebhooksIndexController extends BaseController {
         return badges;
     }
 
-    loadHealth = task(function* () {
+    @task *loadHealth() {
         try {
             const data = yield this.developerMetrics.fetch.get('metrics/dev/endpoint-health', { period: '7d' });
             const byId = {};
@@ -265,9 +265,9 @@ export default class WebhooksIndexController extends BaseController {
         } catch {
             this.healthById = {};
         }
-    });
+    }
 
-    search = task({ restartable: true }, function* ({ target: { value } }) {
+    @task({ restartable: true }) *search({ target: { value } }) {
         if (isBlank(value)) {
             this.query = null;
             return;
@@ -280,7 +280,7 @@ export default class WebhooksIndexController extends BaseController {
         }
 
         this.query = value;
-    });
+    }
 
     // Webhook dialogs live in the webhook-actions service so other engines can open them too.
     @action createWebhook(...args) {

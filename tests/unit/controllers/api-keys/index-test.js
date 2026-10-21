@@ -126,15 +126,30 @@ module('Unit | Controller | api-keys/index', function (hooks) {
     });
 
     test('it opens a deep-linked API key in the existing edit modal', async function (assert) {
-        const controller = this.owner.lookup('controller:api-keys/index');
         const store = this.owner.lookup('service:store');
 
+        this.owner.register(
+            'service:api-key-actions',
+            class ApiKeyActionsStub {
+                static create(props) {
+                    return Object.assign(new this(), props);
+                }
+
+                queryParamsFor(params) {
+                    return params;
+                }
+
+                editApiKey(apiKey, options) {
+                    assert.strictEqual(apiKey, store.record);
+                    assert.strictEqual(typeof options.onDecline, 'function');
+                    assert.strictEqual(typeof options.onFinish, 'function');
+                }
+            }
+        );
+
+        const controller = this.owner.lookup('controller:api-keys/index');
+
         controller.view_api_key = 'api_key_uuid';
-        controller.editApiKey = (apiKey, options) => {
-            assert.strictEqual(apiKey, store.record);
-            assert.strictEqual(typeof options.onDecline, 'function');
-            assert.strictEqual(typeof options.onFinish, 'function');
-        };
 
         await controller.openDeepLinkedApiKey();
 

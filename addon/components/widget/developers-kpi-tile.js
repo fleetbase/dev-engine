@@ -13,9 +13,7 @@ export default class WidgetDevelopersKpiTileComponent extends Component {
     constructor() {
         super(...arguments);
 
-        if (!this.developerMetrics.kpis && !this.developerMetrics.loadKpis.isRunning) {
-            this.developerMetrics.loadKpis.perform();
-        }
+        this.developerMetrics.ensureKpis();
     }
 
     get isLoading() {

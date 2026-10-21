@@ -238,7 +238,7 @@ export default class ApiKeysIndexController extends Controller {
      *
      * @void
      */
-    search = task({ restartable: true }, function* ({ target: { value } }) {
+    @task({ restartable: true }) *search({ target: { value } }) {
         if (isBlank(value)) {
             this.query = null;
             return;
@@ -251,7 +251,7 @@ export default class ApiKeysIndexController extends Controller {
         }
 
         this.query = value;
-    });
+    }
 
     // Dialogs and navigation live in the api-key-actions service so other engines can open them too.
     @action createApiKey(...args) {

@@ -19,11 +19,27 @@ class HostRouterStub extends Service {
     one() {}
 }
 
+/**
+ * The console grants permissions through its own ability setup; the dummy app
+ * allows everything unless a test registers its own abilities stub.
+ */
+class AbilitiesStub extends Service {
+    can() {
+        return true;
+    }
+    cannot() {
+        return false;
+    }
+}
+
 function registerHostStubs(hooks) {
     hooks.beforeEach(function () {
         if (!this.owner.hasRegistration('service:host-router')) {
             this.owner.register('service:host-router', HostRouterStub);
         }
+
+        this.owner.unregister('service:abilities');
+        this.owner.register('service:abilities', AbilitiesStub);
     });
 }
 

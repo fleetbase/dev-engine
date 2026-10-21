@@ -1,5 +1,6 @@
 import Service, { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
+import { next } from '@ember/runloop';
 import { action } from '@ember/object';
 import { task } from 'ember-concurrency';
 
@@ -54,6 +55,21 @@ export default class DeveloperMetricsService extends Service {
         this.period = period;
         this.loadKpis.perform();
     }
+
+    /**
+     * Widgets call this while rendering; the fetch starts on the next run loop
+     * so nothing read during render is updated inside the same computation.
+     */
+    ensureKpis() {
+        if (this.kpis || this.#kpisRequested === this.period) {
+            return;
+        }
+
+        this.#kpisRequested = this.period;
+        next(this, () => this.loadKpis.perform());
+    }
+
+    #kpisRequested = null;
 
     /**
      * Loads the KPIs for the current period, reusing a response already seen
