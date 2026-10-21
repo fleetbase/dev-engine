@@ -40,10 +40,37 @@ export default class FilterBarComponent extends Component {
     }
 
     get segments() {
-        return (this.args.segments ?? []).map((segment) => ({
-            ...segment,
-            isActive: this.readParam(segment.param) === (segment.value ?? undefined) || (isBlank(segment.value) && isBlank(this.readParam(segment.param))),
-        }));
+        return (this.args.segments ?? []).map((segment) => {
+            const params = this.segmentParams(segment);
+            const isActive = Object.keys(params).every((param) => {
+                const expected = params[param];
+                const current = this.readParam(param);
+
+                return isBlank(expected) ? isBlank(current) : String(current) === String(expected);
+            });
+
+            return { ...segment, params, isActive };
+        });
+    }
+
+    /**
+     * Segments either carry one `param`/`value` pair or a `params` object; both
+     * normalize to `{ param: value }` where a blank value means "clear it".
+     */
+    segmentParams(segment) {
+        if (segment.params && typeof segment.params === 'object') {
+            return segment.params;
+        }
+
+        return segment.param ? { [segment.param]: segment.value ?? null } : {};
+    }
+
+    get segmentParamNames() {
+        const names = new Set();
+
+        (this.args.segments ?? []).forEach((segment) => Object.keys(this.segmentParams(segment)).forEach((name) => names.add(name)));
+
+        return [...names];
     }
 
     readParam(param) {
@@ -143,15 +170,16 @@ export default class FilterBarComponent extends Component {
 
     @action clearAll() {
         this.filters.reset(this.args.controller);
-        (this.args.segments ?? []).forEach((segment) => set(this.args.controller, segment.param, undefined));
+        this.segmentParamNames.forEach((param) => set(this.args.controller, param, undefined));
         set(this.args.controller, 'page', 1);
         this.rebuild();
     }
 
     @action applySegment(segment) {
         const { controller } = this.args;
+        const params = this.segmentParams(segment);
 
-        set(controller, segment.param, isBlank(segment.value) ? undefined : segment.value);
+        Object.keys(params).forEach((param) => set(controller, param, isBlank(params[param]) ? undefined : params[param]));
 
         if (segment.clears) {
             segment.clears.forEach((param) => set(controller, param, undefined));

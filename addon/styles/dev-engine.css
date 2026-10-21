@@ -1997,11 +1997,19 @@ body[data-theme='dark'] .dev-ack {
     border: 1px solid #d1d5db;
     border-radius: 6px;
     background-color: #fff;
+    color: #111827;
 }
 
 body[data-theme='dark'] .dev-event-picker-body {
     border-color: #4b5563;
     background-color: #111827;
+    color: #e5e7eb;
+}
+
+.dev-event-picker-body label,
+.dev-event-picker-body button {
+    margin: 0;
+    color: inherit;
 }
 
 @media (width <= 640px) {
@@ -2590,4 +2598,10 @@ body[data-theme='dark'] .dev-kv-facts {
 
 .developers-kpi-delta .status-badge-inner-wrap {
     white-space: nowrap;
+}
+
+@media (width <= 1100px) {
+    .dev-list-header .next-view-section-subheader-actions .form-input.w-64 {
+        width: 9rem;
+    }
 }
