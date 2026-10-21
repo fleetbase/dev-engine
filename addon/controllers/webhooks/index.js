@@ -251,9 +251,9 @@ export default class WebhooksIndexController extends BaseController {
         return badges;
     }
 
-    loadHealth = task(async () => {
+    loadHealth = task(function* () {
         try {
-            const data = await this.developerMetrics.fetch.get('metrics/dev/endpoint-health', { period: '7d' });
+            const data = yield this.developerMetrics.fetch.get('metrics/dev/endpoint-health', { period: '7d' });
             const byId = {};
 
             (data?.items ?? []).forEach((item) => {
@@ -267,13 +267,13 @@ export default class WebhooksIndexController extends BaseController {
         }
     });
 
-    search = task({ restartable: true }, async ({ target: { value } }) => {
+    search = task({ restartable: true }, function* ({ target: { value } }) {
         if (isBlank(value)) {
             this.query = null;
             return;
         }
 
-        await timeout(250);
+        yield timeout(250);
 
         if (this.page > 1) {
             this.page = 1;

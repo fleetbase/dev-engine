@@ -10,9 +10,9 @@ class IntlStub {
         'developers.application.sidebar.items.home': 'Dashboard',
         'developers.application.sidebar.items.api-keys': 'API Keys',
         'developers.application.sidebar.items.webhooks': 'Webhooks',
-        'developers.application.sidebar.items.websockets': 'WebSockets',
-        'developers.application.sidebar.items.logs': 'Logs',
         'developers.application.sidebar.items.events': 'Events',
+        'developers.application.sidebar.items.requests': 'Requests',
+        'developers.application.sidebar.items.channels': 'Channels',
     };
 
     t(key) {
@@ -73,12 +73,12 @@ module('Unit | Controller | application', function (hooks) {
 
         assert.deepEqual(
             items.map((item) => item.label),
-            ['Dashboard', 'API Keys', 'Webhooks', 'WebSockets', 'Logs', 'Events'],
+            ['Dashboard', 'API Keys', 'Webhooks', 'Events', 'Requests', 'Channels'],
             'root items keep the developer labels'
         );
         assert.deepEqual(
             items.map((item) => item.route),
-            ['console.developers.home', 'console.developers.api-keys', 'console.developers.webhooks', 'console.developers.sockets', 'console.developers.logs', 'console.developers.events'],
+            ['console.developers.home', 'console.developers.api-keys', 'console.developers.webhooks', 'console.developers.events', 'console.developers.logs', 'console.developers.sockets'],
             'root items keep the console host route names'
         );
         assert.strictEqual(items[1].permission, 'developers list api-key');

@@ -179,13 +179,13 @@ export default class LogsIndexController extends BaseController {
         };
     }
 
-    search = task({ restartable: true }, async ({ target: { value } }) => {
+    search = task({ restartable: true }, function* ({ target: { value } }) {
         if (isBlank(value)) {
             this.query = null;
             return;
         }
 
-        await timeout(250);
+        yield timeout(250);
 
         if (this.page > 1) {
             this.page = 1;
