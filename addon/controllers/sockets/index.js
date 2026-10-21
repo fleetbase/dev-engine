@@ -1,7 +1,7 @@
 import BaseController from '../base-controller';
 import { tracked } from '@glimmer/tracking';
 import { inject as service } from '@ember/service';
-import { action } from '@ember/object';
+import { action, get } from '@ember/object';
 import { isBlank } from '@ember/utils';
 import fromStore from '@fleetbase/ember-core/decorators/legacy-from-store';
 import { maskKey, timeAgo } from '../../utils/format';
@@ -128,7 +128,9 @@ export default class SocketsIndexController extends BaseController {
      */
     get allChannels() {
         const channels = [];
-        const credentials = this.apiCredentials ?? [];
+        // Read through `get` so the async from-store property re-renders the list once it resolves.
+        // eslint-disable-next-line ember/no-get
+        const credentials = get(this, 'apiCredentials') ?? [];
         const companyId = this.currentUser.companyId;
 
         channels.push(

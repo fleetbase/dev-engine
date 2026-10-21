@@ -216,15 +216,24 @@ export default class SocketsViewController extends BaseController {
             }
         });
 
+        // The console may already hold this channel (its own company channel, for
+        // instance); then no `subscribe` event will fire and we must not close it on leave.
+        const alreadySubscribed = socket.isSubscribed?.(name) === true;
         const channel = socket.subscribe(name);
         this.channel = channel;
 
-        listen(channel, 'subscribe', () => {
+        const markSubscribed = () => {
             this.connection = 'subscribed';
             this.reason = null;
             this.socketChannels.update(name, { access: 'allowed', reason: null, watching: true });
             this.logLifecycle(this.intl.t('developers.sockets.view.subscribed-rule', { modelName: name, rule: this.ruleFor(name) }), 'ok', { event: 'subscribe' });
-        });
+        };
+
+        listen(channel, 'subscribe', markSubscribed);
+
+        if (alreadySubscribed) {
+            markSubscribed();
+        }
 
         listen(channel, 'subscribeFail', ({ error }) => {
             this.connection = 'denied';
@@ -239,14 +248,23 @@ export default class SocketsViewController extends BaseController {
             this.logLifecycle(this.intl.t('developers.sockets.view.socket-kicked-out', { modelName: name, reason: message }), 'bad', { event: 'kickOut' });
         });
 
+        const consumer = typeof channel.createConsumer === 'function' ? channel.createConsumer() : channel;
         (async () => {
-            for await (const data of channel) {
+            for await (const data of consumer) {
                 if (this.isDestroyed) break;
                 this.receive(name, data);
             }
         })();
 
-        this.#cleanup.push(() => channel.close());
+        this.#cleanup.push(() => {
+            consumer.return?.();
+
+            if (alreadySubscribed) {
+                channel.closeAllListeners?.();
+            } else {
+                channel.close();
+            }
+        });
         this.hostRouter.one('routeWillChange', this.teardown);
     }
 
