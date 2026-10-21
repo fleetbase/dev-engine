@@ -31,7 +31,7 @@
             @paginationMeta={{rows.meta}}
             @page={{this.page}}
             @onPageChange={{fn (mut this.page)}}
-            @onRowClick={{this.viewApiKey}}
+            @onRowClick={{this.rowClick}}
             @wrapperClass="dev-table-compact"
             @emptyStateComponent={{component "states/empty" icon=this.emptyState.icon title=this.emptyState.title message=this.emptyState.message action=this.emptyState.action}}
             @searchQuery={{this.query}}

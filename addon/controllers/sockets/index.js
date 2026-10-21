@@ -5,6 +5,7 @@ import { action } from '@ember/object';
 import { isBlank } from '@ember/utils';
 import fromStore from '@fleetbase/ember-core/decorators/legacy-from-store';
 import { maskKey, timeAgo } from '../../utils/format';
+import isRowControlClick from '../../utils/is-row-control-click';
 
 export default class SocketsIndexController extends BaseController {
     @service modalsManager;
@@ -244,5 +245,16 @@ export default class SocketsIndexController extends BaseController {
 
     @action reload() {
         return this.hostRouter.refresh();
+    }
+
+    /**
+     * Row clicks open the record unless the click landed on a control inside the row.
+     */
+    @action rowClick(row) {
+        if (isRowControlClick()) {
+            return;
+        }
+
+        return this.watchChannel(row);
     }
 }

@@ -5,6 +5,7 @@ import { action } from '@ember/object';
 import { isBlank } from '@ember/utils';
 import { task, timeout } from 'ember-concurrency';
 import { maskKey, timeAgo } from '../../utils/format';
+import isRowControlClick from '../../utils/is-row-control-click';
 
 export default class ApiKeysIndexController extends Controller {
     @service apiKeyActions;
@@ -341,5 +342,16 @@ export default class ApiKeysIndexController extends Controller {
 
     maskKey(key) {
         return maskKey(key);
+    }
+
+    /**
+     * Row clicks open the record unless the click landed on a control inside the row.
+     */
+    @action rowClick(row) {
+        if (isRowControlClick()) {
+            return;
+        }
+
+        return this.viewApiKey(row);
     }
 }

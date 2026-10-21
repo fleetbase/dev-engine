@@ -30,7 +30,7 @@
             @canSelectAll={{false}}
             @onSetup={{fn (mut this.table)}}
             @pagination={{false}}
-            @onRowClick={{this.watchChannel}}
+            @onRowClick={{this.rowClick}}
             @wrapperClass="dev-table-compact"
             @emptyStateComponent={{component "states/empty" icon="tower-broadcast" title=(t "developers.sockets.index.empty-title") message=(t "developers.sockets.index.empty-message")}}
             @searchQuery={{this.query}}

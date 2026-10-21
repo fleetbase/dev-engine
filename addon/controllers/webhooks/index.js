@@ -8,6 +8,7 @@ import fromStore from '@fleetbase/ember-core/decorators/legacy-from-store';
 import fetchFrom from '@fleetbase/ember-core/decorators/legacy-fetch-from';
 import { endpointHealth, HEALTH_BADGE } from '../../components/widget/endpoint-health';
 import { RETENTION_DAYS } from '../../utils/retention';
+import isRowControlClick from '../../utils/is-row-control-click';
 
 export default class WebhooksIndexController extends BaseController {
     @service webhookActions;
@@ -315,5 +316,16 @@ export default class WebhooksIndexController extends BaseController {
     @action reload() {
         this.loadHealth.perform();
         return this.hostRouter.refresh();
+    }
+
+    /**
+     * Row clicks open the record unless the click landed on a control inside the row.
+     */
+    @action rowClick(row) {
+        if (isRowControlClick()) {
+            return;
+        }
+
+        return this.viewWebhook(row);
     }
 }

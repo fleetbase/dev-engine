@@ -1,5 +1,6 @@
 import ResourceActionService from '@fleetbase/ember-core/services/resource-action';
 import { action } from '@ember/object';
+import { getOwner } from '@ember/application';
 import { later } from '@ember/runloop';
 import { format as formatDate } from 'date-fns';
 import getWithDefault from '@fleetbase/ember-core/utils/get-with-default';
@@ -25,7 +26,8 @@ export default class ApiKeyActionsService extends ResourceActionService {
     }
 
     get developerPanels() {
-        return this.universe.getService?.('developer-panels') ?? this.hostRouter?.owner?.lookup?.('service:developer-panels') ?? null;
+        // The panels service lives in this engine, so resolve it through the engine's own owner.
+        return getOwner(this).lookup('service:developer-panels') ?? null;
     }
 
     transition = {
@@ -55,7 +57,7 @@ export default class ApiKeyActionsService extends ResourceActionService {
      * Opens the key detail drawer.
      */
     @action viewApiKey(apiKey) {
-        const panels = this.hostRouter.owner?.lookup?.('service:developer-panels') ?? null;
+        const panels = this.developerPanels;
 
         if (panels) {
             return panels.openApiKey(apiKey, { actionButtons: this.panelActionButtons(apiKey) });
