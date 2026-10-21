@@ -1,5 +1,7 @@
 import buildRoutes from 'ember-engines/routes';
 
+// Engine routes. Hosts mount this under `console.developers`.
+
 export default buildRoutes(function () {
     this.route('home', { path: '/' }, function () {
         this.route('index', { path: '/' });
