@@ -1413,6 +1413,7 @@ body[data-theme='dark'] .developers-widget-footer {
 .dev-widget-table {
     width: 100%;
     border-collapse: collapse;
+    color: #111827;
     font-size: 12px;
 }
 
@@ -2694,4 +2695,9 @@ body[data-theme='dark'] .dev-kv-facts {
         flex-wrap: wrap;
         row-gap: 6px;
     }
+}
+
+/* Prefix-rule tables inside dialogs read in both themes */
+body[data-theme='dark'] .dev-widget-table {
+    color: #e5e7eb;
 }
