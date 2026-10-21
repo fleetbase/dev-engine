@@ -2653,3 +2653,20 @@ body[data-theme='dark'] .dev-kv-facts {
         width: 9rem;
     }
 }
+
+/* Phone widths: the dashboard title stays on one line next to the period selector */
+@media (width <= 640px) {
+    .developers-dashboard-title h1 {
+        max-width: 38vw;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+    }
+}
+
+/* Phone widths: the sidebar search covers lookups, so the list header drops its own input */
+@media (width <= 640px) {
+    .dev-list-header .next-view-section-subheader-actions .form-input.w-64 {
+        display: none;
+    }
+}
