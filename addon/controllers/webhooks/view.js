@@ -118,7 +118,7 @@ export default class WebhooksViewController extends BaseController {
                 id: 'more',
                 icon: 'ellipsis',
                 items: [
-                    { id: 'refresh', icon: 'rotate', label: this.intl.t('common.reload-data'), fn: this.reload },
+                    { id: 'refresh', icon: 'rotate', label: this.intl.t('developers.common.reload-data'), fn: this.reload },
                     { id: 'delete', icon: 'trash', label: this.intl.t('developers.webhooks.view.delete-button-text'), class: 'text-red-500', fn: () => this.deleteWebhook(webhook) },
                 ],
             },

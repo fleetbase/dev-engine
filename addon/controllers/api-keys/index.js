@@ -144,7 +144,7 @@ export default class ApiKeysIndexController extends Controller {
                 id: 'created-at',
                 label: this.intl.t('developers.common.created'),
                 valuePath: 'createdAtShort',
-                width: 110,
+                width: 150,
                 hidden: this.devViewport.below(1280),
                 sortable: false,
             },

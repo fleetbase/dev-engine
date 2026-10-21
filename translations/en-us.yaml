@@ -244,10 +244,10 @@ developers:
       view: View details
       view-requests: View requests
       watch-channel: Watch channel
-      edit: Edit…
-      rename: Rename…
-      roll: Roll key…
-      delete: Delete…
+      edit: Edit
+      rename: Rename
+      roll: Roll key
+      delete: Delete
     empty:
       title-live: No live API keys yet
       title-test: No test API keys yet
@@ -523,7 +523,7 @@ developers:
       send-button-text: Send test webhook...
       disable-button-text: Disable
       enable-button-text: Enable
-      delete-button-text: Delete...
+      delete-button-text: Delete
     deliveries:
       title: Deliveries
       date-range: Date range
@@ -552,10 +552,10 @@ developers:
     actions:
       view: View deliveries
       test: Send test event…
-      edit: Edit…
-      disable: Disable…
-      enable: Enable…
-      delete: Delete…
+      edit: Edit
+      disable: Disable
+      enable: Enable
+      delete: Delete
     empty:
       title-live: No live webhook endpoints
       title-test: No test webhook endpoints

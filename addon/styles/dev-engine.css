@@ -2169,6 +2169,22 @@ body[data-theme='dark'] .dev-event-row:hover {
     pointer-events: none;
 }
 
+/* Modal forms: steps keep a gap below, array inputs stay compact until they have rows */
+/* stylelint-disable-next-line selector-class-pattern */
+.flb--modal .dev-steps {
+    margin-bottom: 12px;
+}
+
+.dev-modal-body .array-input .h-48 {
+    height: auto;
+    min-height: 40px;
+    max-height: 192px;
+}
+
+.dev-modal-body .array-input .mb-4 {
+    margin-bottom: 8px;
+}
+
 /* Detail pages: tabs, tables, grids */
 .dev-tabs {
     padding: 0 4px;

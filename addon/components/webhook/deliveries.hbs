@@ -2,7 +2,7 @@
 <SectionCard @title={{t "developers.webhooks.deliveries.title"}} @count={{this.meta.total}} @flush={{true}} class="dev-deliveries" ...attributes>
     <:actions>
         <span class="dev-muted dev-nowrap">{{t "developers.common.retention" days=@retentionDays}}</span>
-        <Button @size="xs" @icon="rotate" @helpText={{t "common.reload-data"}} @onClick={{this.reload}} @isLoading={{this.load.isRunning}} />
+        <Button @size="xs" @icon="rotate" @helpText={{t "developers.common.reload-data"}} @onClick={{this.reload}} @isLoading={{this.load.isRunning}} />
     </:actions>
     <:default>
         <div class="dev-filter-bar dev-filter-bar-inset">
