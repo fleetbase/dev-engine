@@ -60,4 +60,9 @@ export default class LogsIndexRoute extends Route {
     model(params) {
         return this.store.query('api-request-log', params);
     }
+
+    setupController(controller) {
+        super.setupController(...arguments);
+        controller.loadCounts.perform();
+    }
 }

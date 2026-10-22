@@ -72,7 +72,14 @@ export default class LogsIndexController extends BaseController {
      * Status-class totals for the segments, three cheap `limit=1` reads.
      */
     @task({ restartable: true }) *loadCounts() {
-        const scope = { key: this.key, method: this.method, version: this.version, source: this.source, created_at: this.created_at };
+        const scope = {};
+
+        ['key', 'method', 'version', 'source', 'created_at', 'path', 'ip_address', 'duration_gte', 'duration_lte', 'query'].forEach((param) => {
+            if (!isBlank(this[param])) {
+                scope[param] = this[param];
+            }
+        });
+
         const read = (params) => this.fetch.get('api-request-logs', { limit: 1, ...scope, ...params }).then((response) => response?.meta?.total ?? 0);
 
         try {

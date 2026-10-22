@@ -22,7 +22,7 @@ export default class DeveloperPanelsService extends Service {
         return this.resourceContextPanel.open({
             size: 'md',
             closeOnTransition: true,
-            dismissible: true,
+            dismissible: false,
             panelContentClass: 'dev-panel-content',
             headerClass: 'dev-panel-header',
             bodyClass: 'dev-panel-body',

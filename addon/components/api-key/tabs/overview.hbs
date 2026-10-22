@@ -37,7 +37,7 @@
                     <dt>{{t "developers.api-keys.panel.secret"}}</dt>
                     <dd class="dev-muted">{{t "developers.api-keys.panel.secret-hidden-prefix"}} <a href="javascript:;" {{on "click" this.roll}}>{{t "developers.api-keys.panel.secret-roll-link"}}</a> {{t "developers.api-keys.panel.secret-hidden-suffix"}}</dd>
                     <dt>{{t "developers.api-keys.drawer.scope"}}</dt>
-                    <dd><Badge @status="inactive" @text={{t "developers.api-keys.drawer.full-access"}} @size="xs" @hideStatusDot={{true}} @disableHumanize={{true}} /></dd>
+                    <dd><Badge @status="gray" @text={{t "developers.api-keys.drawer.full-access"}} @size="xs" @hideStatusDot={{true}} @disableHumanize={{true}} /></dd>
                     <dt>{{t "developers.component.modals.api-key-form.allowed-browser-label"}}</dt>
                     <dd>
                         {{#if this.origins.length}}

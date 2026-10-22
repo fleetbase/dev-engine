@@ -3273,3 +3273,13 @@ body[data-theme='dark'] .dev-codebar {
     font-size: 14px;
     font-weight: 500;
 }
+
+.dev-header-summary {
+    font-size: 12px;
+}
+
+@media (width <= 1180px) {
+    .dev-header-summary {
+        display: none;
+    }
+}

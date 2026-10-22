@@ -18,7 +18,7 @@
     <:header>
         <div class="dev-subheader-controls">
             <EnvironmentSwitch @hideHint={{true}} />
-            <span class="dev-muted dev-nowrap dev-env-hint">{{t "developers.logs.index.summary" count=(or this.counts.all 0) rate=this.errorRate days=this.retentionDays}}</span>
+            <span class="dev-muted dev-nowrap dev-header-summary">{{t "developers.logs.index.summary" count=(or this.counts.all 0) rate=this.errorRate days=this.retentionDays}}</span>
         </div>
     </:header>
     <:default as |rows|>

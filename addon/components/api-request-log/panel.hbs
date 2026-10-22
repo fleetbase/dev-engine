@@ -17,7 +17,7 @@
                 <span>·</span>
                 <span>{{t "developers.common.version"}} <span class="dev-mono">{{n-a this.log.version}}</span></span>
                 <span>·</span>
-                <span>{{t "developers.common.source"}} <Badge @status="inactive" @text={{or this.log.source "api"}} @size="xxs" @hideStatusDot={{true}} @disableHumanize={{true}} /></span>
+                <span>{{t "developers.common.source"}} <Badge @status="info" @text={{or this.log.source "api"}} @size="xxs" @hideStatusDot={{true}} @disableHumanize={{true}} /></span>
                 {{#if this.log.content_type}}<span>·</span><span class="dev-mono">{{this.log.content_type}}</span>{{/if}}
                 <span>·</span>
                 <ClickToCopy @value={{this.log.public_id}}><span class="dev-mono">{{this.log.public_id}}</span></ClickToCopy>
@@ -88,7 +88,7 @@
                     <table class="dev-widget-table dev-headers-table">
                         <tbody>
                             {{#each this.headerRows as |row|}}
-                                <tr><td class="dev-mono dev-muted">{{row.name}}</td><td class="dev-mono">{{row.value}}{{#if row.masked}} <Badge @status="inactive" @text={{t "developers.logs.panel.masked"}} @size="xxs" @hideStatusDot={{true}} @disableHumanize={{true}} />{{/if}}</td></tr>
+                                <tr><td class="dev-mono dev-muted">{{row.name}}</td><td class="dev-mono">{{row.value}}{{#if row.masked}} <Badge @status="gray" @text={{t "developers.logs.panel.masked"}} @size="xxs" @hideStatusDot={{true}} @disableHumanize={{true}} />{{/if}}</td></tr>
                             {{else}}
                                 <tr><td class="dev-muted" colspan="2">{{t "developers.component.api-request-log.request-headers.no-headers"}}</td></tr>
                             {{/each}}
