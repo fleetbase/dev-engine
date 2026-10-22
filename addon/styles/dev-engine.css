@@ -2832,7 +2832,7 @@ body[data-theme='dark'] .dev-text-danger {
     margin-left: 0 !important;
 }
 
-.dev-list-header .next-view-section-subheader-actions > .hidden,
+.dev-list-header .next-view-section-subheader-actions > #next-view-section-subheader-wormhole-after-search,
 .dev-list-header .next-view-section-subheader-actions > .ember-basic-dropdown-content-placeholder {
     display: none;
 }
