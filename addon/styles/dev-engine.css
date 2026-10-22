@@ -3283,3 +3283,29 @@ body[data-theme='dark'] .dev-codebar {
         display: none;
     }
 }
+
+.dev-request-table td:first-child,
+.dev-request-table th:first-child {
+    width: 100%;
+}
+
+.dev-request-table td:not(:first-child),
+.dev-request-table th:not(:first-child) {
+    white-space: nowrap;
+}
+
+.dev-card-heading .dev-card-title {
+    flex: 0 0 auto;
+    white-space: nowrap;
+}
+
+.dev-card-heading .dev-card-subtitle {
+    min-width: 0;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+.dev-list-header .next-view-section-subheader-actions > .ember-basic-dropdown-trigger:has(> .hidden) {
+    display: none;
+}
