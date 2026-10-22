@@ -1,8 +1,8 @@
-<div class="developers-dashboard-widget developers-chart-widget flex h-full flex-col rounded-md border bg-white shadow-sm dark:bg-gray-800" ...attributes>
+<div class="developers-dashboard-widget developers-chart-widget flex h-full flex-col rounded-md border bg-white shadow-sm dark:bg-gray-800" {{did-update this.refresh this.period}} ...attributes>
     <div class="developers-widget-header">
         <div class="min-w-0">
-            <div class="developers-widget-title">{{@title}}</div>
-            <div class="developers-widget-subtitle">{{@subtitle}}</div>
+            <div class="developers-widget-title" title={{@title}}>{{@title}}</div>
+            <div class="developers-widget-subtitle" title={{@subtitle}}>{{@subtitle}}</div>
         </div>
         <button type="button" class="developers-widget-icon-button" {{on "click" this.refresh}} title={{t "developers.common.reload"}}>
             <FaIcon @icon="rotate" class={{if this.load.isRunning "animate-spin"}} />
@@ -10,13 +10,21 @@
     </div>
     <div class="developers-chart-body">
         {{#if this.load.isRunning}}
-            <div class="flex h-full w-full items-center justify-center"><Spinner /></div>
+            <div class="flex h-full w-full flex-col justify-end gap-2 p-2">
+                <Skeleton @variant="rect" @width="100%" @height="70%" />
+                <Skeleton @variant="text" @width="40%" />
+            </div>
         {{else if this.error}}
-            <div class="flex h-full w-full items-center justify-center text-xs text-rose-500">{{this.error}}</div>
+            <States::Error @message={{this.error}} @onRetry={{this.refresh}} class="py-6" />
+        {{else if this.isEmpty}}
+            <States::Empty @icon="chart-line" @title={{t "developers.component.widget.dashboard.empty"}} class="py-6" />
         {{else}}
             <div class="developers-chart-frame">
                 <Chart @type={{or @type "line"}} @labels={{this.labels}} @datasets={{this.datasets}} @options={{this.chartOptions}} />
             </div>
         {{/if}}
     </div>
+    {{#if this.summaryText}}
+        <div class="developers-widget-footer" title={{this.summaryText}}>{{this.summaryText}}</div>
+    {{/if}}
 </div>

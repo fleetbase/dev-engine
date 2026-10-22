@@ -1,13 +1,17 @@
-<Layout::Section::Header @title={{@model.description}} @actionsWrapperClass="space-x-2">
-    <Layout::Resource::ActionButtons @buttons={{this.actionButtons}} />
+<Layout::Section::Header @title={{@model.event}} @actionsWrapperClass="space-x-2" @titleClass="dev-nowrap dev-mono">
+    <Button @icon="arrow-left" @size="xs" @text={{t "developers.events.index.title"}} @onClick={{this.goBack}} />
+    <Layout::Resource::ActionButtons @buttons={{this.actionButtons}} @renderInPlace={{true}} />
 </Layout::Section::Header>
 
 <Layout::Section::Body>
-    <div class="h-screen overflow-y-scroll">
-        <div class="max-w-6xl mx-auto">
-            <ApiEvent::Details @apiEvent={{@model}} />
-            <ApiEvent::Data @apiEvent={{@model}} />
+    <div class="dev-page-scroll">
+        <div class="dev-page dev-page-narrow">
+            <SectionCard @flush={{true}}>
+                <:default>
+                    <ApiEvent::Panel @resource={{@model}} @isPage={{true}} />
+                </:default>
+            </SectionCard>
         </div>
-        <Spacer @height="200px" />
+        <Spacer @height="120px" />
     </div>
 </Layout::Section::Body>

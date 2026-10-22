@@ -18,6 +18,24 @@ module.exports = function (environment) {
             // Here you can pass flags/options to your application instance
             // when it is created
         },
+
+        // `@fleetbase/ember-core` reads these at import time (fetch service, adapters, routing utils).
+        API: {
+            host: 'http://localhost:8000',
+            namespace: 'int/v1',
+        },
+
+        socket: {
+            path: 'socket',
+            hostname: 'localhost',
+            port: 38000,
+            secure: false,
+        },
+
+        osrm: {
+            host: 'https://router.project-osrm.org',
+            servers: {},
+        },
     };
 
     if (environment === 'development') {

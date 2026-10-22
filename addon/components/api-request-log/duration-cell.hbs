@@ -1,0 +1,3 @@
+{{#let (dev-duration @value unit="s") as |duration|}}
+    <span class="dev-cell-text {{if (gte @value 1) 'text-rose-600 dark:text-rose-300 font-semibold'}}">{{or duration "—"}}</span>
+{{/let}}

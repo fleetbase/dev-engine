@@ -18,7 +18,8 @@ export default class SocketsViewRoute extends Route {
         return { name };
     }
 
-    async setupController(controller, model) {
+    setupController(controller, model) {
+        super.setupController(...arguments);
         controller.watchSocket(model);
     }
 }

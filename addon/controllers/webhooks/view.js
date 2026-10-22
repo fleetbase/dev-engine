@@ -1,61 +1,97 @@
 import BaseController from '../base-controller';
-import { inject as controller } from '@ember/controller';
 import { inject as service } from '@ember/service';
-import { action, computed } from '@ember/object';
-import groupApiEvents from '@fleetbase/ember-core/utils/group-api-events';
-import fromStore from '@fleetbase/ember-core/decorators/legacy-from-store';
-import fetchFrom from '@fleetbase/ember-core/decorators/legacy-fetch-from';
+import { tracked } from '@glimmer/tracking';
+import { action } from '@ember/object';
+import { task } from 'ember-concurrency';
+import { endpointHealth, HEALTH_BADGE, HEALTH_TONE } from '../../components/widget/endpoint-health';
+import { RETENTION_DAYS } from '../../utils/retention';
+import { shortUrl, timeAgo } from '../../utils/format';
 
 export default class WebhooksViewController extends BaseController {
-    @controller('webhooks.index') webhooksIndexController;
-    @service modalsManager;
+    @service webhookActions;
+    @service developerMetrics;
     @service intl;
     @service notifications;
-    @service fetch;
-    @service universe;
     @service hostRouter;
     @service abilities;
 
-    /**
-     * All webhook events
-     *
-     * @memberof WebhooksIndexController
-     * @var {Array}
-     */
-    @fetchFrom('webhook-endpoints/events') webhookEvents;
+    @tracked health = null;
+    @tracked activeTab = 'deliveries';
+    retentionDays = RETENTION_DAYS;
 
-    /**
-     * All api versions
-     *
-     * @memberof WebhooksIndexController
-     * @var {Array}
-     */
-    @fetchFrom('webhook-endpoints/versions') apiVersions;
+    get webhook() {
+        return this.model;
+    }
 
-    /**
-     * All api credentials.
-     *
-     * @memberof WebhooksIndexController
-     * @var {Array}
-     */
-    @fromStore('api-credential', { limit: -1 }) apiCredentials;
+    get shortUrl() {
+        return shortUrl(this.webhook?.url);
+    }
 
-    /**
-     * Group api events by resource
-     *
-     * @var {Object}
-     */
-    @computed('webhookEvents.[]') get groupedApiEvents() {
-        return groupApiEvents(this.webhookEvents);
+    get healthState() {
+        if (!this.webhook) {
+            return 'idle';
+        }
+
+        if (this.webhook.status === 'disabled') {
+            return 'disabled';
+        }
+
+        return this.health ? endpointHealth(this.health) : 'idle';
+    }
+
+    get healthBadge() {
+        return HEALTH_BADGE[this.healthState] ?? 'info';
+    }
+
+    get healthTone() {
+        return HEALTH_TONE[this.healthState] ?? 'is-gray';
+    }
+
+    get isFailing() {
+        return this.healthState === 'failing';
+    }
+
+    get lastDelivery() {
+        return timeAgo(this.health?.last_delivery_at);
+    }
+
+    get stats() {
+        const health = this.health ?? {};
+        const rate = health.success_rate === null || health.success_rate === undefined ? null : Number(health.success_rate);
+
+        return [
+            {
+                label: this.intl.t('developers.webhooks.view.stat-success'),
+                value: rate === null ? '—' : `${rate.toFixed(1)}%`,
+                hint: this.intl.t('developers.webhooks.view.stat-success-hint'),
+                tone: rate !== null && rate < 95 ? 'is-down' : '',
+            },
+            {
+                label: this.intl.t('developers.webhooks.view.stat-deliveries'),
+                value: Number(health.deliveries ?? 0).toLocaleString(),
+                hint: this.intl.t('developers.webhooks.view.stat-deliveries-hint', { failed: Number(health.failures ?? 0).toLocaleString() }),
+            },
+            {
+                label: this.intl.t('developers.webhooks.view.stat-duration'),
+                value: health.average_duration_ms ? `${Math.round(health.average_duration_ms)} ms` : '—',
+                hint: this.intl.t('developers.webhooks.view.stat-duration-hint'),
+            },
+            { label: this.intl.t('developers.webhooks.view.stat-last'), value: this.lastDelivery ?? '—', hint: this.intl.t('developers.webhooks.view.stat-last-hint', { days: 7 }) },
+        ];
+    }
+
+    get tabs() {
+        return [
+            { id: 'deliveries', label: this.intl.t('developers.webhooks.view.tab-deliveries'), icon: 'paper-plane' },
+            { id: 'details', label: this.intl.t('developers.webhooks.view.tab-details'), icon: 'circle-info' },
+        ];
     }
 
     /**
      * Header buttons. Extensions add to them through `developers:webhook:details`.
-     *
-     * @var {Array}
      */
     get actionButtons() {
-        const webhook = this.model;
+        const webhook = this.webhook;
         const toggle = webhook?.isEnabled
             ? {
                   id: 'disable',
@@ -66,116 +102,90 @@ export default class WebhooksViewController extends BaseController {
               }
             : {
                   id: 'enable',
-                  icon: 'ban',
+                  type: 'primary',
+                  icon: 'check',
                   text: this.intl.t('developers.webhooks.view.enable-button-text'),
                   onClick: () => this.enableWebhook(webhook),
                   permission: 'developers enable webhook',
               };
 
         return this.detailsActionButtons('webhook', webhook, [
-            { id: 'refresh', icon: 'refresh', onClick: this.reload, helpText: this.intl.t('common.reload-data') },
+            // TODO(v2): POST webhook-endpoints/{id}/test does not exist yet.
+            { id: 'test', icon: 'vial', text: this.intl.t('developers.webhooks.view.send-button-text'), disabled: true, helpText: this.intl.t('developers.common.unavailable-later') },
+            { id: 'edit', icon: 'pencil', text: this.intl.t('developers.common.edit'), onClick: () => this.editWebhook(webhook), permission: 'developers update webhook' },
             toggle,
             {
-                id: 'delete',
-                icon: 'times',
-                iconPrefix: 'fas',
-                text: this.intl.t('developers.webhooks.view.delete-button-text'),
-                onClick: () => this.deleteWebhook(webhook),
-                permission: 'developers delete webhook',
+                id: 'more',
+                icon: 'ellipsis',
+                items: [
+                    { id: 'refresh', icon: 'rotate', label: this.intl.t('developers.common.reload-data'), fn: this.reload },
+                    { id: 'delete', icon: 'trash', label: this.intl.t('developers.webhooks.view.delete-button-text'), class: 'text-red-500', fn: () => this.deleteWebhook(webhook) },
+                ],
             },
         ]);
     }
 
-    /**
-     * Toggles dialog to delete webhook
-     *
-     * @void
-     */
-    @action deleteWebhook(webhook) {
-        this.webhooksIndexController.deleteWebhook(webhook, {
-            onConfirm: () => {
-                this.notifications.success(this.intl.t('developers.webhooks.view.webhook-deleted-success-message'));
-                return this.hostRouter.transitionTo('console.developers.webhooks.index');
-            },
-        });
+    @task({ restartable: true }) *loadHealth() {
+        if (!this.webhook?.id) {
+            return;
+        }
+
+        try {
+            const data = yield this.developerMetrics.fetch.get('metrics/dev/endpoint-health', { period: '7d' });
+            this.health = (data?.items ?? []).find((item) => item.id === this.webhook.id) ?? null;
+        } catch {
+            this.health = null;
+        }
     }
 
-    /**
-     * Toggles dialog to disable webhook
-     *
-     * @void
-     */
-    @action disableWebhook(webhook) {
-        this.modalsManager.confirm({
-            title: this.intl.t('developers.webhooks.view.disable-webhook-title'),
-            body: this.intl.t('developers.webhooks.view.disable-webhook-body'),
-            acceptButtonText: this.intl.t('developers.webhooks.view.disable-webhook-button-text'),
+    @action setTab(tab) {
+        this.activeTab = tab.id;
+    }
+
+    @action editWebhook(webhook) {
+        return this.webhookActions.editWebhook(webhook, {
             confirm: async (modal) => {
+                const urlError = this.webhookActions.validateUrl(webhook.url);
+
+                if (urlError) {
+                    modal.setOption('urlError', urlError);
+                    return;
+                }
+
                 modal.startLoading();
 
                 try {
-                    await webhook.disable();
-                    this.notifications.success(this.intl.t('developers.webhooks.view.disable-webhook-success-message'));
-                    modal.done();
-                } catch (error) {
-                    this.notifications.serverError(error);
-                    modal.stopLoading();
-                }
-            },
-        });
-    }
-
-    /**
-     * Toggles dialog to enable webhook
-     *
-     * @void
-     */
-    @action enableWebhook(webhook) {
-        this.modalsManager.confirm({
-            title: this.intl.t('developers.webhooks.view.enable-webhook-title'),
-            body: this.intl.t('developers.webhooks.view.enable-webhook-body'),
-            acceptButtonText: this.intl.t('developers.webhooks.view.enable-webhook-button-text'),
-            confirm: async (modal) => {
-                modal.startLoading();
-
-                try {
-                    await webhook.enable();
-                    this.notifications.success(this.intl.t('developers.webhooks.view.enable-webhook-success-message'));
-                    modal.done();
-                } catch (error) {
-                    this.notifications.serverError(error);
-                    modal.stopLoading();
-                }
-            },
-        });
-    }
-
-    /**
-     * Toggles modal to update webhook details
-     *
-     * @param {WebhookEndpointModel} webhook
-     * @void
-     */
-    @action updateWebhookDetails(webhook) {
-        this.webhooksIndexController.editWebhook(webhook, {
-            acceptButtonText: this.intl.t('developers.webhooks.view.update-endpoint-button-text'),
-            eventOptions: this.groupedApiEvents,
-            versionOptions: this.apiVersions,
-            apiCredentialOptions: this.apiCredentials,
-            confirm: () => {
-                return webhook.save().then(() => {
+                    await webhook.save();
                     this.notifications.success(this.intl.t('developers.webhooks.view.update-endpoint-success-message'));
-                });
+                    modal.done();
+                } catch (error) {
+                    this.notifications.serverError(error);
+                    modal.stopLoading();
+                }
             },
         });
     }
 
-    /**
-     * Reloads the view data.
-     *
-     * @memberof WebhooksViewController
-     */
+    @action deleteWebhook(webhook) {
+        return this.webhookActions.deleteWebhook(webhook, {
+            onDeleted: () => this.hostRouter.transitionTo('console.developers.webhooks.index'),
+        });
+    }
+
+    @action disableWebhook(webhook) {
+        return this.webhookActions.disableWebhook(webhook);
+    }
+
+    @action enableWebhook(webhook) {
+        return this.webhookActions.enableWebhook(webhook);
+    }
+
+    @action goBack() {
+        return this.hostRouter.transitionTo('console.developers.webhooks.index');
+    }
+
     @action reload() {
-        this.hostRouter.refresh();
+        this.loadHealth.perform();
+        return this.hostRouter.refresh();
     }
 }

@@ -10,8 +10,9 @@ module('Integration | Component | widget/quick-resources', function (hooks) {
         await render(hbs`<Widget::QuickResources />`);
 
         assert.dom('.developers-dashboard-widget').exists();
-        assert.dom('.developers-resource-link').exists({ count: 5 });
-        assert.dom('.developers-resource-link').includesText('API Keys');
-        assert.dom('.developers-resource-link').includesText('Webhooks');
+        assert.dom('.dev-quick-grid .dev-quick-link').exists({ count: 6 });
+        assert.dom('.dev-quick-grid').includesText('Create API key');
+        assert.dom('.dev-quick-grid').includesText('Add webhook endpoint');
+        assert.dom('.dev-quick-grid').includesText('Channels');
     });
 });

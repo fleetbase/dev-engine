@@ -1,0 +1,34 @@
+{{! template-lint-disable no-invalid-interactive require-presentational-children }}
+<div class="dev-drawer-body" ...attributes>
+    <SectionCard @title={{t "developers.api-keys.drawer.webhooks"}} @subtitle={{t "developers.api-keys.drawer.webhooks-sub"}} @flush={{true}}>
+        <:actions>
+            <Button @size="xs" @icon="plus" @text={{t "developers.webhooks.index.button-text"}} @onClick={{this.add}} @permission="developers create webhook" />
+        </:actions>
+        <:default>
+            {{#if this.insights.error}}
+                <States::Error @message={{this.insights.error}} @onRetry={{this.refresh}} />
+            {{else if (and this.insights.isLoaded (not this.rows.length))}}
+                <States::Empty @icon="globe" @title={{t "developers.api-keys.drawer.no-webhooks"}} @message={{t "developers.api-keys.drawer.no-webhooks-message"}} class="py-6" />
+            {{else}}
+                <table class="dev-widget-table dev-linked-table">
+                    <tbody>
+                        {{#each this.rows as |row|}}
+                            <tr class="dev-widget-row" role="button" tabindex="0" {{on "click" (fn this.open row.webhook)}}>
+                                <td>
+                                    <div class="dev-identity">
+                                        <span class="dev-identity-icon {{if (eq row.webhook.status 'enabled') 'is-green' 'is-red'}}"><FaIcon @icon="globe" @size="xs" /></span>
+                                        <span class="dev-identity-text">
+                                            <span class="dev-identity-title is-regular" title={{row.webhook.url}}>{{row.label}}</span>
+                                            <span class="dev-identity-sub"><Badge @status={{if (eq row.webhook.status "enabled") "success" "inactive"}} @text={{row.webhook.status}} @size="xxs" @hideStatusDot={{true}} /> · {{t "developers.webhooks.index.events-count" count=row.events}} · {{or row.webhook.version "—"}}</span>
+                                        </span>
+                                    </div>
+                                </td>
+                                <td class="text-right"><Button @size="xs" @text={{t "developers.common.open"}} /></td>
+                            </tr>
+                        {{/each}}
+                    </tbody>
+                </table>
+            {{/if}}
+        </:default>
+    </SectionCard>
+</div>

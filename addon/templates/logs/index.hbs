@@ -2,16 +2,42 @@
     @registry="developers:log:table"
     @title={{t "developers.logs.index.title"}}
     @searchQuery={{this.query}}
+    @searchPlaceholder={{t "developers.logs.index.search-placeholder"}}
     @onSearch={{perform this.search}}
     @searchDisabled={{cannot "developers list log"}}
     @onReload={{this.reload}}
     @data={{@model}}
     @columns={{this.columns}}
-    @selectable={{false}}
-    @canSelectAll={{false}}
-    @onRowClick={{this.onRowClick}}
     @page={{this.page}}
     @onPageChange={{fn (mut this.page)}}
     @setupTable={{fn (mut this.table)}}
     @controller={{this}}
-/>
+    @filterPickerButtonClass="hidden"
+    @headerClass="dev-list-header dev-list-header-wide-search"
+>
+    <:header>
+        <div class="dev-subheader-controls">
+            <EnvironmentSwitch @hideHint={{true}} />
+            <span class="dev-muted dev-nowrap dev-header-summary">{{t "developers.logs.index.summary" count=(or this.counts.all 0) rate=this.errorRate days=this.retentionDays}}</span>
+        </div>
+    </:header>
+    <:default as |rows|>
+        <FilterBar @columns={{this.columns}} @controller={{this}} @segments={{this.segments}} @views={{this.views}} @onView={{this.applyView}} />
+        <RequestHistogram @traffic={{this.traffic}} @label={{t "developers.logs.index.histogram-label"}} />
+        <Table
+            @rows={{rows}}
+            @columns={{this.columns}}
+            @selectable={{false}}
+            @canSelectAll={{false}}
+            @onSetup={{fn (mut this.table)}}
+            @pagination={{true}}
+            @paginationMeta={{rows.meta}}
+            @page={{this.page}}
+            @onPageChange={{fn (mut this.page)}}
+            @onRowClick={{this.rowClick}}
+            @wrapperClass="dev-table-compact dev-request-rows"
+            @emptyStateComponent={{component "states/empty" icon=this.emptyState.icon title=this.emptyState.title message=this.emptyState.message}}
+            @searchQuery={{this.query}}
+        />
+    </:default>
+</Layout::Resource::Tabular>

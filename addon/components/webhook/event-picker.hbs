@@ -1,0 +1,58 @@
+<div class="dev-event-picker {{if @disabled 'is-disabled'}}" ...attributes>
+    <div class="dev-event-picker-head">
+        <span class="dev-label">{{t "developers.component.modals.webhook-form.events-send-label"}}</span>
+        <label class="dev-event-picker-all">
+            <Toggle @isToggled={{this.isAllEvents}} @onToggle={{this.setAllEvents}} @disabled={{@disabled}} @label={{t "developers.webhooks.form.all-events"}} />
+        </label>
+    </div>
+    {{#if this.isAllEvents}}
+        <div class="dev-note dev-note-warning">
+            <FaIcon @icon="triangle-exclamation" />
+            <span>{{t "developers.webhooks.form.all-events-warning" count=this.all.length}}</span>
+        </div>
+    {{else}}
+        <div class="dev-event-picker-body">
+            <div class="dev-event-picker-list">
+                <div class="dev-event-picker-search">
+                    <FaIcon @icon="magnifying-glass" @size="xs" class="text-gray-400" />
+                    <Input @value={{this.query}} placeholder={{t "developers.webhooks.form.search-events" count=this.all.length}} class="dev-event-picker-input" aria-label={{t "developers.component.modals.webhook-form.event-search-label"}} {{on "input" this.search}} />
+                </div>
+                <div class="dev-event-picker-scroll">
+                    {{#each this.groups as |group|}}
+                        <div class="dev-event-group">
+                            <label class="dev-event-group-head">
+                                <Checkbox @value={{group.isAllSelected}} @onToggle={{fn this.toggleGroup group}} @disabled={{@disabled}} />
+                                <span class="dev-event-group-name">{{group.label}}</span>
+                                <span class="dev-event-group-count">{{group.selectedCount}} / {{group.total}}</span>
+                            </label>
+                            {{#each group.events as |event|}}
+                                <label class="dev-event-row">
+                                    <Checkbox @value={{event.isSelected}} @onToggle={{fn this.toggleEvent event.name}} @disabled={{@disabled}} />
+                                    <span class="dev-mono">{{event.name}}</span>
+                                </label>
+                            {{/each}}
+                        </div>
+                    {{else}}
+                        <div class="dev-event-picker-empty">{{t "developers.webhooks.form.no-matching-events"}}</div>
+                    {{/each}}
+                </div>
+            </div>
+            <div class="dev-event-picker-selected">
+                <div class="dev-event-picker-selected-head">
+                    <b>{{t "developers.webhooks.form.selected-count" count=this.selected.length}}</b>
+                    {{#if this.selected.length}}
+                        <Button @type="link" @size="xs" @text={{t "developers.common.clear"}} @onClick={{this.clear}} @disabled={{@disabled}} />
+                    {{/if}}
+                </div>
+                <div class="dev-inline-wrap">
+                    {{#each this.chips as |chip|}}
+                        <span class="dev-tag"><span>{{chip.label}}</span><button type="button" class="dev-tag-remove" aria-label={{t "developers.common.clear"}} disabled={{@disabled}} {{on "click" (fn this.removeChip chip)}}><FaIcon @icon="xmark" @size="xs" /></button></span>
+                    {{else}}
+                        <span class="dev-muted">{{t "developers.webhooks.form.none-selected"}}</span>
+                    {{/each}}
+                </div>
+                <div class="dev-muted dev-event-picker-hint">{{t "developers.webhooks.form.chips-hint"}}</div>
+            </div>
+        </div>
+    {{/if}}
+</div>

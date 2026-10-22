@@ -1,0 +1,6 @@
+<span class="dev-cell-text">
+    <Badge @status="info" @text={{or @value "api"}} @size="xs" @hideStatusDot={{true}} @disableHumanize={{true}} />
+    {{#if @row.method}}
+        <span class="dev-method dev-method-{{lowercase @row.method}} ml-1">{{@row.method}}</span>
+    {{/if}}
+</span>

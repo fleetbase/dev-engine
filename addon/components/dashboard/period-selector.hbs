@@ -1,0 +1,10 @@
+<div class="dev-period-selector" ...attributes>
+    <div class="dev-segmented" role="group" aria-label={{t "developers.dashboard.period.label"}}>
+        {{#each this.periods as |item|}}
+            <button type="button" class="dev-segment {{if item.isActive 'is-active'}}" {{on "click" (fn this.select item.period)}}>
+                <span class="dev-segment-label">{{item.period}}</span>
+            </button>
+        {{/each}}
+    </div>
+    <span class="dev-period-range">{{this.rangeText}} · {{t "developers.dashboard.period.compared" period=this.developerMetrics.period}}</span>
+</div>

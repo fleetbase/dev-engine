@@ -1,0 +1,5 @@
+{{#let (status-tone @value) as |tone|}}
+    <span class="dev-cell-text dev-status-{{tone}}">
+        <Badge @status={{tone}} @text={{concat @value (if @row.reason_phrase (concat " " @row.reason_phrase) "")}} @size="xs" @hideStatusDot={{true}} @disableHumanize={{true}} />
+    </span>
+{{/let}}

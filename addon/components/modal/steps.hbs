@@ -1,0 +1,14 @@
+<ol class="dev-steps" ...attributes>
+    {{#each @steps as |step index|}}
+        <li class="dev-step {{if (eq step.state 'active') 'is-active'}} {{if (eq step.state 'done') 'is-done'}}">
+            <span class="dev-step-num">
+                {{#if (eq step.state "done")}}
+                    <FaIcon @icon="check" @size="xs" />
+                {{else}}
+                    {{add index 1}}
+                {{/if}}
+            </span>
+            <span class="dev-step-label">{{step.label}}</span>
+        </li>
+    {{/each}}
+</ol>

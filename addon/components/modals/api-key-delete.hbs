@@ -1,0 +1,13 @@
+<Modal::Default @modalIsOpened={{@modalIsOpened}} @options={{@options}} @confirm={{@onConfirm}} @decline={{@onDecline}} as |options|>
+    <div class="dev-form">
+        <div class="dev-note dev-note-danger"><FaIcon @icon="triangle-exclamation" /><span>{{t "developers.api-keys.delete.consequence"}}</span></div>
+        <dl class="dev-kv">
+            <dt>{{t "developers.api-keys.index.last-used"}}</dt>
+            <dd>{{#if options.apiKey.last_used_at}}{{time-ago options.apiKey.last_used_at}}{{else}}<span class="dev-muted">{{t "developers.common.never-used"}}</span>{{/if}}</dd>
+            <dt>{{t "developers.application.sidebar.items.webhooks"}}</dt>
+            <dd>{{t "developers.api-keys.delete.webhooks" count=options.dependents.webhooks.length endpoint=options.firstDependent}}</dd>
+            <dt>{{t "developers.api-keys.delete.safer"}}</dt>
+            <dd><a href="javascript:;" {{on "click" options.setExpiration}}>{{t "developers.api-keys.delete.safer-link"}}</a> {{t "developers.api-keys.delete.safer-text"}}</dd>
+        </dl>
+    </div>
+</Modal::Default>

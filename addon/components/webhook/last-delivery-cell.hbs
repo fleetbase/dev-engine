@@ -1,0 +1,7 @@
+{{#let (@column.cellComponentArgs.healthFor @row) as |health|}}
+    {{#if health.last_delivery_at}}
+        <span class="dev-cell-text" title={{time-stamp health.last_delivery_at "yyyy-MM-dd HH:mm:ss"}}>{{time-ago health.last_delivery_at}}</span>
+    {{else}}
+        <span class="dev-cell-text dev-muted">—</span>
+    {{/if}}
+{{/let}}

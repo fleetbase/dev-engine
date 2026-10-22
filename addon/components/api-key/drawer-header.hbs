@@ -1,0 +1,19 @@
+<div class="dev-drawer-header" ...attributes>
+    <div class="dev-identity dev-drawer-identity">
+        <span class="dev-identity-icon dev-identity-icon-lg {{this.tone}}"><FaIcon @icon="key" /></span>
+        <span class="dev-identity-text">
+            <span class="dev-identity-title dev-drawer-title" title={{this.apiKey.name}}>
+                <span class="dev-truncate">{{or this.apiKey.name (mask-key this.apiKey.key)}}</span>
+                <Badge @status={{this.environment.status}} @text={{t this.environment.key}} @size="xs" @disableHumanize={{true}} />
+            </span>
+            <span class="dev-identity-sub">
+                <ClickToCopy @value={{this.apiKey.key}}><span class="dev-tag"><span>{{this.apiKey.key}}</span><FaIcon @icon="copy" @size="xs" /></span></ClickToCopy>
+            </span>
+        </span>
+    </div>
+    <div class="dev-drawer-actions">
+        <Layout::Resource::ActionButtons @buttons={{@actionButtons}} @dropdownIcon="ellipsis" @dropdownSize="xs" @renderInPlace={{true}} />
+        <Button @size="xs" @icon="arrow-up-right-from-square" @helpText={{t "developers.common.open-full-page"}} @onClick={{this.openFullPage}} />
+        <Button @size="xs" @icon="times" @helpText={{t "developers.common.close"}} @onClick={{@onPressCancel}} />
+    </div>
+</div>

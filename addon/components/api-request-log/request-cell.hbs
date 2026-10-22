@@ -1,0 +1,7 @@
+<div class="dev-identity dev-request-cell" title={{@row.full_url}}>
+    <span class="dev-method dev-method-{{lowercase @row.method}}">{{@row.method}}</span>
+    <span class="dev-identity-text">
+        <span class="dev-identity-title dev-mono is-regular">{{@row.path}}</span>
+        <span class="dev-identity-sub">{{@row.public_id}}{{#if @row.ip_address}} · {{@row.ip_address}}{{/if}}{{#if @row.content_type}} · {{@row.content_type}}{{/if}}</span>
+    </span>
+</div>

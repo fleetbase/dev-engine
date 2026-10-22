@@ -1,0 +1,6 @@
+<span class="dev-cell-text">
+    <Badge @status={{if (eq @value "company") "purple" (if (eq @value "api") "success" "info")}} @text={{t (concat "developers.sockets.types." @value)}} @size="xs" @hideStatusDot={{true}} @disableHumanize={{true}} />
+    {{#if @row.environment}}
+        <Badge @status={{if (eq @row.environment "test") "warning" "success"}} @text={{t (concat "developers.common." @row.environment)}} @size="xs" @hideStatusDot={{true}} @disableHumanize={{true}} class="ml-1" />
+    {{/if}}
+</span>

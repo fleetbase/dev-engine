@@ -1,0 +1,23 @@
+<div class="dev-env-switch-wrapper" ...attributes>
+    <div class="dev-segmented" role="group" aria-label={{t "developers.environment.label"}}>
+        <button type="button" class="dev-segment {{unless this.isSandbox 'is-active'}}" {{on "click" (fn this.setEnvironment false)}}>
+            <span class="dev-dot dev-dot-green"></span>
+            <span class="dev-segment-label">{{t "developers.environment.live"}}</span>
+            {{#unless (is-empty @liveCount)}}<span class="dev-segment-count">{{@liveCount}}</span>{{/unless}}
+        </button>
+        <button type="button" class="dev-segment {{if this.isSandbox 'is-active'}}" {{on "click" (fn this.setEnvironment true)}}>
+            <span class="dev-dot dev-dot-amber"></span>
+            <span class="dev-segment-label">{{t "developers.environment.test"}}</span>
+            {{#unless (is-empty @testCount)}}<span class="dev-segment-count">{{@testCount}}</span>{{/unless}}
+        </button>
+    </div>
+    {{#unless @hideHint}}
+        <span class="dev-env-hint">
+            {{#if this.isSandbox}}
+                {{t "developers.environment.test-hint"}}
+            {{else}}
+                {{t "developers.environment.live-hint"}}
+            {{/if}}
+        </span>
+    {{/unless}}
+</div>

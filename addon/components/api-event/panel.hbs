@@ -1,0 +1,76 @@
+{{! template-lint-disable require-presentational-children no-invalid-interactive }}
+<div class="dev-panel-content" ...attributes>
+    <div class="dev-panel-identity">
+        <span class="dev-identity-icon is-blue"><FaIcon @icon={{this.icon}} @size="xs" /></span>
+        <div class="dev-identity-text">
+            <span class="dev-identity-title dev-mono" title={{this.event.event}}>{{this.event.event}} <span class="dev-tag"><span>{{this.event.public_id}}</span></span></span>
+            <span class="dev-identity-sub" title={{this.event.description}}>{{this.event.description}} · {{this.createdAt}}</span>
+        </div>
+        <div class="dev-panel-identity-actions">
+            <Button @size="xs" @icon="copy" @helpText={{t "developers.events.actions.copy-id"}} @onClick={{this.copyId}} />
+            {{#unless @isPage}}
+                <Button @size="xs" @icon="arrow-up-right-from-square" @helpText={{t "developers.common.open-full-page"}} @onClick={{this.openFullPage}} />
+            {{/unless}}
+        </div>
+    </div>
+
+    <TabNavigation @tabs={{this.tabs}} @activeTabId={{this.activeTab}} @onTabChange={{this.setTab}} @style="github" @size="sm" @tablistClass="dev-tabs">
+        {{#if (eq this.activeTab "payload")}}
+            <CodeViewer @value={{this.event.data}} @title={{t "developers.events.panel.payload"}} @emptyText={{t "developers.component.api-event.data.no-data"}} class="mt-3" />
+        {{else if (eq this.activeTab "deliveries")}}
+            <SectionCard @flush={{true}} class="mt-3">
+                <:default>
+                    {{#if this.load.isRunning}}
+                        <div class="p-3"><Skeleton::Table @rows={{3}} @columns={{3}} @header={{false}} /></div>
+                    {{else if this.error}}
+                        <States::Error @message={{this.error}} class="py-4" />
+                    {{else if this.deliveryRows.length}}
+                        <table class="dev-widget-table">
+                            <tbody>
+                                {{#each this.deliveryRows as |row|}}
+                                    <tr class="dev-widget-row" role="button" tabindex="0" {{on "click" (fn this.openAttempt row.attempt)}}>
+                                        <td>
+                                            <div class="dev-identity">
+                                                <span class="dev-identity-icon {{if row.ok 'is-green' 'is-red'}}"><FaIcon @icon="globe" @size="xs" /></span>
+                                                <span class="dev-identity-text">
+                                                    <span class="dev-identity-title" title={{row.attempt.url}}>{{row.shortUrl}}</span>
+                                                    <span class="dev-identity-sub">{{t "developers.webhooks.deliveries.attempt-n" n=(or row.attempt.attempt 1)}} · {{or row.duration "—"}} · {{row.at}}</span>
+                                                </span>
+                                            </div>
+                                        </td>
+                                        <td><Badge @status={{if row.ok "success" "danger"}} @text={{row.statusText}} @size="xxs" @hideStatusDot={{true}} @disableHumanize={{true}} /></td>
+                                        <td class="text-right"><FaIcon @icon="chevron-right" @size="xs" class="text-gray-400" /></td>
+                                    </tr>
+                                {{/each}}
+                            </tbody>
+                        </table>
+                    {{else}}
+                        <States::Empty @icon="paper-plane" @title={{t "developers.events.panel.no-deliveries"}} @message={{t "developers.events.panel.no-deliveries-message"}} class="py-4" />
+                    {{/if}}
+                </:default>
+            </SectionCard>
+        {{else}}
+            <dl class="dev-kv mt-3">
+                <dt>{{t "developers.common.source"}}</dt>
+                <dd><Badge @status="info" @text={{this.event.source}} @size="xs" @hideStatusDot={{true}} @disableHumanize={{true}} /> {{#if this.event.method}}<span class="dev-method dev-method-{{lowercase this.event.method}} ml-1">{{this.event.method}}</span>{{/if}}</dd>
+                <dt>{{t "developers.webhooks.index.credential"}}</dt>
+                <dd>{{#if this.credentialName}}{{this.credentialName}}{{else}}<span class="dev-muted">—</span>{{/if}}</dd>
+                <dt>{{t "developers.events.panel.resource"}}</dt>
+                <dd>{{#if this.resourceId}}<span class="dev-tag"><span>{{this.resourceId}}</span></span>{{else}}<span class="dev-muted">—</span>{{/if}}</dd>
+                <dt>{{t "developers.common.description"}}</dt>
+                <dd>{{this.event.description}}</dd>
+                <dt>{{t "developers.common.time"}}</dt>
+                <dd>{{this.createdAt}}</dd>
+                <dt>{{t "developers.application.sidebar.items.channels"}}</dt>
+                <dd class="dev-inline-wrap">
+                    {{#each this.channels as |channel|}}
+                        <button type="button" class="dev-tag dev-tag-button" {{on "click" (fn this.watchChannel channel)}}><span>{{channel}}</span><FaIcon @icon="tower-broadcast" @size="xs" /></button>
+                    {{/each}}
+                </dd>
+            </dl>
+            <div class="mt-4">
+                <CodeViewer @value={{this.event.data}} @title={{t "developers.events.panel.payload"}} @emptyText={{t "developers.component.api-event.data.no-data"}} />
+            </div>
+        {{/if}}
+    </TabNavigation>
+</div>

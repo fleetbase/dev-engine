@@ -1,0 +1,9 @@
+<States::Empty
+    @icon="lock"
+    @iconClass="dev-state-icon-warning"
+    @title={{or @title (t "developers.states.denied.title")}}
+    @message={{or @message (t "developers.states.denied.message" permission=@permission)}}
+    ...attributes
+>
+    {{yield}}
+</States::Empty>

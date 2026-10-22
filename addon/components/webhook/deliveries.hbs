@@ -1,0 +1,101 @@
+{{! template-lint-disable require-presentational-children no-invalid-interactive }}
+<SectionCard @title={{t "developers.webhooks.deliveries.title"}} @count={{this.meta.total}} @flush={{true}} class="dev-deliveries" ...attributes>
+    <:actions>
+        <span class="dev-muted dev-nowrap">{{t "developers.common.retention" days=@retentionDays}}</span>
+        <Button @size="xs" @icon="rotate" @helpText={{t "developers.common.reload-data"}} @onClick={{this.reload}} @isLoading={{this.load.isRunning}} />
+    </:actions>
+    <:default>
+        <div class="dev-filter-bar dev-filter-bar-inset">
+            <div class="dev-segmented" role="group">
+                {{#each this.segments as |segment|}}
+                    <button type="button" class="dev-segment {{if segment.isActive 'is-active'}}" {{on "click" (fn this.setStatus segment)}}><span class="dev-segment-label">{{segment.label}}</span></button>
+                {{/each}}
+            </div>
+            <div class="dev-filter-inline">
+                <DatePicker @value={{this.dateRange}} @range={{true}} @autoClose={{false}} @toggleSelected={{false}} @onSelect={{this.setDateRange}} @placeholder={{t "developers.webhooks.deliveries.date-range"}} class="form-input form-input-sm dev-filter-date" />
+                {{#if this.dateRange}}
+                    <Button @type="link" @size="xs" @icon="xmark" @helpText={{t "developers.common.clear"}} @onClick={{this.clearDateRange}} />
+                {{/if}}
+            </div>
+            <Select @options={{this.eventOptions}} @value={{this.eventType}} @placeholder={{t "developers.webhooks.deliveries.event-type-any"}} @onSelect={{this.setEventType}} class="form-input form-input-sm dev-filter-select" />
+            <Input @value={{this.search}} placeholder={{t "developers.webhooks.deliveries.search"}} class="form-input form-input-sm dev-filter-search" aria-label={{t "developers.webhooks.deliveries.search"}} {{on "keyup" (perform this.searchLogs)}} />
+            {{#if this.hasFilters}}
+                <Button @type="link" @size="xs" @icon="xmark" @text={{t "developers.filter-bar.clear-all"}} @onClick={{this.clearFilters}} />
+            {{/if}}
+        </div>
+
+        {{#if (and this.load.isRunning (not this.logs.length))}}
+            <div class="p-4"><Skeleton::Table @rows={{6}} @columns={{5}} /></div>
+        {{else if this.error}}
+            <States::Error @message={{this.error}} @onRetry={{this.reload}} />
+        {{else if this.groups.length}}
+            <table class="dev-table">
+                <thead>
+                    <tr>
+                        <th class="dev-table-expand"></th>
+                        <th>{{t "developers.common.event"}}</th>
+                        <th>{{t "developers.common.result"}}</th>
+                        <th>{{t "developers.webhooks.deliveries.attempts"}}</th>
+                        <th>{{t "developers.webhooks.deliveries.duration"}}</th>
+                        <th>{{t "developers.webhooks.deliveries.sent"}}</th>
+                        <th class="dev-table-actions"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {{#each this.groups as |group|}}
+                        <tr class="dev-table-row {{if group.expanded 'is-expanded'}}" role="button" tabindex="0" {{on "click" (fn this.toggleGroup group)}}>
+                            <td class="dev-table-expand"><FaIcon @icon={{if group.expanded "chevron-down" "chevron-right"}} @size="xs" class="text-gray-400" /></td>
+                            <td>
+                                <div class="dev-identity">
+                                    <span class="dev-identity-icon is-blue"><FaIcon @icon="bolt" @size="xs" /></span>
+                                    <span class="dev-identity-text">
+                                        <span class="dev-identity-title dev-mono" title={{group.eventName}}>{{group.eventName}}</span>
+                                        <span class="dev-identity-sub" title={{group.eventId}}>{{group.eventId}}</span>
+                                    </span>
+                                </div>
+                            </td>
+                            <td><Badge @status={{group.resultBadge}} @text={{concat (t (concat "developers.webhooks.deliveries.result-" group.result)) (if group.statusCode (concat " · " group.statusCode) "")}} @size="xs" @hideStatusDot={{true}} @disableHumanize={{true}} /></td>
+                            <td>{{group.attemptCount}}</td>
+                            <td>{{or group.duration "—"}}</td>
+                            <td class="dev-nowrap">{{group.sentAt}}</td>
+                            <td class="dev-table-actions">
+                                <Button @size="xs" @icon="magnifying-glass" @helpText={{t "developers.webhooks.deliveries.inspect"}} @onClick={{fn this.openAttempt group.latest}} />
+                            </td>
+                        </tr>
+                        {{#if group.expanded}}
+                            <tr class="dev-table-subrow">
+                                <td colspan="7">
+                                    <ol class="dev-timeline dev-timeline-compact">
+                                        {{#each group.timeline as |item|}}
+                                            <li class="dev-timeline-item" role="button" tabindex="0" {{on "click" (fn this.openAttempt item.attempt)}}>
+                                                <span class="dev-timeline-dot {{if item.ok 'is-ok' 'is-bad'}}"></span>
+                                                <div class="dev-timeline-body">
+                                                    <div class="dev-timeline-title">{{t "developers.webhooks.deliveries.attempt-n" n=item.number}} · {{item.statusCode}} {{item.reason}} · {{or item.duration "—"}}{{#if item.isFinal}} · {{t "developers.webhooks.deliveries.final"}}{{/if}}</div>
+                                                    <div class="dev-timeline-meta">{{item.at}}{{#if item.nextRetry}} · {{t "developers.webhooks.deliveries.next-retry" when=item.nextRetry}}{{/if}}{{#if item.isFinal}} · {{t "developers.webhooks.deliveries.marked-failed"}}{{/if}}</div>
+                                                </div>
+                                                <span class="dev-timeline-action"><FaIcon @icon="chevron-right" @size="xs" class="text-gray-400" /></span>
+                                            </li>
+                                        {{/each}}
+                                        <li class="dev-timeline-foot">
+                                            <Button @size="xs" @icon="bolt" @text={{t "developers.component.webhook.attempts.view-event"}} @onClick={{fn this.openEvent group}} @disabled={{not group.apiEvent}} />
+                                            <Button @size="xs" @icon="rotate-right" @text={{t "developers.webhooks.deliveries.redeliver"}} @disabled={{true}} @helpText={{t "developers.common.unavailable-later"}} />
+                                        </li>
+                                    </ol>
+                                </td>
+                            </tr>
+                        {{/if}}
+                    {{/each}}
+                </tbody>
+            </table>
+            {{#if this.meta}}
+                <Pagination @meta={{this.meta}} @currentPage={{this.page}} @onPageChange={{this.changePage}} @isLoading={{this.load.isRunning}} class="dev-pagination" />
+            {{/if}}
+        {{else}}
+            <States::Empty @icon="paper-plane" @title={{if this.hasFilters (t "developers.webhooks.deliveries.empty-filtered") (t "developers.webhooks.deliveries.empty")}} @message={{t "developers.webhooks.deliveries.empty-message" days=@retentionDays}}>
+                {{#if this.hasFilters}}
+                    <Button @size="xs" @text={{t "developers.filter-bar.clear-all"}} @onClick={{this.clearFilters}} />
+                {{/if}}
+            </States::Empty>
+        {{/if}}
+    </:default>
+</SectionCard>

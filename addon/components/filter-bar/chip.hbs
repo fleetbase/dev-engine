@@ -1,0 +1,35 @@
+<DropdownButton
+    @size="xs"
+    @renderInPlace={{true}}
+    @buttonClass="dev-filter-chip {{if @filter.isActive 'is-active'}}"
+    @text={{concat @filter.chipLabel ": " @filter.displayValue}}
+    @icon="caret-down"
+    @iconPrefix="fas"
+    @iconClass="dev-filter-chip-caret order-last ml-1 mr-0"
+    @contentClass="dev-filter-popover-content"
+    as |dd|
+>
+    <div class="dev-filter-popover">
+        <div class="dev-filter-popover-label">{{@filter.chipLabel}}</div>
+        {{component
+            (if (is-object @filter.filterComponent) (lazy-engine-component @filter.filterComponent) @filter.filterComponent)
+            value=@filter.filterValue
+            filter=@filter
+            param=@filter.param
+            options=@filter.filterOptions
+            optionLabel=@filter.filterOptionLabel
+            optionValue=@filter.filterOptionValue
+            optionFormats=@filter.filterOptionFormats
+            fetchUri=@filter.fetchUri
+            fetchParams=(or @filter.filterFetchParams @filter.fetchParams)
+            fetchOptions=(or @filter.filterFetchOptions @filter.fetchOptions)
+            placeholder=(or @filter.filterComponentPlaceholder @filter.chipLabel)
+            onChange=@onChange
+            onClear=@onClear
+        }}
+        <div class="dev-filter-popover-footer">
+            <Button @size="xs" @text={{t "developers.common.clear"}} @onClick={{dropdown-fn dd (fn @onClearFilter @filter)}} />
+            <Button @size="xs" @type="primary" @icon="check" @text={{t "developers.filter-bar.apply"}} @onClick={{dropdown-fn dd @onApply}} />
+        </div>
+    </div>
+</DropdownButton>

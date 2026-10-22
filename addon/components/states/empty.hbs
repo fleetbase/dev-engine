@@ -1,0 +1,22 @@
+<div class="dev-state" ...attributes>
+    <div class="dev-state-icon {{@iconClass}}">
+        <FaIcon @icon={{or @icon "inbox"}} @prefix={{or @iconPrefix "fas"}} />
+    </div>
+    {{#if @title}}
+        <div class="dev-state-title">{{@title}}</div>
+    {{/if}}
+    {{#if @message}}
+        <p class="dev-state-message">{{@message}}</p>
+    {{/if}}
+    {{#if (or @action @secondaryAction (has-block))}}
+        <div class="dev-state-actions">
+            {{#if @action}}
+                <Button @type={{or @action.type "primary"}} @icon={{@action.icon}} @text={{@action.label}} @onClick={{@action.onClick}} @permission={{@action.permission}} />
+            {{/if}}
+            {{#if @secondaryAction}}
+                <Button @icon={{@secondaryAction.icon}} @text={{@secondaryAction.label}} @onClick={{@secondaryAction.onClick}} @permission={{@secondaryAction.permission}} />
+            {{/if}}
+            {{yield}}
+        </div>
+    {{/if}}
+</div>

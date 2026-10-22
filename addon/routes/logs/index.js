@@ -35,10 +35,19 @@ export default class LogsIndexRoute extends Route {
         created_at: {
             refreshModel: true,
         },
+        source: {
+            refreshModel: true,
+        },
+        status_code_gte: {
+            refreshModel: true,
+        },
+        status_code_lt: {
+            refreshModel: true,
+        },
     };
 
     @action loading(transition) {
-        this.loader.showOnInitialTransition(transition, 'section.next-view-section', { loadingMessage: 'Loading logs...' });
+        this.loader.showOnInitialTransition(transition, 'section.next-view-section', { loadingMessage: this.intl.t('developers.logs.index.loading') });
     }
 
     beforeModel() {
@@ -50,5 +59,10 @@ export default class LogsIndexRoute extends Route {
 
     model(params) {
         return this.store.query('api-request-log', params);
+    }
+
+    setupController(controller) {
+        super.setupController(...arguments);
+        controller.loadCounts.perform();
     }
 }

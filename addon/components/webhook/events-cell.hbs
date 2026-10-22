@@ -1,0 +1,8 @@
+{{#if @row.is_listening_on_all_events}}
+    <span class="dev-cell-text"><Badge @status="warning" @text={{t "developers.webhooks.badges.all-events"}} @size="xs" @hideStatusDot={{true}} @disableHumanize={{true}} /></span>
+{{else}}
+    <span class="dev-cell-text" title={{@row.eventTypes}}>
+        <Badge @status="info" @text={{t "developers.webhooks.index.events-count" count=@row.events.length}} @size="xs" @hideStatusDot={{true}} @disableHumanize={{true}} />
+        <span class="dev-muted dev-mono ml-1">{{@row.eventTypes}}</span>
+    </span>
+{{/if}}

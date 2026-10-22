@@ -8,7 +8,18 @@
         @createWrapperClass="developers-dashboard-create-wrapper"
         @stickyHeader={{true}}
         class="developers-dashboard-page"
-    />
+    >
+        <:actions>
+            <Dashboard::PeriodSelector />
+        </:actions>
+        <:body>
+            {{#if this.developerMetrics.isFirstIntegration}}
+                <div class="px-4 pt-4">
+                    <Dashboard::Onboarding />
+                </div>
+            {{/if}}
+        </:body>
+    </Dashboard>
     <Spacer @height="300px" />
     {{outlet}}
 </Layout::Section::Body>

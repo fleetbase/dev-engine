@@ -1,0 +1,12 @@
+<States::Empty
+    @icon="triangle-exclamation"
+    @iconClass="dev-state-icon-danger"
+    @title={{or @title (t "developers.states.error.title")}}
+    @message={{or @message (t "developers.states.error.message" status=(or @status "—"))}}
+    ...attributes
+>
+    {{#if @onRetry}}
+        <Button @type="primary" @icon="rotate" @text={{t "developers.states.error.retry"}} @onClick={{@onRetry}} @isLoading={{@isRetrying}} />
+    {{/if}}
+    {{yield}}
+</States::Empty>

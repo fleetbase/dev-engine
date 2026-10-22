@@ -1,47 +1,63 @@
 <Modal::Default @modalIsOpened={{@modalIsOpened}} @options={{@options}} @confirm={{@onConfirm}} @decline={{@onDecline}} as |options|>
-    <div class="modal-body-container">
-        <InputGroup
-            @name={{t "developers.common.name"}}
-            @value={{options.apiKey.name}}
-            @placeholder={{t "developers.component.modals.api-key-form.name-placeholder"}}
-            @disabled={{cannot @options.formPermission}}
-            aria-label={{t "developers.component.modals.api-key-form.api-name-aria-label"}}
-            class="w-full form-input"
-        />
-        <div class="input-group">
-            <InputLabel @labelText={{t "developers.component.modals.api-key-form.expiration-label"}} @helpText={{t "developers.component.modals.api-key-form.expiration-help-text"}} />
-
-            <select class="w-full mb-1 form-select" disabled={{cannot @options.formPermission}} aria-label={{t "developers.component.modals.api-key-form.api-expiration-aria-label"}} {{on "change" @options.setExpiration}}>
-                <option selected disabled>
-                    {{t "developers.component.modals.api-key-form.select-expiration-date"}}
-                </option>
-                {{#each @options.expirationOptions as |opt|}}
-                    <option value={{opt}}>
-                        {{opt}}
-                    </option>
-                {{/each}}
-            </select>
-            <p class="text-xs dark:text-gray-100">
-                {{t "developers.component.modals.api-key-form.key-expires"}}
-            </p>
-        </div>
-
-        <div class="flex flex-col input-group">
-            {{#if @options.testMode}}
-                <Badge @status="test">
-                    {{t "developers.component.modals.api-key-form.test-key"}}
-                </Badge>
-                <p class="block my-2 text-sm text-blue-500 dark:text-blue-300">
-                    {{t "developers.component.modals.api-key-form.testing-environments"}}
-                </p>
-            {{else}}
-                <Badge @status="live">
-                    {{t "developers.component.modals.api-key-form.live-key"}}
-                </Badge>
-                <p class="block my-2 text-sm text-blue-500 dark:text-blue-300">
-                    {{t "developers.component.modals.api-key-form.production-environments"}}
-                </p>
+    <div class="dev-form" data-test-api-key-form>
+        {{#if (eq options.step "reveal")}}
+            <ApiKey::Reveal @revealed={{options.revealed}} @acknowledged={{options.acknowledged}} @onToggleAck={{options.toggleAck}} />
+        {{else}}
+            {{#if options.readOnly}}
+                <div class="dev-note dev-note-warning"><FaIcon @icon="lock" /><span>{{t "developers.api-keys.edit.read-only" permission=options.formPermission}}</span></div>
             {{/if}}
-        </div>
+            <div class="dev-ig">
+                <label for="dev-api-key-name">{{t "developers.common.name"}} <span class="dev-req">*</span></label>
+                <Input id="dev-api-key-name" @value={{options.apiKey.name}} placeholder={{t "developers.api-keys.form.name-placeholder"}} disabled={{options.readOnly}} class="w-full form-input dev-input" {{on "keydown" options.onEnter}} />
+            </div>
+            <div class="dev-ig">
+                <label>{{t "developers.common.environment"}}</label>
+                {{#if options.isNew}}
+                    <div class="dev-segmented dev-segmented-static">
+                        <span class="dev-segment {{unless options.isSandbox 'is-active'}}"><span class="dev-dot dev-dot-green"></span>{{t "developers.common.live"}}</span>
+                        <span class="dev-segment {{if options.isSandbox 'is-active'}}"><span class="dev-dot dev-dot-amber"></span>{{t "developers.common.test"}}</span>
+                    </div>
+                    <span class="dev-help">{{t "developers.api-keys.form.environment-help"}} {{if options.isSandbox (t "developers.api-keys.form.environment-test") (t "developers.api-keys.form.environment-live")}}</span>
+                {{else}}
+                    <div class="dev-inline">
+                        <Badge @status={{if options.isSandbox "warning" "success"}} @text={{if options.isSandbox (t "developers.common.test") (t "developers.common.live")}} @size="xs" />
+                        <span class="dev-help">{{t "developers.api-keys.form.environment-fixed"}}</span>
+                    </div>
+                {{/if}}
+            </div>
+            <div class="dev-form-grid">
+                <div class="dev-ig">
+                    <label>{{t "developers.component.modals.api-key-form.expiration-label"}}</label>
+                    <Select
+                        @options={{options.expirationChoices}}
+                        @optionLabel="label"
+                        @optionValue="value"
+                        @value={{options.apiKey.expires_at}}
+                        @placeholder={{if options.isNew (t "developers.api-keys.form.expiration-placeholder") (or options.apiKey.expiresAt (t "developers.api-keys.form.expiration-placeholder"))}}
+                        @onSelect={{options.setExpiration}}
+                        @disabled={{options.readOnly}}
+                        class="w-full form-input dev-input"
+                    />
+                    <span class="dev-help">{{if options.isNew (t "developers.api-keys.form.expiration-help") (t "developers.api-keys.form.expiration-current" value=(or options.apiKey.expiresAt (t "developers.common.never")))}}</span>
+                </div>
+                <div class="dev-ig">
+                    <label>{{t "developers.api-keys.drawer.scope"}} <Badge @status="warning" @text="v1.1" @size="xxs" @hideStatusDot={{true}} @disableHumanize={{true}} /></label>
+                    <Select @options={{array (hash label=(t "developers.api-keys.drawer.full-access") value="full")}} @optionLabel="label" @optionValue="value" @value="full" @disabled={{true}} class="w-full form-input dev-input" />
+                    <span class="dev-help">{{t "developers.api-keys.form.scope-help"}}</span>
+                </div>
+            </div>
+            <div class="dev-ig">
+                <label>{{t "developers.component.modals.api-key-form.allowed-browser-label"}}</label>
+                <TagInput
+                    @tags={{options.origins}}
+                    @addTag={{options.addOrigin}}
+                    @removeTagAtIndex={{options.removeOrigin}}
+                    @placeholder={{t "developers.api-keys.form.origins-placeholder"}}
+                    @readOnly={{options.readOnly}}
+                    class="form-input dev-input dev-tag-input"
+                />
+                <span class="dev-help">{{t "developers.api-keys.form.origins-help"}}</span>
+            </div>
+        {{/if}}
     </div>
 </Modal::Default>

@@ -1,0 +1,71 @@
+<div class="dev-filter-bar" ...attributes>
+    {{#each this.leadingColumns as |filter|}}
+        {{#let (component "filter-bar/chip" filter=filter onChange=this.updateFilterValue onClear=this.clearFilterValue onApply=this.applyFilters onClearFilter=this.clearFilter) as |Chip|}}
+            <Chip />
+        {{/let}}
+    {{/each}}
+    {{#if this.segments.length}}
+        <div class="dev-segmented" role="group">
+            {{#each this.segments as |segment|}}
+                <button type="button" class="dev-segment {{if segment.isActive 'is-active'}}" {{on "click" (fn this.applySegment segment)}}>
+                    <span class="dev-segment-label">{{segment.label}}</span>
+                    {{#unless (is-empty segment.count)}}<span class="dev-segment-count">{{segment.count}}</span>{{/unless}}
+                </button>
+            {{/each}}
+        </div>
+    {{/if}}
+
+    {{#each this.trailingColumns as |filter|}}
+        <DropdownButton
+            @size="xs"
+            @renderInPlace={{true}}
+            @buttonClass="dev-filter-chip {{if filter.isActive 'is-active'}}"
+            @text={{concat filter.chipLabel ": " filter.displayValue}}
+            @icon="caret-down"
+            @iconPrefix="fas"
+            @iconClass="dev-filter-chip-caret order-last ml-1 mr-0"
+            @contentClass="dev-filter-popover-content"
+            as |dd|
+        >
+            <div class="dev-filter-popover">
+                <div class="dev-filter-popover-label">{{filter.chipLabel}}</div>
+                {{component
+                    (if (is-object filter.filterComponent) (lazy-engine-component filter.filterComponent) filter.filterComponent)
+                    value=filter.filterValue
+                    filter=filter
+                    param=filter.param
+                    options=filter.filterOptions
+                    optionLabel=filter.filterOptionLabel
+                    optionValue=filter.filterOptionValue
+                    optionFormats=filter.filterOptionFormats
+                    fetchUri=filter.fetchUri
+                    fetchParams=(or filter.filterFetchParams filter.fetchParams)
+                    fetchOptions=(or filter.filterFetchOptions filter.fetchOptions)
+                    placeholder=(or filter.filterComponentPlaceholder filter.chipLabel)
+                    onChange=this.updateFilterValue
+                    onClear=this.clearFilterValue
+                }}
+                <div class="dev-filter-popover-footer">
+                    <Button @size="xs" @text={{t "developers.common.clear"}} @onClick={{dropdown-fn dd (fn this.clearFilter filter)}} />
+                    <Button @size="xs" @type="primary" @icon="check" @text={{t "developers.filter-bar.apply"}} @onClick={{dropdown-fn dd this.applyFilters}} />
+                </div>
+            </div>
+        </DropdownButton>
+    {{/each}}
+
+    {{#if this.hasActiveFilters}}
+        <Button @type="link" @size="xs" @icon="xmark" @text={{t "developers.filter-bar.clear-all"}} @onClick={{this.clearAll}} class="dev-filter-clear" />
+    {{/if}}
+
+    {{#if (or @views.length (has-block))}}
+        <div class="dev-filter-bar-end">
+            {{#if @views.length}}
+                <span class="dev-muted dev-nowrap">{{t "developers.filter-bar.views"}}</span>
+                {{#each @views as |view|}}
+                    <button type="button" class="dev-view-link" {{on "click" (fn @onView view)}}>{{view.label}}</button>
+                {{/each}}
+            {{/if}}
+            {{yield}}
+        </div>
+    {{/if}}
+</div>

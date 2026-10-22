@@ -20,10 +20,22 @@ export default class WebhooksIndexRoute extends Route {
         sort: {
             refreshModel: true,
         },
+        query: {
+            refreshModel: true,
+        },
+        status: {
+            refreshModel: true,
+        },
+        api_credential_uuid: {
+            refreshModel: true,
+        },
+        version: {
+            refreshModel: true,
+        },
     };
 
     @action loading(transition) {
-        this.loader.showOnInitialTransition(transition, 'section.next-view-section', { loadingMessage: 'Loading webhooks...' });
+        this.loader.showOnInitialTransition(transition, 'section.next-view-section', { loadingMessage: this.intl.t('developers.webhooks.index.loading') });
     }
 
     beforeModel() {

@@ -1,17 +1,54 @@
-<Layout::Section::Header @title={{@model.url}} @actionsWrapperClass="space-x-2">
-    {{!-- {{#if @model.isTestMode}}
-        <Button @icon="reply" @text={{t "developers.webhooks.view.send-button-text"}} class="mr-2" />
-    {{/if}} --}}
-    <Layout::Resource::ActionButtons @buttons={{this.actionButtons}} />
+<Layout::Section::Header @title={{this.shortUrl}} @actionsWrapperClass="space-x-2" @titleClass="dev-nowrap">
+    <Button @icon="arrow-left" @size="xs" @text={{t "developers.webhooks.index.title"}} @onClick={{this.goBack}} />
 </Layout::Section::Header>
 
 <Layout::Section::Body>
-    <div class="h-screen overflow-y-scroll">
-        <div class="space-y-2 mx-auto">
-            <Webhook::Metrics @webhook={{@model}} />
-            <Webhook::Details @webhook={{@model}} @onClickUpdateWebhook={{this.updateWebhookDetails}} @permission="developers update webhook" />
-            <Webhook::Attempts @webhook={{@model}} />
+    <div class="dev-page-scroll">
+        <div class="dev-page">
+            <ResourceHeader @icon="globe" @iconTone={{this.healthTone}} @title={{@model.url}} @status={{this.healthBadge}} @statusText={{t (concat "developers.health." this.healthState)}} @hideStatusDot={{true}} @disableHumanize={{true}} @actionButtons={{this.actionButtons}}>
+                <:badges>
+                    <Badge @status={{if @model.isTestMode "warning" "success"}} @text={{if @model.isTestMode (t "developers.common.test") (t "developers.common.live")}} @size="xs" />
+                </:badges>
+                <:subtitle>
+                    {{#if @model.description}}<span>{{@model.description}}</span><span>·</span>{{/if}}
+                    <span>{{t "developers.webhooks.index.credential"}}: {{#if @model.api_credential_uuid}}{{credential-name @model.api_credential_name}}{{else}}{{t "developers.webhooks.index.any-credential"}}{{/if}}</span>
+                    <span>·</span>
+                    <span>{{t "developers.common.version"}} <span class="dev-mono">{{n-a @model.version}}</span></span>
+                    <span>·</span>
+                    <span>{{t "developers.common.created"}} {{@model.createdAtShort}}</span>
+                </:subtitle>
+            </ResourceHeader>
+
+            {{#if this.isFailing}}
+                <div class="dev-note dev-note-danger">
+                    <FaIcon @icon="triangle-exclamation" />
+                    <span>{{t "developers.webhooks.view.failing-banner" count=this.health.failures}}</span>
+                </div>
+            {{else if (eq this.healthState "disabled")}}
+                <div class="dev-note dev-note-warning">
+                    <FaIcon @icon="ban" />
+                    <span>{{t "developers.webhooks.view.disabled-banner"}}</span>
+                </div>
+            {{/if}}
+
+            <div class="dev-stats">
+                {{#each this.stats as |stat|}}
+                    <div class="dev-stat">
+                        <div class="dev-stat-label">{{stat.label}}</div>
+                        <div class="dev-stat-value {{stat.tone}}">{{stat.value}}</div>
+                        <div class="dev-stat-hint">{{stat.hint}}</div>
+                    </div>
+                {{/each}}
+            </div>
+
+            <TabNavigation @tabs={{this.tabs}} @activeTabId={{this.activeTab}} @onTabChange={{this.setTab}} @style="github" @size="sm" @tablistClass="dev-tabs">
+                {{#if (eq this.activeTab "details")}}
+                    <Webhook::Details @webhook={{@model}} @onEdit={{fn this.editWebhook @model}} />
+                {{else}}
+                    <Webhook::Deliveries @webhook={{@model}} @retentionDays={{this.retentionDays}} />
+                {{/if}}
+            </TabNavigation>
         </div>
-        <Spacer @height="200px" />
+        <Spacer @height="120px" />
     </div>
 </Layout::Section::Body>

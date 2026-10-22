@@ -1,0 +1,34 @@
+<div class="dev-code-viewer {{if this.wrap 'is-wrapped'}}" ...attributes>
+    <div class="dev-code-toolbar">
+        <span class="dev-code-title">{{@title}}</span>
+        {{#if this.size}}
+            <span class="dev-code-meta">{{this.size}}</span>
+        {{/if}}
+        {{#if @meta}}
+            <span class="dev-code-meta">{{@meta}}</span>
+        {{/if}}
+        <div class="dev-code-actions">
+            {{yield}}
+            {{#if (and this.isJson this.hasContent)}}
+                <div class="dev-segmented dev-segmented-xs">
+                    <button type="button" class="dev-segment {{if this.isPretty 'is-active'}}" {{on "click" (fn this.setMode "pretty")}}>{{t "developers.code-viewer.pretty"}}</button>
+                    <button type="button" class="dev-segment {{unless this.isPretty 'is-active'}}" {{on "click" (fn this.setMode "raw")}}>{{t "developers.code-viewer.raw"}}</button>
+                </div>
+            {{/if}}
+            {{#if this.hasContent}}
+                <Button @size="xs" @icon="text-width" @helpText={{t "developers.code-viewer.wrap"}} @onClick={{this.toggleWrap}} @active={{this.wrap}} />
+                <Button @size="xs" @icon="copy" @text={{t "developers.common.copy"}} @onClick={{this.copy}} />
+            {{/if}}
+            {{#if @curl}}
+                <Button @size="xs" @icon="terminal" @text={{t "developers.code-viewer.copy-curl"}} @onClick={{this.copyCurl}} />
+            {{/if}}
+        </div>
+    </div>
+    {{#if this.hasContent}}
+        <div class="dev-code-body">
+            <CodeBlock @code={{this.code}} @language={{this.language}} class="line-numbers" />
+        </div>
+    {{else}}
+        <div class="dev-code-empty">{{or @emptyText (t "developers.code-viewer.empty")}}</div>
+    {{/if}}
+</div>

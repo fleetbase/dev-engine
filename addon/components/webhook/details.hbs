@@ -1,69 +1,49 @@
-<div class="content-panel border-b border-gray-200 dark:border-gray-700" ...attributes>
-    <div class="content-panel-header">
-        <div class="flex items-center">
-            <h3 class="mr-4 text-xl font-bold dark:text-gray-100">
-                {{t "developers.component.webhook.details.webhook-details"}}
-            </h3>
-        </div>
+<div class="dev-details-grid" ...attributes>
+    <SectionCard @title={{t "developers.component.webhook.details.webhook-details"}}>
+        <:actions>
+            <Button @size="xs" @icon="pencil" @text={{t "developers.common.edit"}} @onClick={{@onEdit}} @permission="developers update webhook" />
+        </:actions>
+        <:default>
+            <dl class="dev-kv">
+                <dt>{{t "developers.common.url"}}</dt>
+                <dd><ClickToCopy @value={{@webhook.url}}><span class="dev-mono">{{@webhook.url}}</span></ClickToCopy></dd>
+                <dt>{{t "developers.common.description"}}</dt>
+                <dd>{{n-a @webhook.description}}</dd>
+                <dt>{{t "developers.common.status"}}</dt>
+                <dd><Badge @status={{@webhook.status}} @size="xs" /></dd>
+                <dt>{{t "developers.common.mode"}}</dt>
+                <dd><Badge @status={{if @webhook.isTestMode "warning" "success"}} @text={{if @webhook.isTestMode (t "developers.common.test") (t "developers.common.live")}} @size="xs" /></dd>
+                <dt>{{t "developers.common.version"}}</dt>
+                <dd><span class="dev-mono">{{n-a @webhook.version}}</span></dd>
+                <dt>{{t "developers.component.webhook.details.api-credential"}}</dt>
+                <dd>
+                    {{#if @webhook.receivingFromAllApiCredentials}}
+                        <span>{{t "developers.component.webhook.details.api-credentials"}}</span>
+                        <InputInfo @text={{t "developers.component.webhook.details.help-text-event"}} />
+                    {{else}}
+                        {{credential-name @webhook.api_credential_name}}
+                    {{/if}}
+                </dd>
+                <dt>{{t "developers.component.webhook.metrics.date-created"}}</dt>
+                <dd>{{@webhook.createdAt}}</dd>
+            </dl>
+        </:default>
+    </SectionCard>
 
-        <div class="flex items-center section-header-actions">
-            <Button @icon="pencil" @text={{t "developers.component.webhook.details.update-details"}} @onClick={{this.onClickUpdateWebhook}} @permission={{@permission}} />
-        </div>
-    </div>
-    <div class="text-sm content-panel-body pt-0i">
-        <table class="border-none table-fixed dark:text-gray-100 table-spaced-y-2 table-cells-valign-top">
-            <tbody>
-                <tr>
-                    <td class="w-40">
-                        {{t "developers.common.url"}}
-                    </td>
-                    <td>
-                       <ClickToCopy @value={{@webhook.url}}>{{n-a @webhook.url}}</ClickToCopy>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        {{t "developers.common.description"}}
-                    </td>
-                    <td>
-                        {{n-a @webhook.description}}
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        {{t "developers.component.webhook.details.event-types"}}
-                    </td>
-                    <td>
-                        {{#if @webhook.is_listening_on_all_events}}
-                            <Badge @status="warning" @hideStatusDot={{true}} @helpText={{t "developers.component.webhook.details.help-text"}}>
-                                <FaIcon @icon="exclamation-triangle" />
-                                <span class="ml-2">
-                                    {{t "developers.component.webhook.details.all-events"}}
-                                </span>
-                            </Badge>
-                        {{else}}
-                            {{@webhook.eventTypes}}
-                        {{/if}}
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        {{t "developers.component.webhook.details.api-credential"}}
-                    </td>
-                    <td>
-                        {{#if @webhook.receivingFromAllApiCredentials}}
-                            <Badge @status="warning" @hideStatusDot={{true}} @helpText={{t "developers.component.webhook.details.help-text-event"}}>
-                                <FaIcon @icon="exclamation-triangle" />
-                                <span class="ml-2">
-                                    {{t "developers.component.webhook.details.api-credentials"}}
-                                </span>
-                            </Badge>
-                        {{else}}
-                            {{@webhook.api_credential_name}}
-                        {{/if}}
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
+    <SectionCard @title={{t "developers.component.webhook.details.event-types"}} @count={{if @webhook.is_listening_on_all_events null @webhook.events.length}}>
+        <:default>
+            {{#if @webhook.is_listening_on_all_events}}
+                <div class="dev-note dev-note-warning">
+                    <FaIcon @icon="triangle-exclamation" />
+                    <span>{{t "developers.component.webhook.details.help-text"}}</span>
+                </div>
+            {{else}}
+                <div class="dev-inline-wrap">
+                    {{#each @webhook.events as |event|}}
+                        <span class="dev-tag"><span>{{event}}</span></span>
+                    {{/each}}
+                </div>
+            {{/if}}
+        </:default>
+    </SectionCard>
 </div>
