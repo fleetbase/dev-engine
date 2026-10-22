@@ -1,0 +1,18 @@
+<div class="dev-drawer-body" ...attributes>
+    <SectionCard @title={{t "developers.activity.title"}} @subtitle={{t "developers.api-keys.drawer.activity-sub"}}>
+        <:default>
+            <div class="dev-timeline">
+                {{#each this.items as |item|}}
+                    <div class="dev-timeline-item">
+                        <span class="dev-timeline-dot is-{{item.tone}}"></span>
+                        <div class="dev-timeline-text">
+                            <b>{{t (concat "developers.api-keys.drawer.activity-" item.key)}}</b>
+                            <span class="dev-muted">{{time-stamp item.at "yyyy-MM-dd HH:mm"}}</span>
+                        </div>
+                    </div>
+                {{/each}}
+            </div>
+            <div class="dev-note dev-note-info mt-3"><FaIcon @icon="circle-info" /><span>{{t "developers.api-keys.drawer.activity-note"}}</span></div>
+        </:default>
+    </SectionCard>
+</div>

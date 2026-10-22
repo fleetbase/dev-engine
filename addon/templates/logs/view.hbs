@@ -1,16 +1,11 @@
-<Layout::Section::Header @title={{@model.description}} @actionsWrapperClass="space-x-2" @titleClass="dev-nowrap dev-mono" @badge={{@model.status_code}} @hideStatusDot={{true}} @disableBadgeHumanize={{true}}>
+<Layout::Section::Header @title={{@model.public_id}} @actionsWrapperClass="space-x-2" @titleClass="dev-nowrap dev-mono dev-muted-title">
     <Button @icon="arrow-left" @size="xs" @text={{t "developers.logs.index.title"}} @onClick={{this.goBack}} />
     <Layout::Resource::ActionButtons @buttons={{this.actionButtons}} @renderInPlace={{true}} />
 </Layout::Section::Header>
-
 <Layout::Section::Body>
     <div class="dev-page-scroll">
-        <div class="dev-page dev-page-narrow">
-            <SectionCard @flush={{true}}>
-                <:default>
-                    <ApiRequestLog::Panel @resource={{@model}} @isPage={{true}} />
-                </:default>
-            </SectionCard>
+        <div class="dev-page">
+            <ApiRequestLog::Panel @resource={{@model}} @isPage={{true}} />
         </div>
         <Spacer @height="120px" />
     </div>

@@ -44,7 +44,19 @@ export default class DeveloperPanelsService extends Service {
         return this.open({
             resource: apiKey,
             title: apiKey.name ?? maskKey(apiKey.key),
-            content: 'api-key/panel',
+            header: 'api-key/drawer-header',
+            width: '640px',
+            dismissible: false,
+            tabWrapperClass: 'dev-drawer-tabs',
+            tabStyle: 'github',
+            tabSize: 'sm',
+            tabs: [
+                { key: 'overview', label: this.intl.t('developers.common.overview'), component: 'api-key/tabs/overview' },
+                { key: 'requests', label: this.intl.t('developers.application.sidebar.items.requests'), component: 'api-key/tabs/requests' },
+                { key: 'webhooks', label: this.intl.t('developers.application.sidebar.items.webhooks'), component: 'api-key/tabs/webhooks' },
+                { key: 'channel', label: this.intl.t('developers.api-keys.drawer.channel'), component: 'api-key/tabs/channel' },
+                { key: 'activity', label: this.intl.t('developers.activity.title'), component: 'api-key/tabs/activity' },
+            ],
             registry: 'developers:api-key:details',
             ...options,
         });

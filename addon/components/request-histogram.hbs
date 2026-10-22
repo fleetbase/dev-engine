@@ -1,0 +1,6 @@
+{{! template-lint-disable no-inline-styles }}
+<div class="dev-histogram" aria-label={{@label}} ...attributes>
+    {{#each this.bars as |bar|}}
+        <i class={{if bar.isError "is-error"}} style={{bar.style}} title={{bar.title}}></i>
+    {{/each}}
+</div>

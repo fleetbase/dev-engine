@@ -253,6 +253,11 @@ developers:
       title-test: No test API keys yet
       message: Keys authenticate your integrations. The secret is shown once when a key is created or rolled.
     form:
+      name-placeholder: What will use this key, e.g. Production backend
+      environment-fixed: Cannot change after creation. Create a test key for the sandbox.
+      expiration-help: Never · 1 hour · 24 hours · 3 days · 7 days
+      scope-help: Full access until scopes ship in v1.1
+      origins-placeholder: Add origin, e.g. https://app.example.com
       environment-help: Follows the environment switch in the header.
       environment-live: Live keys start with flb_live_ and read and write production data.
       environment-test: Test keys start with flb_test_ and use the sandbox database.
@@ -263,7 +268,7 @@ developers:
     create:
       title: Create API key
       accept: Create key
-      reveal-title: Save your credentials
+      reveal-title: Save your secret key
       done: Done
       step-details: Details
       step-reveal: Save the secret
@@ -305,12 +310,50 @@ developers:
       key-help: Safe to show; identifies the key in requests and logs.
       acknowledge: I have copied the secret and stored it somewhere safe
     delete:
+      consequence: Requests using this key start failing with 401 immediately. This cannot be undone.
+      webhooks: "{count, plural, =0 {No endpoint receives from this key.} =1 {1 endpoint receives from this key: {endpoint}. It keeps its configuration but stops receiving.} other {# endpoints receive from this key. They keep their configuration but stop receiving.}}"
+      safer: Safer option
+      safer-link: Set an expiration
+      safer-text: instead to give integrations time to migrate.
       title: Delete {apiKeyName}?
       body: "Requests using this key start failing with 401 immediately. {count, plural, =0 {No webhook endpoints depend on it.} =1 {1 webhook endpoint receives from it and will stop receiving.} other {# webhook endpoints receive from it and will stop receiving.}} This cannot be undone."
       accept: Delete key
+    drawer:
+      requests: Requests {days}d
+      requests-hint: "{count, plural, =0 {no requests sampled} one {1 request sampled} other {# requests sampled}}"
+      error-rate: Error rate
+      error-hint: "{count, plural, =0 {no errors in the sample} one {1 error in the sample} other {# errors in the sample}}"
+      p95: p95 latency
+      avg: avg {value} ms
+      bars-label: Requests per hour over the last {days} days
+      scope: Scope
+      full-access: Full access
+      from: from
+      watch: Watch
+      channel: Channel
+      recent-requests: Recent requests
+      recent-requests-sub: "{count, plural, =0 {Nothing sampled yet} one {Newest of 1 sampled request} other {Newest of # sampled requests}}"
+      view-all-requests: All requests
+      no-requests-message: Send a request with this key and it shows up here within the retention window.
+      webhooks: Webhook endpoints
+      webhooks-sub: Endpoints that receive events created with this key
+      no-webhooks: No endpoints use this key
+      no-webhooks-message: Endpoints bound to a key only receive events that key created. Add one to route this key's events.
+      messages-seen: "{count, plural, one {1 message seen} other {# messages seen}}"
+      rule: Authorization
+      rule-text: The socket server allows this channel to the key's own company and to admins.
+      activity-sub: What the record itself tells us
+      activity-note: A full audit trail of edits and rolls needs the activities resource filtered by this key (v1.1).
+      activity-created: Created
+      activity-updated: Settings changed
+      activity-last-used: Last request seen
+      activity-expires: Expires
     panel:
       secret: Secret
       secret-hidden: Hidden since creation. Roll the key to get a new one.
+      secret-hidden-prefix: Hidden since creation.
+      secret-roll-link: Roll the key
+      secret-hidden-suffix: to get a new one.
       no-origins: Server use only, no browser origins
       linked: Linked
       channel-sub: Live events created with this key
@@ -369,7 +412,14 @@ developers:
       no-deliveries: No webhook deliveries
       no-deliveries-message: No enabled endpoint subscribed to this event type when it was emitted.
   logs:
+    views:
+      errors: Errors
+      slow: Slow > 1 s
+      writes: Writes
     index:
+      search-placeholder: "Path, request id, IP, content type…  status:5xx method:POST"
+      summary: "{count, plural, =0 {No requests} one {1 request} other {# requests}} · {rate}% errors · retained {days} days"
+      histogram-label: Requests per day for the last 7 days, errors in red
       api-credential: Credential
       http-method: Method
       title: Requests
@@ -379,6 +429,7 @@ developers:
       count: "{count, plural, =1 {1 request} other {# requests}}"
     actions:
       copy-id: Copy request id
+      view-events: View events emitted
       filter-path: Filter by this path
       filter-ip: Filter by this IP
     empty:
@@ -391,6 +442,10 @@ developers:
       tab-response-headers: Response headers
       tab-response-body: Response body
       full-url: Full URL
+      headers: Headers
+      request: Request
+      response: Response
+      curl-preview: Copy as cURL (preview)
       content-type: Content type
       sizes: Sizes
       sizes-value: "request {request} · response {response}"
@@ -408,6 +463,7 @@ developers:
       access: Access
       last-activity: Last activity
       no-activity: No activity seen this session
+      not-tried: Not tried yet
       activity-hint: Activity is what this browser saw since the page opened.
       watching: Watching
       listen-channel-title: Listen on a custom channel
@@ -640,6 +696,7 @@ developers:
     live-hint: Showing live data. Live keys start with flb_live_.
     test-hint: Showing sandbox data. Test keys start with flb_test_.
   filter-bar:
+    views: "Views:"
     any: Any
     apply: Apply
     clear-all: Clear filters
@@ -673,6 +730,7 @@ developers:
     disabled: Disabled
     idle: No deliveries
   activity:
+    title: Activity
     api_request: Request
     webhook: Delivery
     event: Event

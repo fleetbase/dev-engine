@@ -1,4 +1,9 @@
 <div class="dev-filter-bar" ...attributes>
+    {{#each this.leadingColumns as |filter|}}
+        {{#let (component "filter-bar/chip" filter=filter onChange=this.updateFilterValue onClear=this.clearFilterValue onApply=this.applyFilters onClearFilter=this.clearFilter) as |Chip|}}
+            <Chip />
+        {{/let}}
+    {{/each}}
     {{#if this.segments.length}}
         <div class="dev-segmented" role="group">
             {{#each this.segments as |segment|}}
@@ -10,7 +15,7 @@
         </div>
     {{/if}}
 
-    {{#each this.filterColumns as |filter|}}
+    {{#each this.trailingColumns as |filter|}}
         <DropdownButton
             @size="xs"
             @renderInPlace={{true}}
@@ -52,8 +57,14 @@
         <Button @type="link" @size="xs" @icon="xmark" @text={{t "developers.filter-bar.clear-all"}} @onClick={{this.clearAll}} class="dev-filter-clear" />
     {{/if}}
 
-    {{#if (has-block)}}
+    {{#if (or @views.length (has-block))}}
         <div class="dev-filter-bar-end">
+            {{#if @views.length}}
+                <span class="dev-muted dev-nowrap">{{t "developers.filter-bar.views"}}</span>
+                {{#each @views as |view|}}
+                    <button type="button" class="dev-view-link" {{on "click" (fn @onView view)}}>{{view.label}}</button>
+                {{/each}}
+            {{/if}}
             {{yield}}
         </div>
     {{/if}}

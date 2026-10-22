@@ -1,0 +1,116 @@
+{{! template-lint-disable no-invalid-interactive require-presentational-children no-inline-styles }}
+<div class="dev-drawer-body" ...attributes>
+    {{#if this.insights.error}}
+        <States::Error @message={{this.insights.error}} @onRetry={{this.refresh}} />
+    {{else}}
+        <div class="dev-stats dev-stats-3">
+            <div class="dev-stat">
+                <div class="dev-stat-label">{{t "developers.api-keys.drawer.requests" days=this.retentionDays}}</div>
+                <div class="dev-stat-value">{{#if this.insights.isLoaded}}{{format-number this.insights.total}}{{else}}<Skeleton @width="48px" @height="20px" />{{/if}}</div>
+                <div class="dev-stat-hint">{{t "developers.api-keys.drawer.requests-hint" count=this.insights.logs.length}}</div>
+            </div>
+            <div class="dev-stat">
+                <div class="dev-stat-label">{{t "developers.api-keys.drawer.error-rate"}}</div>
+                <div class="dev-stat-value {{if (gt this.insights.errorRate 5) 'is-down'}}">{{#if this.insights.isLoaded}}{{this.insights.errorRate}}%{{else}}<Skeleton @width="48px" @height="20px" />{{/if}}</div>
+                <div class="dev-stat-hint">{{t "developers.api-keys.drawer.error-hint" count=this.insights.errors}}</div>
+            </div>
+            <div class="dev-stat">
+                <div class="dev-stat-label">{{t "developers.api-keys.drawer.p95"}}</div>
+                <div class="dev-stat-value">{{#if this.insights.isLoaded}}{{if this.insights.p95Ms (concat this.insights.p95Ms " ms") "—"}}{{else}}<Skeleton @width="48px" @height="20px" />{{/if}}</div>
+                <div class="dev-stat-hint">{{t "developers.api-keys.drawer.avg" value=(or this.insights.avgMs "—")}}</div>
+            </div>
+        </div>
+        <div class="dev-bars" aria-label={{t "developers.api-keys.drawer.bars-label" days=this.retentionDays}}>
+            {{#each this.insights.bars as |bar|}}
+                <i class={{if bar.isError "is-error"}} style={{bar.style}} title={{bar.count}}></i>
+            {{/each}}
+        </div>
+
+        <SectionCard @title={{t "developers.common.details"}}>
+            <:actions>
+                <Button @size="xs" @icon="pencil" @text={{t "developers.common.edit"}} @onClick={{this.edit}} @permission="developers update api-key" />
+            </:actions>
+            <:default>
+                <dl class="dev-kv">
+                    <dt>{{t "developers.api-keys.index.public-key"}}</dt>
+                    <dd><ClickToCopy @value={{this.apiKey.key}}><span class="dev-tag"><span>{{this.apiKey.key}}</span><FaIcon @icon="copy" @size="xs" /></span></ClickToCopy></dd>
+                    <dt>{{t "developers.api-keys.panel.secret"}}</dt>
+                    <dd class="dev-muted">{{t "developers.api-keys.panel.secret-hidden-prefix"}} <a href="javascript:;" {{on "click" this.roll}}>{{t "developers.api-keys.panel.secret-roll-link"}}</a> {{t "developers.api-keys.panel.secret-hidden-suffix"}}</dd>
+                    <dt>{{t "developers.api-keys.drawer.scope"}}</dt>
+                    <dd><Badge @status="inactive" @text={{t "developers.api-keys.drawer.full-access"}} @size="xs" @hideStatusDot={{true}} @disableHumanize={{true}} /></dd>
+                    <dt>{{t "developers.component.modals.api-key-form.allowed-browser-label"}}</dt>
+                    <dd>
+                        {{#if this.origins.length}}
+                            <div class="dev-inline-wrap">{{#each this.origins as |origin|}}<span class="dev-tag"><span>{{origin}}</span></span>{{/each}}</div>
+                        {{else}}
+                            <span class="dev-muted">{{t "developers.api-keys.panel.no-origins"}}</span>
+                        {{/if}}
+                    </dd>
+                    <dt>{{t "developers.api-keys.index.expiry"}}</dt>
+                    <dd>{{or this.apiKey.expiresAt (t "developers.common.never")}}</dd>
+                    <dt>{{t "developers.api-keys.index.last-used"}}</dt>
+                    <dd>
+                        {{#if this.apiKey.last_used_at}}
+                            {{time-ago this.apiKey.last_used_at}}{{#if this.lastRequest}} · <span class="dev-mono">{{this.lastRequest.method}} {{this.lastRequest.path}}</span>{{#if this.lastRequest.ip_address}} {{t "developers.api-keys.drawer.from"}} {{this.lastRequest.ip_address}}{{/if}}{{/if}}
+                        {{else}}
+                            <span class="dev-muted">{{t "developers.common.never-used"}}</span>
+                        {{/if}}
+                    </dd>
+                    <dt>{{t "developers.common.created"}}</dt>
+                    <dd>{{this.apiKey.createdAt}}</dd>
+                </dl>
+            </:default>
+        </SectionCard>
+
+        <SectionCard @title={{t "developers.api-keys.panel.linked"}} @flush={{true}}>
+            <:default>
+                <table class="dev-widget-table dev-linked-table">
+                    <tbody>
+                        {{#each this.linkedWebhooks as |item|}}
+                            <tr class="dev-widget-row" role="button" tabindex="0" {{on "click" (fn this.openWebhook item.webhook)}}>
+                                <td>
+                                    <div class="dev-identity">
+                                        <span class="dev-identity-icon {{if (eq item.status 'enabled') 'is-green' 'is-red'}}"><FaIcon @icon="globe" @size="xs" /></span>
+                                        <span class="dev-identity-text">
+                                            <span class="dev-identity-title is-regular" title={{item.webhook.url}}>{{item.label}}</span>
+                                            <span class="dev-identity-sub">{{t "developers.resource.webhook-endpoint"}} · <Badge @status={{if (eq item.status "enabled") "success" "inactive"}} @text={{item.status}} @size="xxs" @hideStatusDot={{true}} /></span>
+                                        </span>
+                                    </div>
+                                </td>
+                                <td class="text-right"><Button @size="xs" @text={{t "developers.common.open"}} /></td>
+                            </tr>
+                        {{/each}}
+                        <tr class="dev-widget-row" role="button" tabindex="0" {{on "click" this.watchChannel}}>
+                            <td>
+                                <div class="dev-identity">
+                                    <span class="dev-identity-icon is-purple"><FaIcon @icon="tower-broadcast" @size="xs" /></span>
+                                    <span class="dev-identity-text">
+                                        <span class="dev-identity-title is-regular dev-mono" title={{this.channelName}}>{{this.channelName}}</span>
+                                        <span class="dev-identity-sub">{{t "developers.resource.socket-channel"}} · {{t "developers.api-keys.panel.channel-sub"}}</span>
+                                    </span>
+                                </div>
+                            </td>
+                            <td class="text-right"><Button @size="xs" @text={{t "developers.api-keys.drawer.watch"}} /></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </:default>
+        </SectionCard>
+
+        <SectionCard @title={{t "developers.activity.title"}}>
+            <:default>
+                <div class="dev-timeline">
+                    {{#each this.activity as |item|}}
+                        <div class="dev-timeline-item">
+                            <span class="dev-timeline-dot is-{{item.tone}}"></span>
+                            <div class="dev-timeline-text">
+                                <b>{{t (concat "developers.api-keys.drawer.activity-" item.key)}}</b>
+                                <span class="dev-muted">{{time-stamp item.at "yyyy-MM-dd HH:mm"}}</span>
+                            </div>
+                        </div>
+                    {{/each}}
+                </div>
+            </:default>
+        </SectionCard>
+    {{/if}}
+</div>

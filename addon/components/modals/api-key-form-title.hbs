@@ -1,0 +1,12 @@
+<Modal::Header::Title class="dev-modal-title">
+    <span class="dev-modal-title-text">{{@options.title}}</span>
+    {{#if @options.isNew}}
+        <Modal::Steps
+            @steps={{array
+                (hash label=(t "developers.api-keys.create.step-details") state=(if (eq @options.step "form") "active" "done"))
+                (hash label=(t "developers.api-keys.create.step-reveal") state=(if (eq @options.step "reveal") "active" "pending"))
+            }}
+            class="dev-modal-steps"
+        />
+    {{/if}}
+</Modal::Header::Title>

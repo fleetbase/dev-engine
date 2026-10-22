@@ -1,0 +1,32 @@
+{{! template-lint-disable no-invalid-interactive require-presentational-children }}
+<div class="dev-drawer-body" ...attributes>
+    <SectionCard @title={{t "developers.api-keys.drawer.recent-requests"}} @subtitle={{t "developers.api-keys.drawer.recent-requests-sub" count=this.insights.logs.length}} @flush={{true}}>
+        <:actions>
+            <Button @size="xs" @icon="rotate" @helpText={{t "developers.common.reload-data"}} @onClick={{this.refresh}} @isLoading={{this.apiKeyInsights.load.isRunning}} />
+            <Button @size="xs" @icon="terminal" @text={{t "developers.api-keys.drawer.view-all-requests"}} @onClick={{this.viewAll}} />
+        </:actions>
+        <:default>
+            {{#if this.insights.error}}
+                <States::Error @message={{this.insights.error}} @onRetry={{this.refresh}} />
+            {{else if (and this.insights.isLoaded (not this.rows.length))}}
+                <States::Empty @icon="terminal" @title={{t "developers.api-keys.panel.no-requests"}} @message={{t "developers.api-keys.drawer.no-requests-message"}} class="py-6" />
+            {{else}}
+                <table class="dev-widget-table dev-request-table">
+                    <thead>
+                        <tr><th>{{t "developers.logs.index.request"}}</th><th>{{t "developers.common.status"}}</th><th class="text-right">{{t "developers.logs.index.duration"}}</th><th class="text-right">{{t "developers.common.time"}}</th></tr>
+                    </thead>
+                    <tbody>
+                        {{#each this.rows as |row|}}
+                            <tr class="dev-widget-row" role="button" tabindex="0" {{on "click" (fn this.open row.log)}}>
+                                <td class="dev-cell-ellipsis"><span class="dev-method dev-method-{{lowercase row.log.method}}">{{row.log.method}}</span> <span class="dev-mono">{{row.log.path}}</span></td>
+                                <td><Badge @status={{row.tone}} @text={{row.status}} @size="xxs" @hideStatusDot={{true}} @disableHumanize={{true}} /></td>
+                                <td class="text-right {{if row.isSlow 'dev-text-danger'}}">{{or row.duration "—"}}</td>
+                                <td class="text-right dev-muted">{{row.time}}</td>
+                            </tr>
+                        {{/each}}
+                    </tbody>
+                </table>
+            {{/if}}
+        </:default>
+    </SectionCard>
+</div>

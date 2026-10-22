@@ -24,6 +24,7 @@ export default class ApiRequestLogPanelComponent extends Component {
     @service hostRouter;
 
     @tracked activeTab = 'request-body';
+    @tracked headerSide = 'request';
 
     get log() {
         return this.args.resource ?? this.args.model;
@@ -47,6 +48,44 @@ export default class ApiRequestLogPanelComponent extends Component {
 
     get createdAt() {
         return timeStamp(this.log?.created_at, 'MMM d, yyyy HH:mm:ss.SSS');
+    }
+
+    get isError() {
+        return Number(this.log?.status_code ?? 0) >= 400;
+    }
+
+    get responseContentType() {
+        const headers = this.log?.response_headers;
+
+        if (!headers || typeof headers !== 'object') {
+            return null;
+        }
+
+        const key = Object.keys(headers).find((name) => name.toLowerCase() === 'content-type');
+        const value = key ? headers[key] : null;
+
+        return Array.isArray(value) ? value[0] : value;
+    }
+
+    /**
+     * Header rows for the side-by-side error view, masked like the cURL output.
+     */
+    get headerRows() {
+        const source = this.headerSide === 'response' ? this.log?.response_headers : this.maskedRequestHeaders;
+
+        if (!source || typeof source !== 'object') {
+            return [];
+        }
+
+        return Object.keys(source).map((name) => ({
+            name: name.toLowerCase(),
+            value: Array.isArray(source[name]) ? source[name].join(', ') : String(source[name]),
+            masked: this.headerSide === 'request' && SECRET_HEADERS.includes(name.toLowerCase()),
+        }));
+    }
+
+    @action setHeaderSide(side) {
+        this.headerSide = side;
     }
 
     get requestBody() {

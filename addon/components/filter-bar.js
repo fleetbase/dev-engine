@@ -35,6 +35,14 @@ export default class FilterBarComponent extends Component {
         this.hostRouter?.off?.('routeDidChange', this._routeHandler);
     }
 
+    get leadingColumns() {
+        return this.filterColumns.filter((filter) => filter.filterLeading);
+    }
+
+    get trailingColumns() {
+        return this.filterColumns.filter((filter) => !filter.filterLeading);
+    }
+
     get hasActiveFilters() {
         return this.filterColumns.some((filter) => filter.isActive);
     }

@@ -90,6 +90,40 @@ export default class ApiKeyActionsService extends ResourceActionService {
      *
      * @void
      */
+    /**
+     * Browser origins as chips: the modal options hold a tracked copy and write
+     * back to the record on every change.
+     */
+    originOptions(apiKey) {
+        const origins = Array.isArray(apiKey.browser_origins) ? [...apiKey.browser_origins] : [];
+
+        return {
+            origins,
+            addOrigin: (origin) => {
+                const value = String(origin ?? '').trim();
+
+                if (!value || this.modalsManager.getOption('origins').includes(value)) {
+                    return false;
+                }
+
+                const next = [...this.modalsManager.getOption('origins'), value];
+                this.modalsManager.setOption('origins', next);
+                apiKey.browser_origins = next;
+            },
+            removeOrigin: (index) => {
+                const next = this.modalsManager.getOption('origins').filter((_, position) => position !== index);
+                this.modalsManager.setOption('origins', next);
+                apiKey.browser_origins = next;
+            },
+            onEnter: (event) => {
+                if (event.key === 'Enter') {
+                    event.preventDefault();
+                    this.modalsManager.confirm?.();
+                }
+            },
+        };
+    }
+
     @action createApiKey() {
         const formPermission = 'developers create api-key';
         const isSandbox = this.currentUser.getOption('sandbox') || false;
@@ -100,7 +134,8 @@ export default class ApiKeyActionsService extends ResourceActionService {
 
         return this.modalsManager.show('modals/api-key-form', {
             title: this.intl.t('developers.api-keys.create.title'),
-            modalClass: 'dev-modal modal-lg',
+            titleComponent: 'modals/api-key-form-title',
+            modalClass: 'dev-modal modal-md',
             acceptButtonText: this.intl.t('developers.api-keys.create.accept'),
             acceptButtonIcon: 'check',
             acceptButtonIconPrefix: 'fas',
@@ -116,11 +151,9 @@ export default class ApiKeyActionsService extends ResourceActionService {
             expirationChoices: this.expirationChoices,
             formPermission,
             apiKey,
+            ...this.originOptions(apiKey),
             setExpiration: (value) => {
                 apiKey.expires_at = value || null;
-            },
-            setOrigins: (origins) => {
-                apiKey.browser_origins = origins;
             },
             toggleAck: (checked) => {
                 this.modalsManager.setOption('acknowledged', checked);
@@ -177,7 +210,8 @@ export default class ApiKeyActionsService extends ResourceActionService {
 
         return this.modalsManager.show('modals/api-key-form', {
             title: this.intl.t('developers.api-keys.edit.title', { apiKeyName }),
-            modalClass: 'dev-modal modal-lg',
+            titleComponent: 'modals/api-key-form-title',
+            modalClass: 'dev-modal modal-md',
             acceptButtonText: this.intl.t('developers.api-keys.edit.accept'),
             acceptButtonIcon: 'save',
             acceptButtonDisabled: this.abilities.cannot(formPermission),
@@ -190,11 +224,9 @@ export default class ApiKeyActionsService extends ResourceActionService {
             expirationChoices: this.expirationChoices,
             formPermission,
             apiKey,
+            ...this.originOptions(apiKey),
             setExpiration: (value) => {
                 apiKey.expires_at = value || null;
-            },
-            setOrigins: (origins) => {
-                apiKey.browser_origins = origins;
             },
             confirm: async (modal) => {
                 if (this.abilities.cannot(formPermission)) {
@@ -348,13 +380,24 @@ export default class ApiKeyActionsService extends ResourceActionService {
     @action async deleteApiKey(apiKey, options = {}) {
         const apiKeyName = getWithDefault(apiKey, 'name', this.intl.t('developers.api-keys.index.untitled'));
         const dependents = await this.loadDependents(apiKey);
+        const firstDependent = dependents.webhooks[0]?.url ?? '';
 
-        return this.modalsManager.confirm({
+        return this.modalsManager.show('modals/api-key-delete', {
             title: this.intl.t('developers.api-keys.delete.title', { apiKeyName }),
-            body: this.intl.t('developers.api-keys.delete.body', { count: dependents.webhooks.length }),
+            modalClass: 'dev-modal modal-md',
+            modalHeaderTitleClass: 'dev-modal-title-danger',
             acceptButtonText: this.intl.t('developers.api-keys.delete.accept'),
             acceptButtonScheme: 'danger',
             acceptButtonIcon: 'trash',
+            declineButtonIcon: 'times',
+            declineButtonIconPrefix: 'fas',
+            apiKey,
+            dependents,
+            firstDependent,
+            setExpiration: () => {
+                this.modalsManager.done();
+                return this.editApiKey(apiKey);
+            },
             confirm: async (modal) => {
                 modal.startLoading();
 

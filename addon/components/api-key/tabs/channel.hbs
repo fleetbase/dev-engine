@@ -1,0 +1,25 @@
+<div class="dev-drawer-body" ...attributes>
+    <SectionCard @title={{t "developers.api-keys.drawer.channel"}} @subtitle={{t "developers.api-keys.panel.channel-sub"}}>
+        <:actions>
+            <Button @size="xs" @type="primary" @icon="tower-broadcast" @text={{t "developers.api-keys.drawer.watch"}} @onClick={{this.watch}} @permission="developers view socket" />
+        </:actions>
+        <:default>
+            <dl class="dev-kv">
+                <dt>{{t "developers.sockets.index.channel"}}</dt>
+                <dd><ClickToCopy @value={{this.channelName}}><span class="dev-tag"><span>{{this.channelName}}</span><FaIcon @icon="copy" @size="xs" /></span></ClickToCopy></dd>
+                <dt>{{t "developers.sockets.index.access"}}</dt>
+                <dd>
+                    {{#if this.state.access}}
+                        <Badge @status={{if (eq this.state.access "allowed") "success" "danger"}} @text={{this.state.access}} @size="xs" @hideStatusDot={{true}} />
+                    {{else}}
+                        <span class="dev-muted">{{t "developers.sockets.index.not-tried"}}</span>
+                    {{/if}}
+                </dd>
+                <dt>{{t "developers.sockets.index.last-activity"}}</dt>
+                <dd>{{#if this.state.lastActivityAt}}{{time-ago this.state.lastActivityAt}} · {{t "developers.api-keys.drawer.messages-seen" count=(or this.state.messageCount 0)}}{{else}}<span class="dev-muted">{{t "developers.sockets.index.no-activity"}}</span>{{/if}}</dd>
+                <dt>{{t "developers.api-keys.drawer.rule"}}</dt>
+                <dd class="dev-muted">{{t "developers.api-keys.drawer.rule-text"}}</dd>
+            </dl>
+        </:default>
+    </SectionCard>
+</div>
