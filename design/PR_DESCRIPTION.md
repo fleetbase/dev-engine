@@ -71,6 +71,14 @@ Implements the redesign on the design canvas https://claude.ai/artifact/9tHmccX6
 
 See `design/visual-check.md` and `design/screenshots/`. Every board was checked in the running console at 1280px in dark mode: dashboard (B1), API keys list, create/reveal, roll, drawer and dialogs (C1 to C5), webhooks list, form, detail and states (D1 to D4), channels list, viewer and custom channel (E1 to E3), events list (F1), requests list, drawer and page (G1, G2), the shell search, plus a light-theme pass and a 375px phone pass. The webhooks list was also checked at 1024px. Not checked against real data: the populated events list and event drawer (no events exist in this instance), the webhook deliveries table and attempt inspector (no deliveries), the roll submission (needs the user's password) and the denied/kicked channel states (the local socket server accepts every prefix); the unit tests cover the state logic for the last one.
 
+## Round two (review feedback)
+
+- **List headers**: every control is 28px on one 8px rhythm; the hidden search wormhole and dropdown placeholders no longer add gaps.
+- **Key drawer** (C4): custom header with the identity block, Edit, Roll key, overflow, open page and close; Overview, Requests, Webhooks, Channel and Activity tabs; usage tiles and an hourly bar strip from a request-log sample (`api-key-insights` service); Details, Linked and Activity cards on the mockup's 12/16 rhythm; 640px wide; no backdrop dims the console.
+- **Key dialogs** (C2, C5): 560px dialogs with the step strip in the title, the mockup's placeholders and help lines, environment segment, Expiration and Scope (v1.1) side by side, origins as chips (ember-tag-input); reveal step with the code box and large Copy; delete dialog with the consequence box, dependents and the safer option.
+- **Requests** (G1, G2): search syntax (`status:5xx method:POST path:… key:… ip:… version:… duration>1000`), status segments with totals, leading date chip, built-in views, traffic histogram, time-only column, 4xx/5xx row tints; detail with the resource header, facts strip, tabbed bodies, side-by-side error view and cURL preview.
+- `design/visual-check.md` has a round-two table comparing each board with the page, before and after.
+
 ## Note for reviewers running the console from source
 
 While adding files during a live `ember serve`, the lazy engine's dependency funnel can get stuck after a failed patch and silently drop new modules from `engine.js` (the console then reports unknown injections or unresolved components). Editing `addon/routes.js` forces the full rebuild that heals it; a restart does the same. This is a broccoli-dependency-funnel behaviour, not something in this branch.
