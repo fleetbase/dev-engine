@@ -2887,8 +2887,13 @@ body[data-theme='dark'] .dev-text-danger {
 }
 
 .flb--modal.dev-modal .dev-modal-title-danger .dev-modal-title-text,
-.flb--modal.dev-modal .flb--modal-title.dev-modal-title-danger {
+.flb--modal.dev-modal .flb--modal-title.dev-modal-title-danger,
+body[data-theme='dark'] .flb--modal.dev-modal .flb--modal-title.dev-modal-title-danger {
     color: #dc2626;
+}
+
+body[data-theme='dark'] .flb--modal.dev-modal .flb--modal-title.dev-modal-title-danger {
+    color: #fca5a5;
 }
 
 .flb--modal.dev-modal .dev-modal-steps {
