@@ -68,12 +68,12 @@ export default class ApiKeyActionsService extends ResourceActionService {
 
     panelActionButtons(apiKey) {
         return [
-            { id: 'edit', icon: 'pencil', size: 'sm', text: this.intl.t('developers.common.edit'), onClick: () => this.editApiKey(apiKey), permission: 'developers update api-key' },
-            { id: 'roll', icon: 'rotate', size: 'sm', text: this.intl.t('developers.api-keys.actions.roll'), onClick: () => this.rollApiKey(apiKey), permission: 'developers roll api-key' },
+            { id: 'edit', icon: 'pencil', size: 'xs', text: this.intl.t('developers.common.edit'), onClick: () => this.editApiKey(apiKey), permission: 'developers update api-key' },
+            { id: 'roll', icon: 'rotate', size: 'xs', text: this.intl.t('developers.api-keys.actions.roll'), onClick: () => this.rollApiKey(apiKey), permission: 'developers roll api-key' },
             {
                 id: 'more',
                 icon: 'ellipsis',
-                size: 'sm',
+                size: 'xs',
                 items: [
                     { id: 'requests', icon: 'terminal', label: this.intl.t('developers.api-keys.actions.view-requests'), fn: () => this.viewRequestLogs(apiKey) },
                     { id: 'channel', icon: 'tower-broadcast', label: this.intl.t('developers.api-keys.actions.watch-channel'), fn: () => this.watchChannel(apiKey) },
