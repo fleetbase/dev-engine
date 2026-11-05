@@ -13,6 +13,7 @@ export default class ApiCredentialModel extends Model {
     @attr('string') secret;
     @attr('boolean', { defaultValue: false }) test_mode;
     @attr('string') api;
+    @attr('string') profile;
     @attr('raw') browser_origins;
 
     /** @dates */

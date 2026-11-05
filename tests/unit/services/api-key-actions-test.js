@@ -30,6 +30,15 @@ module('Unit | Service | api-key-actions', function (hooks) {
         this.owner.register('service:host-router', EmptyServiceStub);
     });
 
+    test('it offers full and rider access for a key', function (assert) {
+        const service = this.owner.lookup('service:api-key-actions');
+
+        assert.deepEqual(
+            service.scopeChoices.map((choice) => choice.value),
+            ['full', 'rider']
+        );
+    });
+
     test('it keeps the shared dialog and transition API', function (assert) {
         const service = this.owner.lookup('service:api-key-actions');
 

@@ -49,6 +49,13 @@ export default class ApiKeyActionsService extends ResourceActionService {
     /**
      * The expiration options with translated labels for a Select.
      */
+    get scopeChoices() {
+        return [
+            { label: this.intl.t('developers.api-keys.drawer.full-access'), value: 'full' },
+            { label: this.intl.t('developers.api-keys.drawer.rider-access'), value: 'rider' },
+        ];
+    }
+
     get expirationChoices() {
         return this.expirationOptions.map((value) => ({ value, label: this.intl.t(`developers.api-keys.expiration.${value.replace(/\s+/g, '-')}`) }));
     }
@@ -152,6 +159,10 @@ export default class ApiKeyActionsService extends ResourceActionService {
             formPermission,
             apiKey,
             ...this.originOptions(apiKey),
+            scopeChoices: this.scopeChoices,
+            setScope: (value) => {
+                apiKey.profile = value === 'full' ? null : value;
+            },
             setExpiration: (value) => {
                 apiKey.expires_at = value || null;
             },
@@ -225,6 +236,10 @@ export default class ApiKeyActionsService extends ResourceActionService {
             formPermission,
             apiKey,
             ...this.originOptions(apiKey),
+            scopeChoices: this.scopeChoices,
+            setScope: (value) => {
+                apiKey.profile = value === 'full' ? null : value;
+            },
             setExpiration: (value) => {
                 apiKey.expires_at = value || null;
             },

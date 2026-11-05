@@ -41,8 +41,8 @@
                     <span class="dev-help">{{if options.isNew (t "developers.api-keys.form.expiration-help") (t "developers.api-keys.form.expiration-current" value=(or options.apiKey.expiresAt (t "developers.common.never")))}}</span>
                 </div>
                 <div class="dev-ig">
-                    <label>{{t "developers.api-keys.drawer.scope"}} <Badge @status="warning" @text="v1.1" @size="xxs" @hideStatusDot={{true}} @disableHumanize={{true}} /></label>
-                    <Select @options={{array (hash label=(t "developers.api-keys.drawer.full-access") value="full")}} @optionLabel="label" @optionValue="value" @value="full" @disabled={{true}} class="w-full form-input dev-input" />
+                    <label>{{t "developers.api-keys.drawer.scope"}}</label>
+                    <Select @options={{options.scopeChoices}} @optionLabel="label" @optionValue="value" @value={{or options.apiKey.profile "full"}} @onSelect={{options.setScope}} @disabled={{options.readOnly}} class="w-full form-input dev-input" />
                     <span class="dev-help">{{t "developers.api-keys.form.scope-help"}}</span>
                 </div>
             </div>
