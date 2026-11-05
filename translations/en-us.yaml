@@ -256,7 +256,7 @@ developers:
       name-placeholder: What will use this key, e.g. Production backend
       environment-fixed: Cannot change after creation. Create a test key for the sandbox.
       expiration-help: Never · 1 hour · 24 hours · 3 days · 7 days
-      scope-help: Full access until scopes ship in v1.1
+      scope-help: Use rider access for a key inside a published rider app. It only reaches rider routes.
       origins-placeholder: Add origin, e.g. https://app.example.com
       environment-help: Follows the environment switch in the header.
       environment-live: Live keys start with flb_live_ and read and write production data.
@@ -328,6 +328,7 @@ developers:
       bars-label: Requests per hour over the last {days} days
       scope: Scope
       full-access: Full access
+      rider-access: Rider access
       from: from
       watch: Watch
       channel: Channel
